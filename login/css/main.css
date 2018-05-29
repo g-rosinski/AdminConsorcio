@@ -1,0 +1,22 @@
+body {
+    /* background: linear-gradient(teal, black); */
+    background-image: url(../img/1.jpg);
+    background-size: cover;
+}
+
+.card {
+    margin: auto;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup{
+    color: gray;
+}
