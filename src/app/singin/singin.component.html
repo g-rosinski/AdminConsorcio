@@ -16,7 +16,7 @@
             <input [(ngModel)]="formModel.pass" name="pass" required matInput [type]="'password'" placeholder="Contraseña">
           </mat-form-field>
           <div class="text-right">
-            <button mat-button color="accent" style="margin-right: 5px;">Registrarse</button>
+            <button mat-button color="accent" style="margin-right: 5px;" routerLink="/register">Registrarse</button>
             <button type="submit" [disabled]="!loginForm.form.valid" mat-raised-button color="primary">Ingresar</button>
           </div>
         </form>
