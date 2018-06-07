@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+  <title></title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+
+  <div class="container expand-on-small-only">
+    <div class="row valign change-form">
+      <div class="col l8 offset-l2">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Generar Reclamo</span>
+            <form autocomplete="off">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input type="text" class="validate">
+                  <label>Titulo</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea id="textarea1" class="materialize-textarea"></textarea>
+                  <!-- <label for="textarea1">Detalle su reclamo</label> -->
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-action">
+            <div class="right-align">
+              <button class="waves-effect waves-light btn" type="submit">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+</body>
+
+</html>
