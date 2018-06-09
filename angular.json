@@ -21,11 +21,11 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/server"
+              "src/server",
+              "src/.htaccess"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/materialize-css/dist/css/materialize.css"
+              "src/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-singup',
@@ -14,14 +15,15 @@ export class SingupComponent {
     email: '',
     name: '',
     lastName: '',
-    dni: null
+    dni: ''
   };
-
   constructor(
-    public http: HttpClient
+    public http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   onSubmit() {
+    this.toastr.error('Hello world!', 'Toastr fun!');
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const body = new HttpParams()
       .set('user', this.formModel.user)
@@ -32,7 +34,7 @@ export class SingupComponent {
       .set('email', this.formModel.email)
       .set('dni', this.formModel.dni.toString());
 
-    return this.http.post('http://localhost/server/test.php', body.toString(), { headers: headers })
+    return this.http.post('http://localhost/server/registrar.php', body.toString(), { headers: headers })
       .subscribe(x => console.log(x));
   }
 }

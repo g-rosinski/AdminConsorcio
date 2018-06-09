@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MaterializeModule } from "angular2-materialize";
+import { ToastrModule } from 'ngx-toastr';
 
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,6 +25,7 @@ import { HomeComponent } from './home/home.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    ToastrModule.forRoot(),
     HttpClientModule,
     BrowserAnimationsModule,
     MaterializeModule,
