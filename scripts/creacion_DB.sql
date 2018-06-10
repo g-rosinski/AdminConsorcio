@@ -11,17 +11,14 @@ dni varchar (50) not null,
 email varchar (200) not null,
 cuil varchar (50),
 razon_social varchar (200),
-inquilino_de int unsigned,
-primary key (id_persona),
-constraint persona_fk_p foreign key (inquilino_de) references persona (id_persona));
+primary key (id_persona));
 
 create table usuario
-(id_usuario int unsigned auto_increment not null,
-user varchar (50) not null,
+(user varchar (50) not null,
 pass varchar(50) not null,
 estado varchar (50) not null,
 id_persona int unsigned not null,
-primary key (id_usuario),
+primary key (user),
 constraint persona_fk_u foreign key (id_persona) references persona (id_persona));
 
 create table rol
@@ -31,10 +28,10 @@ primary key (id_rol));
 
 create table rolUsuario
 (id_rol int unsigned not null,
-id_usuario int unsigned not null,
-primary key (id_usuario, id_rol),
+user varchar (50) not null,
+primary key (id_rol, user),
 constraint rol_fk_ru foreign key (id_rol) references rol (id_rol),
-constraint usuario_fk_ru foreign key (id_usuario) references usuario (id_usuario));
+constraint usuario_fk_ru foreign key (user) references usuario (user));
 
 
 create table comuna
@@ -71,18 +68,26 @@ piso varchar(2) not null,
 departamento varchar (2) not null,
 nro_unidad int not null,
 id_consorcio int unsigned not null,
-id_usuario int unsigned not null,
+user varchar (50) not null,
 primary key (id_unidad),
 constraint consorcio_fk_u foreign key (id_consorcio) references consorcio (id_consorcio),
-constraint usuario_fk_u foreign key (id_usuario) references usuario (id_usuario));
+constraint usuario_fk_u foreign key (user) references usuario (user),
+constraint unidad_fk foreign key (id_unidad) references unidad (id_unidad));
 
-create table propietario
-(id_propietario int unsigned auto_increment,
-id_usuario int unsigned not null,
+create table propietarioUnidad
+(user varchar (50) not null,
+inquilino_de varchar (50),
+id_unidad int unsigned not null,
+constraint user_fk foreign key (user) references usuario (user),
+constraint inquilino_fk foreign key (inquilino_de) references propieatrioUnidad (user));
+
+create table consejoConsorcio
+(id_consejoConsorcio int unsigned auto_increment not null,
+user varchar (50) not null,
 id_consorcio int unsigned not null,
-primary key (id_propietario),
+primary key (id_consejoConsorcio),
 constraint consorcio_fk_pc foreign key (id_consorcio) references consorcio (id_consorcio),
-constraint usuario_fk_pc foreign key (id_usuario) references usuario (id_usuario));
+constraint usuario_fk_pc foreign key (user) references usuario (user));
 
 create table cuentaCorriente
 (id_ctacte int unsigned auto_increment,
@@ -180,14 +185,14 @@ titulo varchar (500) not null,
 mensaje varchar (3000) not null,
 fecha date not null,
 hora datetime not null,
-id_propietario int unsigned not null,
+user varchar (50) not null,
 id_motivo_reclamo int unsigned not null,
 primary key (id_reclamo),
-constraint propietario_fk_r foreign key (id_propietario) references propietario (id_propietario),
+constraint propietario_fk_r foreign key (user) references usuario (user),
 constraint motivo_fk_r foreign key (id_motivo_reclamo) references motivoReclamo (id_motivo_reclamo));
 
 create table gasto
-(id_gasto int unsigned auto_increment,
+(id_gasto int unsigned auto_increment not null,
 nro_comprobante int not null,
 fecha date not null,
 descripcion varchar (200) not null,
@@ -196,13 +201,13 @@ id_motivo_gasto int unsigned not null,
 id_proveedor int unsigned not null,
 id_gasto_mensual int unsigned not null,
 id_reclamo int unsigned not null,
-id_operador int unsigned not null,
+id_operador varchar (50) not null,
 primary key (id_gasto),
 constraint gasto_motivo_fk_g foreign key (id_motivo_gasto) references motivoGasto (id_motivo_gasto),
 constraint proveedor_fk_g foreign key (id_proveedor) references proveedor (id_proveedor),
 constraint gasto_mensual_fk_g foreign key (id_gasto_mensual) references gastoMensual (id_gasto_mensual),
 constraint reclamo_fk_g foreign key (id_reclamo) references reclamo (id_reclamo),
-constraint operador_fk_g foreign key (id_operador) references usuario (id_usuario));
+constraint operador_fk_g foreign key (id_operador) references usuario (user));
 
 create table pagoGasto
 (id_pago_gasto int unsigned auto_increment,
