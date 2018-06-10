@@ -29,3 +29,11 @@ p {
 	color: #FFF;
 	width:auto;
 }
+
+/deep/ .mat-badge-content{
+	margin-bottom: 8px;
+}
+
+.mat-expansion-panel-header-description {
+	justify-content: flex-end;
+}

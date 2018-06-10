@@ -1,6 +1,6 @@
 <div class="row no-gutters">
-  <div class="col-6 left-panel">
-    <mat-card>
+  <div class="col-7 left-panel">
+    <mat-card style="margin-bottom: 10px;">
       <mat-card-title>¡Bienvenido {{name}}!</mat-card-title>
       <mat-card-content>
         <p>Usted se encuentra registrado bajo el consorcio:
@@ -11,6 +11,31 @@
         <p>Esperamos que este teniendo un agradable día.</p>
       </mat-card-content>
     </mat-card>
+
+    <mat-accordion>
+      <mat-expansion-panel hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <a>Solicitud de nuevos usuarios</a>
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon [matBadge]="countUsers" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">account_circle</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-review-users></app-review-users>
+      </mat-expansion-panel>
+      <mat-expansion-panel hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <a>Reclamos</a>
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon matBadge="0" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>Componente que muestre los reclamos</p>
+      </mat-expansion-panel>
+    </mat-accordion>
 
   </div>
 </div>

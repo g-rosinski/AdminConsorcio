@@ -6,32 +6,42 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-if (empty(validarCampos())) {
+if (empty(validar())) {
     registrarUsuario();
 } else {
-    echo json_encode(validarCampos());
+    echo json_encode(validar());
 }
 
-function validarCampos()
+// TODO: Tenemos que validar que el formato del user?
+// Por ejemplo: solo letras, sin espacio.
+function validar()
 {
-    $errores = array();
     $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni');
-    $esValido = true;
 
     foreach ($campos as &$valor) {
         if (empty(($_POST[$valor]))) {
-            $esValido = false;
+            return 'Por favor complete todos los campos';
         }
     }
 
-    if (!$esValido) {
-        $errores[] = 'Por favor complete todos los campos';
-    } elseif ($_POST['pass'] != $_POST['repass']) {
-        $esValido = false;
-        $errores[] = 'Las contraseñas no coinciden';
+    if (validarSiElUsuarioExiste()) {
+        return 'Nombre de usuario ya existe. Por favor elija otro';
     }
 
-    return $errores;
+    if ($_POST['pass'] != $_POST['repass']) {
+        return'Las contraseñas no coinciden';
+    }
+
+    return;
+}
+
+function validarSiElUsuarioExiste()
+{
+    $user = $_POST['user'];
+    $query = "SELECT user FROM usuario WHERE (user) = ('$user')";
+    $listaUsers = mysqli_fetch_assoc(ejecutarSQL($query));
+
+    return !empty($listaUsers['user']);
 }
 
 function registrarUsuario()

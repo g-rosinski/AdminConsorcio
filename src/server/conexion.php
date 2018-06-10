@@ -18,15 +18,14 @@ function conectarBD()
 
 function ejecutarInsertYObtenerId($query)
 {
-    $conexion = conectarBD();
-    
     try {
+        $conexion = conectarBD();
         mysqli_query($conexion, $query);
         $id = mysqli_insert_id($conexion);
 
-        if(mysqli_error($conexion)) throw new Exception(mysqli_error($conexion));
-        
-    } catch(Exception  $e) {
+        if (mysqli_error($conexion)) throw new Exception(mysqli_error($conexion));
+
+    } catch (Exception $e) {
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         echo json_encode(array("success" => false, "message" => $e->getMessage()));
     }
@@ -34,4 +33,18 @@ function ejecutarInsertYObtenerId($query)
     mysqli_close($conexion);
 
     return $id;
+}
+
+function ejecutarSQL($query)
+{
+    try {
+        $conexion = conectarBD();
+        $respuesta = mysqli_query($conexion, $query);
+        if (mysqli_error($conexion)) throw new Exception(mysqli_error($conexion));     
+        
+        return $respuesta;
+    } catch (Exception $e) {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+        echo json_encode(array("success" => false, "message" => $e->getMessage()));
+    }
 }

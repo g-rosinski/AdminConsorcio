@@ -10,8 +10,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class HomeComponent implements OnInit {
   name = '';
   consorcio = '';
+  countUsers = 0;
 
   ngOnInit() {
+    this.http.get('http://localhost/server/usuario.php').subscribe((x: Array<any>) => this.countUsers = x.length);    
     this.http.get('http://localhost/server/propietario.php')
       .subscribe((x) => {
         this.name = x['name'];

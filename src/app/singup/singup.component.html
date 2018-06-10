@@ -1,10 +1,16 @@
 <div class="row justify-content-center no-gutters">
-  <div class="col-5">
+  <div class="col-5" *ngIf="!successSignUp">
     <mat-card>
       <mat-card-title>Registro</mat-card-title>
       <mat-card-content>
         <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
-          <i class="material-icons"></i>
+          <div class="full-width">
+            <label>Tipo de usuario: </label>
+            <mat-radio-group (change)="onRadioChange($event)" [(ngModel)]="formModel.rol" [ngModelOptions]="{standalone: true}">
+              <mat-radio-button [value]="'PROPIETARIO'">Propietario</mat-radio-button>
+              <mat-radio-button [value]="'INQUILINO'">Inquilino</mat-radio-button>
+            </mat-radio-group>
+          </div>
 
           <mat-form-field class="full-width">
             <mat-icon matSuffix>account_circle</mat-icon>
@@ -37,11 +43,54 @@
             <input [(ngModel)]="formModel.dni" name="dni" required matInput [type]="'number'" placeholder="DNI">
           </mat-form-field>
 
+          <mat-card-title>Datos de la unidad</mat-card-title>
+
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Consorcio">
+              <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div *ngIf="formModel.rol === 'PROPIETARIO'">
+            <mat-form-field class="third-width">
+              <input [(ngModel)]="formModel.floor" name="floor" required matInput [type]="'number'" placeholder="Piso">
+            </mat-form-field>
+            <mat-form-field class="third-width">
+              <input [(ngModel)]="formModel.depto" name="depto" required matInput placeholder="Departamento">
+            </mat-form-field>
+            <mat-form-field class="third-width">
+              <input [(ngModel)]="formModel.size" name="size" required matInput placeholder="Metros Cuadrados">
+            </mat-form-field>
+          </div>
+          <div *ngIf="formModel.rol === 'INQUILINO'">
+            <mat-form-field class="half-width">
+              <mat-select placeholder="Piso">
+                <mat-option value="option">Option</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="half-width">
+              <mat-select placeholder="Departamento">
+                <mat-option value="option">Option</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <p style="text-align: center;color: red;">{{error}}</p>
+
           <div class="text-right">
             <!-- <button mat-button color="accent" style="margin-right: 5px;">Registrarse</button> -->
             <button type="submit" mat-raised-button color="primary">Registrarme</button>
           </div>
         </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-5" *ngIf="successSignUp">
+    <mat-card>
+      <mat-card-title>Registro Exitoso!</mat-card-title>
+      <mat-card-content>
+        <p>El registro ha sido un exito! Por favor espere a que uno de nuestros operadores revise su solicitud.</p>
       </mat-card-content>
     </mat-card>
   </div>

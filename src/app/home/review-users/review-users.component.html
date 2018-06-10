@@ -1,0 +1,22 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Usuario</th>
+      <th>Nombre</th>
+      <th>Consorcio</th>
+      <th>Departamento</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios |async">
+      <td>{{usuario.user}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>
+        <button (click)="marcarUsuarioComoActivo(usuario.user)">DAR DE ALTA</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -8,18 +8,20 @@ import { ToastrModule } from 'ngx-toastr';
 
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatInputModule, MatIconModule } from '@angular/material';
+import { MatBadgeModule, MatExpansionModule,MatTableModule, MatButtonModule, MatCheckboxModule, MatCardModule, MatInputModule, MatIconModule, MatSelectModule, MatRadioModule } from '@angular/material';
 import { SingupComponent } from './singup/singup.component';
 import { SinginComponent } from './singin/singin.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
+import { ReviewUsersComponent } from './home/review-users/review-users.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SingupComponent,
     SinginComponent,
-    HomeComponent
+    HomeComponent,
+    ReviewUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -29,11 +31,16 @@ import { HomeComponent } from './home/home.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterializeModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatSelectModule,
+    MatBadgeModule,
     MatButtonModule,
     MatCheckboxModule,
     MatCardModule,
     MatInputModule,
     MatIconModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
