@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+  <title></title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+
+  <div class="container expand-on-small-only">
+    <div class="row valign change-form">
+      <div class="col l8 offset-l2">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Registro</span>
+            <form autocomplete="off">
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="icon_prefix" type="text" class="validate">
+                  <label for="icon_prefix">Usuario</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">email</i>
+                  <input id="icon_prefix" type="email" class="validate">
+                  <label for="icon_prefix">Email</label>
+                </div>
+              </div>
+              <div class="layout-row row">
+                <div class="col s12 m6">
+                  <div class="row">
+                    <div class="input-field col s12 required" id="id_password_container">
+                      <i class="material-icons prefix">lock_open</i>
+                      <input id="id_password" name="password" type="password">
+                      <label for="id_password">Contraseña</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col s12 m6">
+                  <div class="row">
+                    <div class="input-field col s12 required" id="id_password_confirm_container">
+                      <input id="id_password_confirm" name="password_confirm" type="password">
+                      <label for="id_password_confirm">Confirmar contraseña</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h5>Datos Personales</h5>
+              <div class="row">
+                <div class="input-field col s6">
+                  <input type="text" class="validate">
+                  <label for="icon_prefix">Nombre</label>
+                </div>
+                <div class="input-field col s6">
+                  <input type="text" class="validate">
+                  <label for="icon_prefix">Apellido</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input type="number" class="validate">
+                  <label>DNI</label>
+                </div>
+              </div>
+
+            </form>
+          </div>
+          <div class="card-action">
+            <div class="right-align">
+              <button class="waves-effect waves-light btn" type="submit">Registrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+</body>
+
+</html>
