@@ -54,7 +54,7 @@ cuit varchar (50) not null,
 calle varchar (100) not null,
 altura int not null,
 telefono varchar (50),
-email varchar (200),
+superficie double not null,
 coordenadaLatitud decimal(10,7),
 coordenadaLongiud decimal(10,7),
 id_barrio int unsigned not null,
@@ -67,19 +67,19 @@ prc_participacion double not null,
 piso varchar(2) not null,
 departamento varchar (2) not null,
 nro_unidad int not null,
+superficie double,
 id_consorcio int unsigned not null,
 user varchar (50) not null,
 primary key (id_unidad),
 constraint consorcio_fk_u foreign key (id_consorcio) references consorcio (id_consorcio),
-constraint usuario_fk_u foreign key (user) references usuario (user),
-constraint unidad_fk foreign key (id_unidad) references unidad (id_unidad));
+constraint usuario_fk_u foreign key (user) references usuario (user));
 
 create table propietarioUnidad
 (user varchar (50) not null,
 inquilino_de varchar (50),
 id_unidad int unsigned not null,
 constraint user_fk foreign key (user) references usuario (user),
-constraint inquilino_fk foreign key (inquilino_de) references propieatrioUnidad (user));
+constraint inquilino_fk foreign key (inquilino_de) references propietarioUnidad (user));
 
 create table consejoConsorcio
 (id_consejoConsorcio int unsigned auto_increment not null,
@@ -110,11 +110,11 @@ importe double not null,
 fecha date not null,
 hora datetime not null,
 id_ctacte int unsigned not null,
-id_usuario int unsigned not null,
+user varchar (50) not null,
 id_forma_pago int unsigned not null,
 primary key (id_pago_expensa),
 constraint ctacte_fk_pe foreign key (id_ctacte) references cuentaCorriente (id_ctacte),
-constraint usuario_fk_pe foreign key (id_usuario) references usuario (id_usuario),
+constraint usuario_fk_pe foreign key (user) references usuario (user),
 constraint formaPago_fk_pe foreign key (id_forma_pago) references formaPago (id_forma_pago));
 
 create table gastoMensual
