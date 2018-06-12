@@ -1,0 +1,27 @@
+.full-width{
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.third-width {
+  width: 33.33%;
+}
+
+mat-card {
+  margin: 3rem 0;
+}
+
+.mat-form-field {
+  padding: 0 0.5rem;
+}
+
+form .mat-radio-button {
+  margin: 0 20px;
+}
+
+label {
+  vertical-align: top;
+}

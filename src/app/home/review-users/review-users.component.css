@@ -1,0 +1,14 @@
+.table thead th {
+    border-top: 0;
+}
+
+.table th, .table td {
+    font-size: 13px;
+    padding: 0.75rem 0;
+    text-align: center;
+}
+
+.mat-card-title {
+    font-size: 15px;
+    margin: 0;
+}

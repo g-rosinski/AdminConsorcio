@@ -1,0 +1,26 @@
+<div class="row justify-content-center no-gutters">
+  <div class="col-5">
+    <mat-card>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-content>
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
+          <i class="material-icons"></i>
+
+          <mat-form-field class="full-width">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <input [(ngModel)]="formModel.user" name="user" required matInput placeholder="Usuario">
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-icon matSuffix>lock</mat-icon>
+            <input [(ngModel)]="formModel.pass" name="pass" required matInput [type]="'password'" placeholder="Contraseña">
+          </mat-form-field>
+          <div class="text-right">
+            <button mat-button color="accent" style="margin-right: 5px;" routerLink="/register">Registrarse</button>
+            <button type="submit" [disabled]="!loginForm.form.valid" mat-raised-button color="primary" routerLink="/home">Ingresar</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

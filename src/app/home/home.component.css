@@ -1,0 +1,39 @@
+@import "~materialize-css\dist\css\materialize.css";
+
+.left-panel {
+  height: 100vh;
+  background-color: #eee;
+  padding: 0.5rem;
+}
+
+.mat-card {
+  background: #0D47A1 !important;
+  color: white;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.mobile-fab-tip {
+	position: fixed;
+	right: 85px;
+	padding:0px 0.5rem;
+	text-align: right;
+	background-color: #323232;
+	border-radius: 2px;
+	color: #FFF;
+	width:auto;
+}
+
+/deep/ .mat-badge-content{
+	margin-bottom: 8px;
+}
+
+.mat-expansion-panel-header-description {
+	justify-content: flex-end;
+}
