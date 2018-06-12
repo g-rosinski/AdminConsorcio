@@ -6,23 +6,23 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once './../config/db.php';
 include_once './../entities/consorcio.php';
 
-echo agregarConsorcio();
+echo crearConsorcio();
 
-function agregarConsorcio()
+function crearConsorcio()
 {
     $db = new DB();
-    $consorcio = new Consorcio($db->getConnection());
+    $consorcio = new Consorcio($db);
     $data = $_POST;
 
     $consorcio->crearConsorcio(
-        $data.nombre,
-        $data.cuit,
-        $data.calle,
-        $data.altura,
-        $data.telefono,
-        $data.superficie,
-        $data.barrio
+        $data['nombre'],
+        $data['cuit'],
+        $data['calle'],
+        $data['altura'],
+        $data['superficie'],
+        $data['barrio'],
+        $data['telefono']
     );
     
-    return $usuario->agregarUsuario();
+    return $consorcio->crearConsorcio();
 }

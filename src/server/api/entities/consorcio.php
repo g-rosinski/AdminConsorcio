@@ -20,13 +20,7 @@ class Consorcio {
     {
         $this->connection = $connection;
     }
-    private function insertConsorcio(){
-        $query = "INSERT INTO" 
-                . $this->tabla 
-                . "(nombre, cuit, calle, altura, telefono, superficie, id_barrio)"
-                ." VALUES (('$this->nombre'),('$this->cuit'),($this->calle),('$this->altura'),('$this->telefono'),('$this->superficie),('$this->barrio')";
-        return $this->connection->ejecutar($query);
-    }
+    
     public function crearConsorcio($nombre,$cuit,$calle,$altura,$superficie,$barrio,$telefono = null){
         $this->setNombre($nombre);
         $this->setCuit($cuit);
@@ -56,6 +50,15 @@ class Consorcio {
         return mysql_fetch_assoc ( $this->connection->ejecutar($query) );
     }
    
+
+    private function insertConsorcio(){
+        $query = "INSERT INTO " 
+                . $this->tabla 
+                . " (nombre, cuit, calle, altura, telefono, superficie, id_barrio)"
+                . " VALUES (('$this->nombre'),('$this->cuit'),('$this->calle'),($this->altura),('$this->telefono'),($this->superficie),($this->barrio))";
+        return $this->connection->ejecutar($query);
+    }
+
     private function setNombre($nombre){ 
         try{$this->nombre = $this->validarVariableString($nombre);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
