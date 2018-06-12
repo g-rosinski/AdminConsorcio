@@ -1,6 +1,5 @@
 <?php
 
-include 'query.php';
 class Consorcio {
 
     private $connection;
@@ -38,6 +37,7 @@ class Consorcio {
         while($reg = mysql_fetch_assoc ( $this->connection->ejecutar($query) )){
             $result[$reg['id_consorcio']] = $reg['nombre'];
         }
+        echo '<pre>'.print_r($query,true).'</true>';die;
         return  $result;
     }
     public function listarConsorciosCompleto(){

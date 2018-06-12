@@ -24,5 +24,5 @@ function crearConsorcio()
         $data['telefono']
     );
     
-    return $consorcio->crearConsorcio();
+   // return $consorcio->crearConsorcio();
 }
