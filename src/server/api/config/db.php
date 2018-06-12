@@ -5,7 +5,7 @@ class DB
     public $username;
     public $password;
     public $database;
-    public $connection;
+    private $connection;
 
     public function __construct()
     {
@@ -45,5 +45,10 @@ class DB
             header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
             echo json_encode(array("success" => false, "message" => $e->getMessage()));
         }
+    }
+
+    public function obtenerUltimoInsertId()
+    {
+        return $this->connection->insert_id;
     }
 }

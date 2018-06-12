@@ -23,7 +23,7 @@ class Usuario
 
     public function agregarUsuario()
     {
-        $query = "INSERT INTO usuario (user, pass, id_persona, estado) VALUES (('$this->user'),('$this->pass'),($this->id),('$this->estado'))";
+        $query = "INSERT INTO usuario (user, pass, id_persona, estado) VALUES (('$this->user'),('$this->pass'),($this->id_persona),('$this->estado'))";
         return $this->connection->ejecutar($query);
     }
 }
