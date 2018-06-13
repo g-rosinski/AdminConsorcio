@@ -51,8 +51,8 @@ export class SingupComponent implements OnInit {
 
     return this.http.post('http://localhost/server/registrar.php', body.toString(), { headers: headers })
       .subscribe(x => {
-        if (x) this.error = x.toString();
-        if (!this.error || this.error !== '') this.successSignUp = true;
+        if (x && x !== '') this.error = x.toString();
+        if (!x || x === '') this.successSignUp = true;
       });
   }
 
