@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MatRadioChange } from '@angular/material';
-import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { ConsorcioService } from './../services/consorcio.service';
+import { UsuarioService } from './../services/usuario.service';
 
 @Component({
   selector: 'app-singup',
@@ -29,8 +29,8 @@ export class SingupComponent implements OnInit {
   successSignUp = false;
 
   constructor(
-    public http: HttpClient,
-    private toastr: ToastrService
+    private consorcioService: ConsorcioService,
+    private usuarioService: UsuarioService,
   ) { }
 
   ngOnInit() {
@@ -38,22 +38,10 @@ export class SingupComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.toastr.error('Hello world!', 'Toastr fun!');
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    const body = new HttpParams()
-      .set('user', this.formModel.user.toLocaleLowerCase().trim())
-      .set('pass', this.formModel.pass)
-      .set('repass', this.formModel.repass)
-      .set('name', this.formModel.name)
-      .set('lastName', this.formModel.lastName)
-      .set('email', this.formModel.email)
-      .set('dni', this.formModel.dni.toString());
-
-    return this.http.post('http://localhost/server/registrar.php', body.toString(), { headers: headers })
-      .subscribe(x => {
-        if (x && x !== '') this.error = x.toString();
-        if (!x || x === '') this.successSignUp = true;
-      });
+    this.usuarioService.registrar(this.formModel).then(x => {
+      if (x && x !== '') this.error = x.toString();
+      if (!x || x === '') this.successSignUp = true;
+    });
   }
 
   onRadioChange(e: MatRadioChange) {
@@ -63,6 +51,6 @@ export class SingupComponent implements OnInit {
   }
 
   obtenerTodosLosConsorcios() {
-    this.consorcios = this.http.get('http://localhost/server/consorcio.php');
+    this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
   }
 }

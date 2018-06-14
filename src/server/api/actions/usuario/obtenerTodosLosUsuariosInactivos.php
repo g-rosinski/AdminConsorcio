@@ -1,5 +1,6 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Origin: *");
 include_once './../../config/db.php';
 include_once './../../entities/usuario.php';
 include_once './../../utils/parseArrayToObject.php';

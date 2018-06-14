@@ -25,4 +25,20 @@ export class UsuarioService {
     return this.http.post(UsuarioService.BASE_URL + '/marcarComoActivo.php', body.toString(), { headers: headers })
       .toPromise();
   }
+
+  registrar(formModel: any): Promise<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const body = new HttpParams()
+      .set('user', formModel.user.toLocaleLowerCase().trim())
+      .set('pass', formModel.pass)
+      .set('repass', formModel.repass)
+      .set('name', formModel.name)
+      .set('lastName', formModel.lastName)
+      .set('email', formModel.email)
+      .set('dni', formModel.dni.toString());
+
+    return this.http.post(UsuarioService.BASE_URL + '/registrar.php', body.toString(), { headers: headers })
+      .toPromise();
+
+  }
 }
