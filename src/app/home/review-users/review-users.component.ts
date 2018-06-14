@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-review-users',
@@ -9,7 +10,8 @@ import { Observable } from 'rxjs';
 })
 export class ReviewUsersComponent implements OnInit {
   constructor(
-    public http: HttpClient,
+    private toast: ToastrService,
+    private usuarioServ: UsuarioService,
   ) { }
 
   usuarios: Observable<any>;
@@ -19,15 +21,13 @@ export class ReviewUsersComponent implements OnInit {
   }
 
   obtenerUsuariosInactivos() {
-    this.usuarios = this.http.get('http://localhost/server/usuario.php');
+    this.usuarios = this.usuarioServ.obtenerUsuariosInactivos();
   }
 
   marcarUsuarioComoActivo(id) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    const body = new HttpParams()
-      .set('id', id);
-
-    this.http.post('http://localhost/server/marcarComoActivo.php', body.toString(), { headers: headers })
-      .subscribe(() => this.obtenerUsuariosInactivos());
+    this.usuarioServ.marcarUsuarioComoActivo(id).then(() => {
+      this.toast.success('El usuario ha sido activado correctamente');
+      this.obtenerUsuariosInactivos()
+    });
   }
 }

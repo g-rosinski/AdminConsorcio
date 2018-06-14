@@ -3,9 +3,9 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-include_once './../config/db.php';
-include_once './../entities/usuario.php';
-include_once './../entities/persona.php';
+include_once './../../config/db.php';
+include_once './../../entities/usuario.php';
+include_once './../../entities/persona.php';
 
 $db = new DB();
 echo registrar($db);

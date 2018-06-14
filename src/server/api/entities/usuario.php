@@ -14,6 +14,12 @@ class Usuario
         $this->connection = $connection;
     }
 
+    public function marcarComoActivo()
+    {
+        $query = "UPDATE usuario set estado = 'ACTIVO' WHERE (user) = ('$this->id')";
+        return $this->connection->ejecutar($query);
+    }
+
     // TODO: Esta funcion no me devuelve el nombre, apellido, etc, NI SIQUIERA EL CONSORCIO!!!
     public function obtenerTodosLosUsuariosInactivos()
     {
