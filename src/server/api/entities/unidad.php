@@ -1,17 +1,17 @@
 <?php
 
-class Consorcio {
+class Unidad {
 
     private $connection;
     private $tabla = "unidad";
     /* Campos de la tabla */
-    private $idUnidad;
-    private $prcParticipacion;
-    private $piso;
-    private $departamento;
-    private $nro_unidad;
-    private $superficie;
-    private $id_consorcio;
+    private $idUnidad; 
+    private $prcParticipacion;  //setPrcParticipacion
+    private $piso;              //setPiso
+    private $departamento;      //setDepartamento
+    private $nro_unidad;        //setNro_unidad
+    private $superficie;        //setSuperficie
+    private $id_consorcio;      //setIdConsorcio
 
     
     public function __construct($connection)
@@ -29,7 +29,7 @@ class Consorcio {
     }
     
     private function consultarUnidadesSinPropietario(){
-        $query = $connection->prepare("
+        $query = $this->connection->prepare("
         SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
         FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
         WHERE u.id_consorcio = ? 
@@ -40,7 +40,7 @@ class Consorcio {
         return $reg;
     }
     private function consultarUnidadesConPropietario(){
-        $query = $connection->prepare("
+        $query = $this->connection->prepare("
         SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
         FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
         WHERE u.id_consorcio = ? 
@@ -62,10 +62,6 @@ class Consorcio {
     }
     private function setDepartamento($departamento){ 
         try{$this->departamento = $this->validarVariableString($departamento);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
-    }
-    private function setAltura($altura){ 
-        try{$this->altura = $this->validarVariableNumerica($altura);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
     }
     private function setNro_unidad($nro_unidad){ 

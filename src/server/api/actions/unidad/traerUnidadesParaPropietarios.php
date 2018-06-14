@@ -1,20 +1,22 @@
 <?php
     header("Content-Type: application/json; charset=UTF-8");
-    include_once './../config/db.php';
-    include_once './../entities/usuario.php';
-
-    $db = new DB();
-    $unidad = new Unidad($db);
+    include_once './../../config/db.php';
+    include_once './../../entities/unidad.php';
 
     echo traerUnidadesParaPropietarios();
 
-    public function traerUnidadesParaPropietarios(){
-        $unidadesEncontradas = $this->unidad->UnidadesSinPropietarioAsignado();
+    function traerUnidadesParaPropietarios(){
+
+        $db = new DB();
+        $unidad = new Unidad($db);
+        $data = $_GET;
+        // var_dump($data['id_consorcio']);die;
+        $unidadesEncontradas = $unidad->UnidadesSinPropietarioAsignado($data['id_consorcio']);
         $arrayUnidades = array();
         while ($obj = $unidadesEncontradas->fetch_object()) {
             $arrayUnidades[] = $obj;
         }
-        echo "<pre>".print_r($arrayUnidades,true)."</pre>";die:
+        // echo "<pre>".print_r($arrayUnidades,true)."</pre>";die:
         return json_encode($arrayUnidades);
     }
 ?>
