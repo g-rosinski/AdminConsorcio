@@ -1,17 +1,17 @@
 <?php
 
-class Consorcio {
+class Unidad {
 
     private $connection;
     private $tabla = "unidad";
     /* Campos de la tabla */
-    private $idUnidad;
-    private $prcParticipacion;
-    private $piso;
-    private $departamento;
-    private $nro_unidad;
-    private $superficie;
-    private $id_consorcio;
+    private $idUnidad; 
+    private $prcParticipacion;  //setPrcParticipacion
+    private $piso;              //setPiso
+    private $departamento;      //setDepartamento
+    private $nro_unidad;        //setNro_unidad
+    private $superficie;        //setSuperficie
+    private $id_consorcio;      //setIdConsorcio
 
     
     public function __construct($connection)
@@ -19,6 +19,9 @@ class Consorcio {
         $this->connection = $connection;
     }
     
+
+    // UnidadesConPropietarioAsignado:: 
+    // Trae un array? de registros con id de unidad, piso y depto de los que propietario asociado
     public function UnidadesConPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
@@ -29,27 +32,21 @@ class Consorcio {
     }
     
     private function consultarUnidadesSinPropietario(){
-        $query = $connection->prepare("
-        SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
-        FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-        WHERE u.id_consorcio = ? 
-        AND p.user is null");
-        $query->bind_param("i",$this->id_consorcio);
-        $query->execute();
-        $reg = $query->get_result();
-        return $reg;
+
+        $query =    "SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
+                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
+                    WHERE u.id_consorcio = $this->id_consorcio
+                    AND p.user is null";
+        return $this->connection->ejecutar($query);
     }
     private function consultarUnidadesConPropietario(){
-        $query = $connection->prepare("
-        SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
-        FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-        WHERE u.id_consorcio = ? 
-        AND p.user is not null
-        AND p.inquilino_de is null");
-        $query->bind_param("i",$this->id_consorcio);
-        $query->execute();
-        $reg = $query->get_result();
-        return $reg;
+    
+        $query =    "SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
+                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
+                    WHERE u.id_consorcio = $this->id_consorcio
+                    AND p.user is not null
+                    AND p.inquilino_de is null";
+        return $this->connection->ejecutar($query);
     }
 
     private function setPrcParticipacion($prcParticipacion){ 
@@ -62,10 +59,6 @@ class Consorcio {
     }
     private function setDepartamento($departamento){ 
         try{$this->departamento = $this->validarVariableString($departamento);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
-    }
-    private function setAltura($altura){ 
-        try{$this->altura = $this->validarVariableNumerica($altura);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
     }
     private function setNro_unidad($nro_unidad){ 
