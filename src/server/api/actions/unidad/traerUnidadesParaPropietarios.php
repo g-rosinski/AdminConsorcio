@@ -10,7 +10,6 @@
         $db = new DB();
         $unidad = new Unidad($db);
         $data = $_GET;
-        // var_dump($data['id_consorcio']);die;
         $unidadesEncontradas = $unidad->UnidadesSinPropietarioAsignado($data['id_consorcio']);
         $arrayUnidades = array();
         while ($obj = $unidadesEncontradas->fetch_object()) {

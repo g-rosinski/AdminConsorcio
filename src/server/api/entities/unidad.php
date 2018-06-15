@@ -19,6 +19,9 @@ class Unidad {
         $this->connection = $connection;
     }
     
+
+    // UnidadesConPropietarioAsignado:: 
+    // Trae un array? de registros con id de unidad, piso y depto de los que propietario asociado
     public function UnidadesConPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
@@ -29,27 +32,21 @@ class Unidad {
     }
     
     private function consultarUnidadesSinPropietario(){
-        $query = $this->connection->prepare("
-        SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
-        FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-        WHERE u.id_consorcio = ? 
-        AND p.user is null");
-        $query->bind_param("i",$this->id_consorcio);
-        $query->execute();
-        $reg = $query->get_result();
-        return $reg;
+
+        $query =    "SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
+                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
+                    WHERE u.id_consorcio = $this->id_consorcio
+                    AND p.user is null";
+        return $this->connection->ejecutar($query);
     }
     private function consultarUnidadesConPropietario(){
-        $query = $this->connection->prepare("
-        SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
-        FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-        WHERE u.id_consorcio = ? 
-        AND p.user is not null
-        AND p.inquilino_de is null");
-        $query->bind_param("i",$this->id_consorcio);
-        $query->execute();
-        $reg = $query->get_result();
-        return $reg;
+    
+        $query =    "SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
+                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
+                    WHERE u.id_consorcio = $this->id_consorcio
+                    AND p.user is not null
+                    AND p.inquilino_de is null";
+        return $this->connection->ejecutar($query);
     }
 
     private function setPrcParticipacion($prcParticipacion){ 
