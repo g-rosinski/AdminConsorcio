@@ -32,4 +32,10 @@ class Usuario
         $query = "INSERT INTO usuario (user, pass, id_persona, estado) VALUES (('$this->user'),('$this->pass'),($this->id_persona),('$this->estado'))";
         return $this->connection->ejecutar($query);
     }
+
+    public function obtenerPorUser($user)
+    {
+        $query = "SELECT * FROM usuario WHERE (user) = ('$user')";
+        return $this->connection->ejecutar($query);
+    }
 }

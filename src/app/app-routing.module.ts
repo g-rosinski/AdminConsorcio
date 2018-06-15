@@ -4,6 +4,7 @@ import { SingupComponent } from './singup/singup.component';
 import { HomeComponent } from './home/home.component';
 
 import { RouterModule, Routes } from '@angular/router';
+import { SessionGuard } from './services/session-guard.service';
 
 const appRoutes: Routes = [
   {
@@ -16,7 +17,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [SessionGuard]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   // { path: '**', component: PageNotFoundComponent }
@@ -28,6 +30,7 @@ const appRoutes: Routes = [
   ],
   exports: [
     RouterModule
-  ]
+  ],
+  providers: [SessionGuard]
 })
 export class AppRoutingModule { }

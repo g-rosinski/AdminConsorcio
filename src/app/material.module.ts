@@ -1,31 +1,31 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterializeModule } from "angular2-materialize";
-import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatBadgeModule, MatExpansionModule, MatTableModule, MatButtonModule, MatCheckboxModule,
   MatCardModule, MatInputModule, MatIconModule, MatSelectModule, MatRadioModule
 } from '@angular/material';
 
+const MODULES = [
+  CommonModule,
+  BrowserAnimationsModule,
+  MaterializeModule,
+  MatExpansionModule,
+  MatTableModule,
+  MatSelectModule,
+  MatBadgeModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MatCardModule,
+  MatInputModule,
+  MatIconModule,
+  MatRadioModule,
+];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    MaterializeModule,
-    MatExpansionModule,
-    MatTableModule,
-    MatSelectModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatInputModule,
-    MatIconModule,
-    MatRadioModule,
-  ],
+  imports: MODULES,
+  exports: MODULES,
   declarations: []
 })
 export class MaterialModule { }
