@@ -1,5 +1,7 @@
 <?php
 
+include_once './../../utils/query.php';
+
 class Unidad {
 
     private $connection;
@@ -13,15 +15,14 @@ class Unidad {
     private $superficie;        //setSuperficie
     private $id_consorcio;      //setIdConsorcio
 
+    private $query;
+
     
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
-    
 
-    // UnidadesConPropietarioAsignado:: 
-    // Trae un array? de registros con id de unidad, piso y depto de los que propietario asociado
     public function UnidadesConPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
@@ -31,22 +32,34 @@ class Unidad {
         return $this->consultarUnidadesSinPropietario();        
     }
     
-    private function consultarUnidadesSinPropietario(){
+    private function execute($type, $param){
+        $q = new Query($this->connection);
+        return $q->execute(array($this->query),array($type),array($param));
+    }
 
-        $query =    "SELECT u.id_unidad AS id, u.piso AS piso , u.departamento AS deptounidad
-                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-                    WHERE u.id_consorcio = $this->id_consorcio
-                    AND p.user is null";
-        return $this->connection->ejecutar($query);
+    private function consultarUnidadesSinPropietario(){
+        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS depto
+                            FROM iani.unidad u left join iani.propietariounidad p on p.id_unidad = u.id_unidad
+                            WHERE u.id_consorcio = ?
+                            AND p.user is null";
+        $arrType = array ("i");
+        $arrParam = array(
+            $this->id_consorcio
+        );
+        return $this->execute($arrType,$arrParam );
     }
     private function consultarUnidadesConPropietario(){
     
         $query =    "SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
                     FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-                    WHERE u.id_consorcio = $this->id_consorcio
+                    WHERE u.id_consorcio = ?
                     AND p.user is not null
                     AND p.inquilino_de is null";
-        return $this->connection->ejecutar($query);
+        $arrType = array ("i");
+        $arrParam = array(
+            $this->id_consorcio
+        );
+        return $this->execute($arrType,$arrParam );
     }
 
     private function setPrcParticipacion($prcParticipacion){ 
