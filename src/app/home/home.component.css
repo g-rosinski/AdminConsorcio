@@ -26,11 +26,11 @@ p {
 	text-align: right;
 	background-color: #323232;
 	border-radius: 2px;
-	color: #FFF;
+	color: #FFF !important;
 	width:auto;
 }
 
-/deep/ .mat-badge-content{
+:host /deep/ .mat-badge-content{
 	margin-bottom: 8px;
 }
 

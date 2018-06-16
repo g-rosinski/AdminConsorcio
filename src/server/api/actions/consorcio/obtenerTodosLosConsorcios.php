@@ -1,19 +1,22 @@
 <?php
-header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Origin: *");
 include_once './../../config/db.php';
+include_once './../../entities/consorcio.php';
 
-echo json_encode(obtenerTodosLosConsorcios());
+echo obtenerTodosLosConsorcios();
 
 function obtenerTodosLosConsorcios()
 {
+    $db = new DB();
+    $consorcio = new Consorcio($db);
+ 
+    $resultados = $consorcio->listarConsorciosCompleto();
     $consorcios = array();
-    $query = "SELECT * FROM consorcio";
-    $resultados = ejecutarSQL($query);
 
-    while ($obj = mysqli_fetch_object($resultados)) {
+
+    while ($obj = $resultados->fetch_object()) {
         $consorcios[] = $obj;
     }
-
-    return $consorcios;
+    return json_encode($consorcios);
 }

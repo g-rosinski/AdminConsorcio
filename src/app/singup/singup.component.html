@@ -46,39 +46,20 @@
           <mat-card-title>Datos de la unidad</mat-card-title>
 
           <mat-form-field class="full-width">
-            <mat-select placeholder="Consorcio">
+            <mat-select placeholder="Consorcio" [(ngModel)]="formModel.consorcio" name="consorcio" (selectionChange)="onConsorcioChange($event)">
               <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <div *ngIf="formModel.rol === 'PROPIETARIO'">
-            <mat-form-field class="third-width">
-              <input [(ngModel)]="formModel.floor" name="floor" required matInput [type]="'number'" placeholder="Piso">
-            </mat-form-field>
-            <mat-form-field class="third-width">
-              <input [(ngModel)]="formModel.depto" name="depto" required matInput placeholder="Departamento">
-            </mat-form-field>
-            <mat-form-field class="third-width">
-              <input [(ngModel)]="formModel.size" name="size" required matInput placeholder="Metros Cuadrados">
-            </mat-form-field>
-          </div>
-          <div *ngIf="formModel.rol === 'INQUILINO'">
-            <mat-form-field class="half-width">
-              <mat-select placeholder="Piso">
-                <mat-option value="option">Option</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="half-width">
-              <mat-select placeholder="Departamento">
-                <mat-option value="option">Option</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Unidad"  [(ngModel)]="formModel.unit" name="unit" >
+              <mat-option *ngFor="let unidad of unidades |async" [value]="unidad.id">{{unidad.piso + unidad.deptounidad}}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <p style="text-align: center;color: red;">{{error}}</p>
 
           <div class="text-right">
-            <!-- <button mat-button color="accent" style="margin-right: 5px;">Registrarse</button> -->
             <button type="submit" mat-raised-button color="primary">Registrarme</button>
           </div>
         </form>

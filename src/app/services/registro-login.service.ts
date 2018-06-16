@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class RegistroLoginService {
     static BASE_URL = 'http://localhost/server/api/actions/loginRegistro';
-
+    usuario = null;
     constructor(
         public http: HttpClient,
     ) { }
@@ -27,7 +27,11 @@ export class RegistroLoginService {
     }
 
     obtenerSession(): Observable<any> {
-        return this.http.get(RegistroLoginService.BASE_URL + '/obtenerSession.php');
+        return this.http.get(RegistroLoginService.BASE_URL + '/obtenerSession.php')
+            .map(x => { 
+                if (x) this.usuario = x;
+                return x;
+            });
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 
-class Consorcio {
+class Consorcio
+{
 
     private $connection;
     private $tabla = "consorcio";
@@ -14,13 +15,13 @@ class Consorcio {
     private $superficie;
     private $barrio;
 
-    
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
-    
-    public function crearConsorcio($nombre,$cuit,$calle,$altura,$superficie,$barrio,$telefono = null){
+
+    public function crearConsorcio($nombre, $cuit, $calle, $altura, $superficie, $barrio, $telefono = null)
+    {
         $this->setNombre($nombre);
         $this->setCuit($cuit);
         $this->setCalle($calle);
@@ -31,78 +32,82 @@ class Consorcio {
 
         $this->insertConsorcio();
     }
-    public function listarConsorciosArrayFormateado(){
+    public function listarConsorciosArrayFormateado()
+    {
         $result = array();
         $query = "select id_consorcio, nombre from" . $this->tabla . " order by nombre";
-        while($reg = mysql_fetch_assoc ( $this->connection->ejecutar($query) )){
+        while ($reg = mysql_fetch_assoc($this->connection->ejecutar($query))) {
             $result[$reg['id_consorcio']] = $reg['nombre'];
         }
-        echo '<pre>'.print_r($query,true).'</true>';die;
-        return  $result;
+        echo '<pre>' . print_r($query, true) . '</true>';die;
+        return $result;
     }
-    public function listarConsorciosCompleto(){
-        $query = "select * from " .$this->tabla;
-        return mysql_fetch_assoc ( $this->connection->ejecutar($query) );
-    }
-
-    public function traerConsorcioByID($id){
-        $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
-        return mysql_fetch_assoc ( $this->connection->ejecutar($query) );
-    }
-   
-
-    private function insertConsorcio(){
-        $query = "INSERT INTO " 
-                . $this->tabla 
-                . " (nombre, cuit, calle, altura, telefono, superficie, id_barrio)"
-                . " VALUES (('$this->nombre'),('$this->cuit'),('$this->calle'),($this->altura),('$this->telefono'),($this->superficie),($this->barrio))";
+    public function listarConsorciosCompleto()
+    {
+        $query = "select * from " . $this->tabla;
         return $this->connection->ejecutar($query);
     }
 
-    private function setNombre($nombre){ 
-        try{$this->nombre = $this->validarVariableString($nombre);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+    public function traerConsorcioByID($id)
+    {
+        $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
+        return mysql_fetch_assoc($this->connection->ejecutar($query));
     }
-    private function setCuit($cuit){ 
-        try{$this->cuit = $this->validarVariableString($cuit);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+
+    private function insertConsorcio()
+    {
+        $query = "INSERT INTO "
+        . $this->tabla
+            . " (nombre, cuit, calle, altura, telefono, superficie, id_barrio)"
+            . " VALUES (('$this->nombre'),('$this->cuit'),('$this->calle'),($this->altura),('$this->telefono'),($this->superficie),($this->barrio))";
+        return $this->connection->ejecutar($query);
     }
-    private function setCalle($calle){ 
-        try{$this->calle = $this->validarVariableString($calle);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+
+    private function setNombre($nombre)
+    {
+        try { $this->nombre = $this->validarVariableString($nombre);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
-    private function setAltura($altura){ 
-        try{$this->altura = $this->validarVariableNumerica($altura);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+    private function setCuit($cuit)
+    {
+        try { $this->cuit = $this->validarVariableString($cuit);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
-    private function setTelefono($telefono){ 
+    private function setCalle($calle)
+    {
+        try { $this->calle = $this->validarVariableString($calle);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
+    private function setAltura($altura)
+    {
+        try { $this->altura = $this->validarVariableNumerica($altura);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
+    private function setTelefono($telefono)
+    {
         /* try{$this->telefono = $this->validarVariableString($telefono);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); } */
         $this->telefono = $telefono;
     }
-    private function setSuperficie($superficie){ 
-        try{$this->superficie = $this->validarVariableNumerica($superficie);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+    private function setSuperficie($superficie)
+    {
+        try { $this->superficie = $this->validarVariableNumerica($superficie);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
-    private function setBarrio($barrio){ 
-        try{$this->barrio = $this->validarVariableNumerica($barrio);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+    private function setBarrio($barrio)
+    {
+        try { $this->barrio = $this->validarVariableNumerica($barrio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
 
-    private function validarVariableString($var){
-        if(!empty($var) && is_string($var)){
+    private function validarVariableString($var)
+    {
+        if (!empty($var) && is_string($var)) {
             return $var;
-        }else{
+        } else {
             throw new Exception("El valor es null o no es de tipo String");
         }
     }
-    private function validarVariableNumerica($var){
-        if(!empty($var) && is_numeric($var)){
+    private function validarVariableNumerica($var)
+    {
+        if (!empty($var) && is_numeric($var)) {
             return $var;
-        }else{
+        } else {
             throw new Exception("El valor es null o no es de tipo Numerico");
         }
     }
 }
-
-?>

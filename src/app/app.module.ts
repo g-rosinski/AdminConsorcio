@@ -15,6 +15,7 @@ import { ReviewUsersComponent } from './home/review-users/review-users.component
 import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
 import { RegistroLoginService } from './services/registro-login.service';
+import { UnidadService } from './services/unidad.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { RegistroLoginService } from './services/registro-login.service';
     MaterialModule,
     ToastrModule.forRoot(),
   ],
-  providers: [UsuarioService, ConsorcioService, RegistroLoginService],
+  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

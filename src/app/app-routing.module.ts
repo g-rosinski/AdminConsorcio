@@ -5,15 +5,18 @@ import { HomeComponent } from './home/home.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { SessionGuard } from './services/session-guard.service';
+import { LoginGuard } from './services/login-guard.service';
 
 const appRoutes: Routes = [
   {
     path: 'login',
-    component: SinginComponent
+    component: SinginComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'register',
-    component: SingupComponent
+    component: SingupComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'home',
@@ -31,6 +34,6 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [SessionGuard]
+  providers: [SessionGuard, LoginGuard]
 })
 export class AppRoutingModule { }

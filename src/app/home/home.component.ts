@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioService.obtenerUsuariosInactivos().subscribe((x: Array<any>) => this.countUsers = x.length);
+    this.name = this.session.usuario.user;
   }
 
   logout() {
