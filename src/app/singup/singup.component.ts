@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatRadioChange } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ConsorcioService } from './../services/consorcio.service';
-import { UsuarioService } from './../services/usuario.service';
+import { RegistroLoginService } from './../services/registro-login.service';
 import { UnidadService } from './../services/unidad.service';
 
 @Component({
@@ -20,8 +20,8 @@ export class SingupComponent implements OnInit {
     lastName: '',
     dni: '',
     rol: 'PROPIETARIO',
-    consorcio: 0,
-    unit: 0,
+    consorcio: '',
+    unit: '',
   };
 
   error = '';
@@ -31,7 +31,7 @@ export class SingupComponent implements OnInit {
 
   constructor(
     private consorcioService: ConsorcioService,
-    private usuarioService: UsuarioService,
+    private registroService: RegistroLoginService,
     private unidadService: UnidadService,
   ) { }
 
@@ -40,15 +40,15 @@ export class SingupComponent implements OnInit {
   }
 
   onSubmit() {
-    this.usuarioService.registrar(this.formModel).then(x => {
+    this.registroService.registrar(this.formModel).then(x => {
       if (x && x !== '') this.error = x.toString();
       if (!x || x === '') this.successSignUp = true;
     });
   }
 
   onRadioChange(e: MatRadioChange) {
-    this.formModel.unit = 0;
-    this.formModel.consorcio = 0;
+    this.formModel.unit = '';
+    this.formModel.consorcio = '';
     this.unidades = null;
   }
 

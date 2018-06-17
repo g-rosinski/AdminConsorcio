@@ -28,10 +28,27 @@ export class RegistroLoginService {
 
     obtenerSession(): Observable<any> {
         return this.http.get(RegistroLoginService.BASE_URL + '/obtenerSession.php')
-            .map(x => { 
+            .map(x => {
                 if (x) this.usuario = x;
                 return x;
             });
     }
 
+    registrar(formModel: any): Promise<any> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        const body = new HttpParams()
+            .set('user', formModel.user.toLocaleLowerCase().trim())
+            .set('pass', formModel.pass)
+            .set('repass', formModel.repass)
+            .set('name', formModel.name)
+            .set('lastName', formModel.lastName)
+            .set('email', formModel.email)
+            .set('consorcio', formModel.consorcio)
+            .set('unit', formModel.unit)
+            .set('rol', formModel.rol)
+            .set('dni', formModel.dni.toString());
+
+        return this.http.post(RegistroLoginService.BASE_URL + '/registrar.php', body.toString(), { headers: headers })
+            .toPromise();
+    }
 }

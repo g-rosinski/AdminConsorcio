@@ -6,6 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once './../../config/db.php';
 include_once './../../entities/usuario.php';
 include_once './../../entities/persona.php';
+include_once './../../entities/unidad.php';
 
 $db = new DB();
 echo registrar($db);
@@ -18,6 +19,7 @@ function registrar(&$db)
         // OBTENGO EL ID la persona que acabo de generar.
         $idPersona = $db->obtenerUltimoInsertId();
         agregarUsuario($db, $idPersona);
+        agregarRelacionUnidadPersona($db);
     }
 
     return json_encode($errores);
@@ -49,20 +51,24 @@ function agregarPersona(&$conexion)
     return $persona->agregar();
 }
 
+function agregarRelacionUnidadPersona($db)
+{
+    $unidad = new Unidad($db);
+    $unidad->AgregarRelacionPersonaUnidad($_POST['user'], $_POST['rol'], $_POST['unit']);
+}
+
 function validarSiElUsuarioExiste($db)
 {
     $user = $_POST['user'];
     $query = "SELECT user FROM usuario WHERE (user) = ('$user')";
-    $listaUsers =  $db->ejecutar($query)->fetch_assoc();
+    $listaUsers = $db->ejecutar($query)->fetch_assoc();
 
     return !empty($listaUsers['user']);
 }
 
-// TODO: Tenemos que validar que el formato del user?
-// Por ejemplo: solo letras, sin espacio.
 function validar($db)
 {
-    $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni');
+    $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni', 'consorcio', 'unit');
 
     foreach ($campos as &$valor) {
         if (empty(($_POST[$valor]))) {
@@ -70,8 +76,16 @@ function validar($db)
         }
     }
 
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        return 'Por favor ingrese un email valido';
+    }
+
     if (validarSiElUsuarioExiste($db)) {
         return 'Nombre de usuario ya existe. Por favor elija otro';
+    }
+
+    if (strlen($_POST['pass']) < 6) {
+        return 'La contraseña debe tener al menos 6 caracteres';
     }
 
     if ($_POST['pass'] != $_POST['repass']) {

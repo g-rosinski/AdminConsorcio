@@ -46,13 +46,13 @@
           <mat-card-title>Datos de la unidad</mat-card-title>
 
           <mat-form-field class="full-width">
-            <mat-select placeholder="Consorcio" [(ngModel)]="formModel.consorcio" name="consorcio" (selectionChange)="onConsorcioChange($event)">
+            <mat-select placeholder="Consorcio" required [(ngModel)]="formModel.consorcio" name="consorcio" (selectionChange)="onConsorcioChange($event)">
               <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field class="full-width">
-            <mat-select placeholder="Unidad"  [(ngModel)]="formModel.unit" name="unit" >
+            <mat-select placeholder="Unidad" required [(ngModel)]="formModel.unit" name="unit" >
               <mat-option *ngFor="let unidad of unidades |async" [value]="unidad.id">{{unidad.piso + unidad.deptounidad}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -72,6 +72,7 @@
       <mat-card-title>Registro Exitoso!</mat-card-title>
       <mat-card-content>
         <p>El registro ha sido un exito! Por favor espere a que uno de nuestros operadores revise su solicitud.</p>
+        <button type="button" mat-raised-button color="primary" routerLink="/login">Ir al inicio</button>
       </mat-card-content>
     </mat-card>
   </div>
