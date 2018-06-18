@@ -1,9 +1,9 @@
 <?php
 require_once './../../utils/autoload.php';
 
-class Formapago {
+class FormaPago {
 
-    public $id_forma_pago;
+    public $idFormaPago;
     public $descripcion;
     public $cotizacion;
     public $tipo;

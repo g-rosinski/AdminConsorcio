@@ -6,13 +6,13 @@ class Expensa
     private $connection;
     private $tabla = "expensa";
 
-    public $id_expensa;
-    public $cuota_expensa;
-    public $cuoata_extraordinaria;
-    public $cuota_mora;
-    public $cuota_mes;
-    public $cuota_vencimiento;
-    public $cuota_estado;
+    public $idExpensa;
+    public $cuotaExpensa;
+    public $cuoataExtraordinaria;
+    public $cuotaMora;
+    public $cuotaMes;
+    public $cuotaVencimiento;
+    public $cuotaEstado;
     public $id_ctacte;
     public $id_gasto_mensual;
 

@@ -1,7 +1,8 @@
 <?php
 require_once './../../utils/autoload.php';
 
-class Gasto {
+class Gasto
+{
 
     public $id_gasto;
     public $nro_comprobante;
@@ -14,4 +15,3 @@ class Gasto {
     public $id_reclamo;
     public $id_operador;
 }
-?>

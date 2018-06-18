@@ -10,11 +10,10 @@ class Barrio
     private $id_comuna;
     private $codigo_postal;
     private $descripcion;
-    
+
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
 
 }
-?>
