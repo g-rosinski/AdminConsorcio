@@ -1,6 +1,6 @@
 <?php
 
-include_once './../../utils/query.php';
+require_once './../../utils/autoload.php';
 
 class Unidad 
 {
@@ -33,8 +33,10 @@ class Unidad
     // $arrType = array("iss") /* int string string */
     // $arrParam = array(14,"Calle Falsa","432");
     private function execute($arrType = null, $arrParam = null)
-    {
-        $q = new Query($this->connection);
+    {   
+        try{$q = new Query($this->connection);}
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        
         return $q->execute(array($this->query),$arrType,$arrParam);
     }
     

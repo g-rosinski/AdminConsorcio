@@ -1,15 +1,14 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-require_once './../../config/db.php';
+require_once './../../utils/autoload.php';
 include_once './../../entities/unidad.php';
 
 echo traerUnidadesParaPropietarios();
 
 function traerUnidadesParaPropietarios()
 {
-
-        $db = new DB();
+		try{$db = new DB();}catch(Exception $e){echo "Msj:".$e->getMessage();}        
         $unidad = new Unidad($db);
         $data = $_GET;
 

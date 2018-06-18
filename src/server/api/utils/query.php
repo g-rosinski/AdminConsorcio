@@ -14,6 +14,15 @@ class Query{
     /* public function prepare($query){
         $this->query = $this->connection->prepare($query);
     } */
+    public function testA($p){
+        if(!empty($p)){
+            echo $p;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public function execute($query, $type, $param){
         $this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);
         if (!empty($type) && !empty($param)) {
