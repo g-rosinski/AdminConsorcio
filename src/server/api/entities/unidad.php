@@ -16,6 +16,7 @@ class Unidad
     private $nro_unidad; //setNro_unidad
     private $superficie; //setSuperficie
     private $id_consorcio; //setIdConsorcio
+    private $validator;
     
     private $query;
     
@@ -23,6 +24,8 @@ class Unidad
     public function __construct($connection)
     {
         $this->connection = $connection;
+        try{ $this->validator = new Validator; }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
 
     // executeQuery ejecuta la consulta, utiliza la query del atributo, recibe como parametro 2 arrays que se utilizarán para bindear a la query
@@ -34,7 +37,7 @@ class Unidad
     // $arrParam = array(14,"Calle Falsa","432");
     private function execute($arrType = null, $arrParam = null)
     {   
-        try{$q = new Query($this->connection);}
+        try{ $q = new Query($this->connection); }
         catch(Exception $e){echo "Msj:".$e->getMessage();}
         
         return $q->execute(array($this->query),$arrType,$arrParam);
@@ -107,43 +110,43 @@ class Unidad
 
     private function setIdConsorcio($id_consorcio)
     {
-        try { $this->id_consorcio = $this->validarVariableNumerica($id_consorcio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->id_consorcio = $this->validator->validarVariableNumerica($id_consorcio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setPrcParticipacion($prcParticipacion)
     {
-        try { $this->prcParticipacion = $this->validarVariableNumerica($prcParticipacion);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->prcParticipacion = $this->validator->validarVariableNumerica($prcParticipacion);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setPiso($piso)
     {
-        try { $this->piso = $this->validarVariableNumerica($piso);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->piso = $this->validator->validarVariableNumerica($piso);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setDepartamento($departamento)
     {
-        try { $this->departamento = $this->validarVariableString($departamento);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->departamento = $this->validator->validarVariableString($departamento);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setNro_unidad($nro_unidad)
     {
-        try { $this->nro_unidad = $this->validarVariableNumerica($nro_unidad);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->nro_unidad = $this->validator->validarVariableNumerica($nro_unidad);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setSuperficie($superficie)
     {
-        try { $this->superficie = $this->validarVariableNumerica($superficie);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->superficie = $this->validator->validarVariableNumerica($superficie);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
 
-    private function validarVariableString($var)
-    {
-        if (!empty($var) && is_string($var)) {
-            return $var;
-        } else {
-            throw new Exception("El valor es null o no es de tipo String");
-        }
-    }
-    private function validarVariableNumerica($var)
-    {
-        if (!empty($var) && is_numeric($var)) {
-            return $var;
-        } else {
-            throw new Exception("El valor es null o no es de tipo Numerico");
-        }
-    }
+    // private function validarVariableString($var)
+    // {
+    //     if (!empty($var) && is_string($var)) {
+    //         return $var;
+    //     } else {
+    //         throw new Exception("El valor es null o no es de tipo String");
+    //     }
+    // }
+    // private function validarVariableNumerica($var)
+    // {
+    //     if (!empty($var) && is_numeric($var)) {
+    //         return $var;
+    //     } else {
+    //         throw new Exception("El valor es null o no es de tipo Numerico");
+    //     }
+    // }
 }
