@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatRadioChange } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ConsorcioService } from './../services/consorcio.service';
-import { UsuarioService } from './../services/usuario.service';
+import { RegistroLoginService } from './../services/registro-login.service';
+import { UnidadService } from './../services/unidad.service';
 
 @Component({
   selector: 'app-singup',
@@ -19,18 +20,19 @@ export class SingupComponent implements OnInit {
     lastName: '',
     dni: '',
     rol: 'PROPIETARIO',
-    floor: '',
-    depto: '',
-    size: '',
+    consorcio: '',
+    unit: '',
   };
 
   error = '';
   consorcios: Observable<any>;
+  unidades: Observable<any>;
   successSignUp = false;
 
   constructor(
     private consorcioService: ConsorcioService,
-    private usuarioService: UsuarioService,
+    private registroService: RegistroLoginService,
+    private unidadService: UnidadService,
   ) { }
 
   ngOnInit() {
@@ -38,19 +40,30 @@ export class SingupComponent implements OnInit {
   }
 
   onSubmit() {
-    this.usuarioService.registrar(this.formModel).then(x => {
+    this.registroService.registrar(this.formModel).then(x => {
       if (x && x !== '') this.error = x.toString();
       if (!x || x === '') this.successSignUp = true;
     });
   }
 
   onRadioChange(e: MatRadioChange) {
-    this.formModel.floor = '';
-    this.formModel.size = '';
-    this.formModel.depto = '';
+    this.formModel.unit = '';
+    this.formModel.consorcio = '';
+    this.unidades = null;
+  }
+
+  onConsorcioChange(e) {
+    this.traerUnidades(e.value);
   }
 
   obtenerTodosLosConsorcios() {
     this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
+  }
+
+  traerUnidades(consorcioId) {
+    if (this.formModel.rol === 'PROPIETARIO')
+      this.unidades = this.unidadService.traerUnidadesParaPropietarios(consorcioId);
+      else
+      this.unidades = this.unidadService.traerUnidadesParaInquilinos(consorcioId);
   }
 }

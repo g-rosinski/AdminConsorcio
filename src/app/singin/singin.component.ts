@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { RegistroLoginService } from './../services/registro-login.service';
+import { Router } from "@angular/router";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-singin',
@@ -11,16 +13,19 @@ export class SinginComponent {
   formModel = { user: '', pass: '' };
 
   constructor(
-    public http: HttpClient
+    private login: RegistroLoginService,
+    private router: Router,
+    private toast: ToastrService
   ) { }
 
   onSubmit() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    const body = new HttpParams()
-      .set('user', this.formModel.user)
-      .set('pass', this.formModel.pass);
-    return this.http.post('http://localhost/server/test.php', body.toString(), { headers: headers })
-      .subscribe(x => console.log(x));
+    this.login.loguear(this.formModel)
+      .then(x => {
+        if (x)
+          this.toast.error(x);
+        else
+          this.router.navigate(['home']);
+      });
   }
 
 }

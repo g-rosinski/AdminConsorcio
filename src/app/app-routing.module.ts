@@ -4,19 +4,24 @@ import { SingupComponent } from './singup/singup.component';
 import { HomeComponent } from './home/home.component';
 
 import { RouterModule, Routes } from '@angular/router';
+import { SessionGuard } from './services/session-guard.service';
+import { LoginGuard } from './services/login-guard.service';
 
 const appRoutes: Routes = [
   {
     path: 'login',
-    component: SinginComponent
+    component: SinginComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'register',
-    component: SingupComponent
+    component: SingupComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [SessionGuard]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   // { path: '**', component: PageNotFoundComponent }
@@ -28,6 +33,7 @@ const appRoutes: Routes = [
   ],
   exports: [
     RouterModule
-  ]
+  ],
+  providers: [SessionGuard, LoginGuard]
 })
 export class AppRoutingModule { }

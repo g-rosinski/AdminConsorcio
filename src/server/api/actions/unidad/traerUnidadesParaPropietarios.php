@@ -1,13 +1,13 @@
 <?php
-    header("Content-Type: application/json; charset=UTF-8");
-    require_once './../../config/db.php';
-    
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Origin: *");
+require_once './../../config/db.php';
+include_once './../../entities/unidad.php';
 
-    include_once './../../entities/unidad.php';
+echo traerUnidadesParaPropietarios();
 
-    echo traerUnidadesParaPropietarios();
-
-    function traerUnidadesParaPropietarios(){
+function traerUnidadesParaPropietarios()
+{
 
         $db = new DB();
         $unidad = new Unidad($db);
@@ -21,5 +21,5 @@
         }
 
         return json_encode($arrayUnidades);
-    }
-?>
+
+}
