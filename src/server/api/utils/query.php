@@ -15,13 +15,12 @@ class Query{
         $this->query = $this->connection->prepare($query);
     } */
     public function execute($query, $type, $param){
-        
-        if ($this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query )   ) {
-
+        $this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);
+        if (!empty($type) && !empty($param)) {
             call_user_func_array(array($this->query,'bind_param'),$this->bindTypeAndParams($type, $param) );
-            $this->query->execute();        
-            return $result = $this->query->get_result();
         }
+        $this->query->execute();        
+        return $result = $this->query->get_result();
     }
 
     private function bindTypeAndParams($type , $param){
