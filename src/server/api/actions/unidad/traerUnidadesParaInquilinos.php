@@ -5,16 +5,16 @@
 
     include_once './../../entities/unidad.php';
 
-    echo traerUnidadesParaPropietarios();
+    echo traerUnidadesParaInquilinos();
 
-    function traerUnidadesParaPropietarios(){
+    function traerUnidadesParaInquilinos(){
 
         $db = new DB();
         $unidad = new Unidad($db);
         $data = $_GET;
 
-        $unidadesEncontradas = $unidad->unidadesSinPropietarioAsignado($data['id_consorcio']);
-
+        $unidadesEncontradas = $unidad->unidadesConPropietarioAsignado($data['id_consorcio']);
+        
         $arrayUnidades = array();
         while ($obj = $unidadesEncontradas->fetch_object()) {
             $arrayUnidades[] = $obj;

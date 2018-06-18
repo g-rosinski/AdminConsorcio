@@ -23,23 +23,23 @@ class Unidad {
         $this->connection = $connection;
     }
 
-    public function UnidadesConPropietarioAsignado($consorcio){
+    public function unidadesConPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
     }
-    public function UnidadesSinPropietarioAsignado($consorcio){
+    public function unidadesSinPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesSinPropietario();        
     }
     
-    private function execute($type, $param){
+    private function execute($type = null, $param = null){
         $q = new Query($this->connection);
-        return $q->execute(array($this->query),array($type),array($param));
+        return $q->execute(array($this->query),$type,$param);
     }
 
     private function consultarUnidadesSinPropietario(){
         $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS depto
-                            FROM iani.unidad u left join iani.propietariounidad p on p.id_unidad = u.id_unidad
+                            FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
                             AND p.user is null";
         $arrType = array ("i");
@@ -50,11 +50,11 @@ class Unidad {
     }
     private function consultarUnidadesConPropietario(){
     
-        $query =    "SELECT u.id_unidad AS id , u.piso AS piso , u.departamento AS depto
-                    FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
-                    WHERE u.id_consorcio = ?
-                    AND p.user is not null
-                    AND p.inquilino_de is null";
+        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS depto
+                            FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
+                            WHERE u.id_consorcio = ?
+                            AND p.user is not null
+                            AND p.inquilino_de is null";
         $arrType = array ("i");
         $arrParam = array(
             $this->id_consorcio
@@ -62,6 +62,10 @@ class Unidad {
         return $this->execute($arrType,$arrParam );
     }
 
+    private function setIdConsorcio($id_consorcio){ 
+        try{$this->id_consorcio = $this->validarVariableNumerica($id_consorcio);}
+        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
+    }
     private function setPrcParticipacion($prcParticipacion){ 
         try{$this->prcParticipacion = $this->validarVariableNumerica($prcParticipacion);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
@@ -80,10 +84,6 @@ class Unidad {
     }
     private function setSuperficie($superficie){ 
         try{$this->superficie = $this->validarVariableNumerica($superficie);}
-        catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
-    }
-    private function setIdConsorcio($id_consorcio){ 
-        try{$this->id_consorcio = $this->validarVariableNumerica($id_consorcio);}
         catch(Exception $e){ echo "Msj:" . $e->getMessage(); }
     }
 

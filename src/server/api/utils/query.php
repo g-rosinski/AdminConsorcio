@@ -11,9 +11,9 @@ class Query{
         $this->connection = $connection;
     }
 
-    public function prepare($query){
+    /* public function prepare($query){
         $this->query = $this->connection->prepare($query);
-    }
+    } */
     public function execute($query, $type, $param){
         
         if ($this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query )   ) {
@@ -35,19 +35,35 @@ class Query{
         for($i=0 ; $i<$numOfParam; $i++){
             $arrParam[] = & $param[$i];
         }
+
         return $arrParam;
     }
 
-/*    public function execute(){
-        return $this->connection->ejecutar($query);
-    }*/
-    public function selectAll($tabla)
+    public function select($campos){
+        $q= "SELECT ";
+        if(count($campos)==0){
+            $q .= "*";
+        }else{
+            foreach($campos as $key => $campo){
+                ($key == 0) ? $q .= $campo : $q .= " , " .$campo;                
+            }
+        }
+        $this->query = $q;
+    }
+    public function from($tabla)
     {
-        $this->query .= "SELECT * FROM " . $tabla;
+        $this->query .= " " . $tabla;
     }
 
-    public function where($campo,$valor){
-        $this->query .= "WHERE ". $campo ." = " . $valor;
+    public function where($campo, $op){
+        $this->query .= "WHERE ". $campo ." ". $op ." ?";
+    }
+    
+    public function condAnd($campo, $op){
+        $this->query .= " AND ". $campo ." ". $op ." ?";
+    }
+    public function condOr($campo, $op){
+        $this->query .= " OR ". $campo ." ". $op ." ?";
     }
     public function whereIn($campo, $valores){
         foreach($valores as $valor){
