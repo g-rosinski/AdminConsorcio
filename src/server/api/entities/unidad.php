@@ -33,7 +33,7 @@ class Unidad
     // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
     // $arrType = array("i","s","s") /* int string string */
     // $arrParam = array(14,"Calle Falsa","432");
-    private function execute($arrType = null, $arrParam = null)
+    private function executeQuery($arrType = null, $arrParam = null)
     {   
         try{ $q = new Query($this->connection); }
         catch(Exception $e){echo "Msj:".$e->getMessage();}
@@ -69,7 +69,7 @@ class Unidad
             $user,
             $unidad
         );
-        return $this->execute($arrType,$arrParam);  
+        return $this->executeQuery($arrType,$arrParam);  
     }  
     private function vincularInquilinoAUnidad($user, $propietario, $unidad){
         $this->query = "INSERT INTO propietariounidad (user, inquilino_de,id_unidad)
@@ -80,7 +80,7 @@ class Unidad
             $propietario,
             $unidad
         );
-        return $this->execute($arrType,$arrParam); 
+        return $this->executeQuery($arrType,$arrParam); 
     }
     
     private function consultarUnidadesSinPropietario()
@@ -93,7 +93,7 @@ class Unidad
         $arrParam = array(
             $this->id_consorcio
         );
-        return $this->execute($arrType,$arrParam);
+        return $this->executeQuery($arrType,$arrParam);
     }
     private function consultarUnidadesConPropietario()
     {    
@@ -111,7 +111,7 @@ class Unidad
         $arrParam = array(
             $this->id_consorcio
         );
-        return $this->execute($arrType,$arrParam);
+        return $this->executeQuery($arrType,$arrParam);
     }
     private function consultarUnidadesOcupadasPorConsorcio(){
         $this->query =     "SELECT p.id_unidad 
@@ -123,7 +123,7 @@ class Unidad
         $arrParam = array(
             $this->id_consorcio
         );
-        return $this->execute($arrType,$arrParam);
+        return $this->executeQuery($arrType,$arrParam);
     }
 
     private function obtenerPropietarioUnidad($unidad)
@@ -133,7 +133,7 @@ class Unidad
         $arrParam = array(
             $unidad
         );
-        return $this->execute($arrType,$arrParam );
+        return $this->executeQuery($arrType,$arrParam );
     }
 
     private function setIdConsorcio($id_consorcio)
