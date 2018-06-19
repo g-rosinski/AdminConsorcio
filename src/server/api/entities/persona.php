@@ -12,15 +12,16 @@ class Persona
     public $email;
     public $cuil;
     public $razon_social;
-    public $inquilino_de;            
+    public $inquilino_de;
 
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
 
-    public function agregar() {
+    public function agregar()
+    {
         $query = "INSERT INTO persona (apellido, nombre, dni, email) VALUES (('$this->apellido'),('$this->nombre'),('$this->dni'),('$this->email'))";
-        return $this->connection->ejecutar($query);        
+        return $this->connection->ejecutar($query);
     }
 }

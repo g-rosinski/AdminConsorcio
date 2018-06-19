@@ -4,8 +4,6 @@ require_once './../../utils/autoload.php';
 
 class Unidad 
 {
-    
-    
     private $connection;
     private $tabla = "unidad";
     /* Campos de la tabla */
