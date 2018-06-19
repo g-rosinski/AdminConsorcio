@@ -11,25 +11,22 @@ class Query{
         $this->connection = $connection;
     }
 
-    /* public function prepare($query){
-        $this->query = $this->connection->prepare($query);
-    } */
-    public function testA($p){
-        if(!empty($p)){
-            echo $p;
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    public function execute($query, $type, $param){
+    public function prepare($query){
         $this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);
+    } 
+    public function sendData($type,$param){
         if (!empty($type) && !empty($param)) {
             call_user_func_array(array($this->query,'bind_param'),$this->bindTypeAndParams($type, $param) );
         }
         $this->query->execute();        
-        return $result = $this->query->get_result();
+        $result = $this->query->get_result();
+        $this->query->close();
+        return $result;
+    }
+    public function execute($query, $type, $param){
+        $this->prepare($query);                
+        $result = $this->sendData($type,$param);
+        return $result;
     }
 
     private function bindTypeAndParams($type , $param){
