@@ -12,7 +12,8 @@
     a) node -v
     b) npm --v
    Si la instalacion fue correcta les deveria devolver una version diferente en cada comando.
-4) Tenemos que instalar el cli de angular de manera global, para eso en la misma ventana CMD hacemos (sin las comillas). "npm install -g @angular/cli", esto puede tardar un ratito, pero cuando terminan, verifican la instalacion haciendo "ng -v" y este deberia devolver la version del cli que instalaron.
+3) Tenemos que instalar el cli de angular de manera global, para eso en la misma ventana CMD hacemos (sin las comillas). "npm install -g @angular/cli", esto puede tardar un ratito, pero cuando terminan, verifican la instalacion haciendo "ng -v" y este deberia devolver la version del cli que instalaron.
+4) Configuración de apache, modificar el archivo C:/xamp/apache/conf/httpd.conf, ubicar DocumentRoot y por defecto tendrá "C:/xampp/htdocs/" y en la linea siguiente tendrá <Directory "C:/xampp/htdocs/", modificar el path por "C:/xampp/htdocs/AdminConsorcios/dist/adminitrador-consorcio/"
 
 ## Levantar la aplicacion.
 1) Clonan el proyecto, y abren la ubicacion del proyecto en CMD. 
