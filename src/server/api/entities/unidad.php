@@ -63,7 +63,6 @@ class Unidad
     public function vincularPropietarioAUnidad($user, $unidad){
         $this->query = "INSERT INTO propietariounidad (user,id_unidad)
                         VALUES (?,?)";
-        echo "<br>".$user." ".$unidad."<br>";
         $arrType = array("s","i");
         $arrParam = array(
             $user,
