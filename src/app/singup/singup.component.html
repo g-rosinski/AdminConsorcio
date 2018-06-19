@@ -53,7 +53,7 @@
 
           <mat-form-field class="full-width">
             <mat-select placeholder="Unidad" required [(ngModel)]="formModel.unit" name="unit" >
-              <mat-option *ngFor="let unidad of unidades |async" [value]="unidad.id">{{unidad.piso + unidad.deptounidad}}</mat-option>
+              <mat-option *ngFor="let unidad of unidades |async" [value]="unidad['id_unidad']">{{unidad.piso + unidad.deptoUnidad}}</mat-option>
             </mat-select>
           </mat-form-field>
 
