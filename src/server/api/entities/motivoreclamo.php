@@ -2,11 +2,13 @@
 require_once './../../utils/autoload.php';
 
 class MotivoReclamo {
-    private $id_motivo_reclamo;
-    private $descripcion;
     private $connection;
     private $query;
     private $validator;
+	private $tabla = "motivoreclamo";
+    /* Campos de la tabla */
+    private $id_motivo_reclamo;
+    private $descripcion;
 
     public function __construct($connection)
     {
@@ -23,11 +25,11 @@ class MotivoReclamo {
     	return $this->insertMotivoReclamo();
     }
     private function consultaMotivoReclamo(){
-    	$this->query = "SELECT id_motivo_reclamo, descripcion FROM motivoreclamo";
+    	$this->query = "SELECT id_motivo_reclamo, descripcion FROM ". $tabla;
         return $this->executeQuery();
     }
     private function insertMotivoReclamo(){
-    	$this->query = "INSERT INTO motivoreclamo (descripcion) VALUES (?)";
+    	$this->query = "INSERT INTO ".$tabla." (descripcion) VALUES (?)";
         $arrType = array("s");
         $arrParam = array(
             $this->descripcion
