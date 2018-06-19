@@ -81,20 +81,37 @@ class Unidad
         $arrParam = array(
             $this->id_consorcio
         );
-        return $this->execute($arrType,$arrParam );
+        return $this->execute($arrType,$arrParam);
     }
     private function consultarUnidadesConPropietario()
     {    
         $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
                             FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
-                            AND p.user is not null
-                            AND p.inquilino_de is null";
+                            AND p.user IS NOT NULL
+                            AND p.inquilino_de IS NULL
+                            AND p.id_unidad NOT IN (SELECT p2.id_unidad
+                                                    FROM propietariounidad p2
+                                                    WHERE p2.id_unidad = p.id_unidad
+                                                    AND p2.inquilino_de IS NOT NULL)
+                            ";
         $arrType = array ("i");
         $arrParam = array(
             $this->id_consorcio
         );
-        return $this->execute($arrType,$arrParam );
+        return $this->execute($arrType,$arrParam);
+    }
+    private function consultarUnidadesOcupadasPorConsorcio(){
+        $this->query =     "SELECT p.id_unidad 
+                            FROM propietariounidad p
+                            INNER JOIN unidad u on p.id_unidad = u.id_unidad 
+                            WHERE  p.inquilino_de IS NOT NULL
+                            AND u.id_consorcio = ?";
+        $arrType = array ("i");
+        $arrParam = array(
+            $this->id_consorcio
+        );
+        return $this->execute($arrType,$arrParam);
     }
 
     private function obtenerPropietarioUnidad($unidad)
