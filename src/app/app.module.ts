@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { ToastrModule } from 'ngx-toastr';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { SingupComponent } from './singup/singup.component';
@@ -11,6 +12,7 @@ import { SinginComponent } from './singin/singin.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ReviewUsersComponent } from './home/review-users/review-users.component';
+import { ListarConsorciosComponent } from './home/listar-consorcios/listar-consorcios.component';
 
 import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
@@ -23,7 +25,8 @@ import { UnidadService } from './services/unidad.service';
     SingupComponent,
     SinginComponent,
     HomeComponent,
-    ReviewUsersComponent
+    ReviewUsersComponent,
+    ListarConsorciosComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,9 @@ import { UnidadService } from './services/unidad.service';
     HttpClientModule,
     MaterialModule,
     ToastrModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
+    }),
   ],
   providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService],
   bootstrap: [AppComponent]
