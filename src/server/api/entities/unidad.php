@@ -31,7 +31,7 @@ class Unidad
     // Letras según tipo de dato i = int ; s = string ; d = double
     // $arrParam = array [ 0 => "<string>", 1 => "<string>", n => "<string>"] El string será valor que bindeara a la query
     // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
-    // $arrType = array("iss") /* int string string */
+    // $arrType = array("i","s","s") /* int string string */
     // $arrParam = array(14,"Calle Falsa","432");
     private function execute($arrType = null, $arrParam = null)
     {   
@@ -53,17 +53,28 @@ class Unidad
     public function agregarRelacionPersonaUnidad($user, $rol, $id_unidad)
     {
         if ($rol == 'PROPIETARIO') {
-            return $this->vincularPropietarioAUnidad($user, null, $id_unidad);
+            return $this->vincularPropietarioAUnidad($user,$id_unidad);
         } else {
             $propietario = $this->obtenerPropietarioUnidad($id_unidad)->fetch_assoc();
             return $this->vincularInquilinoAUnidad($user, $propietario['user'], $id_unidad);
         }
     }
 
+    public function vincularPropietarioAUnidad($user, $unidad){
+        $this->query = "INSERT INTO propietariounidad (user,id_unidad)
+                        VALUES (?,?)";
+        echo "<br>".$user." ".$unidad."<br>";
+        $arrType = array("s","i");
+        $arrParam = array(
+            $user,
+            $unidad
+        );
+        return $this->execute($arrType,$arrParam);  
+    }  
     private function vincularInquilinoAUnidad($user, $propietario, $unidad){
         $this->query = "INSERT INTO propietariounidad (user, inquilino_de,id_unidad)
-                        VALUES( ? , ? , ?)";
-        $arrType = array("ssi");
+                        VALUES (?,?,?)";
+        $arrType = array("s","s","i");
         $arrParam = array(
             $user,
             $propietario,
@@ -71,31 +82,6 @@ class Unidad
         );
         return $this->execute($arrType,$arrParam); 
     }
-    private function vincularPropietarioAUnidad($user, $unidad){
-        $this->query = "INSERT INTO propietariounidad (user,id_unidad)
-                        VALUES( ? , ?)";
-        $arrType = array("si");
-        $arrParam = array(
-            $user,
-            $unidad
-        );
-        return $this->execute($arrType,$arrParam);  
-    }
-    
-    // private function relacionPersonaUnidad($user, $inquilino_de, $id_unidad)
-    // {
-    //     $inquilino_de = $inquilino_de ? "'" . $inquilino_de . "'" : 'null';
-    //     $this->query = "INSERT INTO propietariounidad (`user`, `inquilino_de`, `id_unidad`)
-    //                 VALUES ( ?, ?, ?)";
-    //     $arrType = array("ssi");
-    //     $arrParam = array(
-    //         $user,
-    //         $inquilino_de,
-    //         $unidad
-    //     );
-    //     return $this->execute($arrType,$arrParam); 
-    // }
-    
     
     private function consultarUnidadesSinPropietario()
     {
@@ -104,7 +90,6 @@ class Unidad
                             WHERE u.id_consorcio = ?
                             AND p.user is null";
         $arrType = array ("i");
-        // echo $this->id_consorcio;die;
         $arrParam = array(
             $this->id_consorcio
         );

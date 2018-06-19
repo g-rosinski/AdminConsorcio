@@ -54,7 +54,7 @@ function agregarPersona(&$conexion)
 function agregarRelacionUnidadPersona($db)
 {
     $unidad = new Unidad($db);
-    $unidad->AgregarRelacionPersonaUnidad($_POST['user'], $_POST['rol'], $_POST['unit']);
+    $unidad->agregarRelacionPersonaUnidad($_POST['user'], $_POST['rol'], $_POST['unit']);
 }
 
 function validarSiElUsuarioExiste($db)
