@@ -50,24 +50,51 @@ class Unidad
         return $this->consultarUnidadesSinPropietario();
     }
 
-    // ESTA FUNCION TIENE QUE IR ACA?
     public function agregarRelacionPersonaUnidad($user, $rol, $id_unidad)
     {
         if ($rol == 'PROPIETARIO') {
-            return $this->relacionPersonaUnidad($user, null, $id_unidad);
+            return $this->vincularPropietarioAUnidad($user, null, $id_unidad);
         } else {
-            $resultado = $this->obtenerPropietarioUnidad($id_unidad)->fetch_assoc();
-            return $this->relacionPersonaUnidad($user, $resultado['user'], $id_unidad);
+            $propietario = $this->obtenerPropietarioUnidad($id_unidad)->fetch_assoc();
+            return $this->vincularInquilinoAUnidad($user, $propietario['user'], $id_unidad);
         }
     }
-    
-    private function relacionPersonaUnidad($user, $inquilino_de, $id_unidad)
-    {
-        $inquilino_de = $inquilino_de ? "'" . $inquilino_de . "'" : 'null';
-        $query = "INSERT INTO propietariounidad (`user`, `inquilino_de`, `id_unidad`)
-                    VALUES (('$user'), ($inquilino_de), ($id_unidad))";
-        return $this->connection->ejecutar($query);
+
+    private function vincularInquilinoAUnidad($user, $propietario, $unidad){
+        $this->query = "INSERT INTO propietariounidad (user, inquilino_de,id_unidad)
+                        VALUES( ? , ? , ?)";
+        $arrType = array("ssi");
+        $arrParam = array(
+            $user,
+            $propietario,
+            $unidad
+        );
+        return $this->execute($arrType,$arrParam); 
     }
+    private function vincularPropietarioAUnidad($user, $unidad){
+        $this->query = "INSERT INTO propietariounidad (user,id_unidad)
+                        VALUES( ? , ?)";
+        $arrType = array("si");
+        $arrParam = array(
+            $user,
+            $unidad
+        );
+        return $this->execute($arrType,$arrParam);  
+    }
+    
+    // private function relacionPersonaUnidad($user, $inquilino_de, $id_unidad)
+    // {
+    //     $inquilino_de = $inquilino_de ? "'" . $inquilino_de . "'" : 'null';
+    //     $this->query = "INSERT INTO propietariounidad (`user`, `inquilino_de`, `id_unidad`)
+    //                 VALUES ( ?, ?, ?)";
+    //     $arrType = array("ssi");
+    //     $arrParam = array(
+    //         $user,
+    //         $inquilino_de,
+    //         $unidad
+    //     );
+    //     return $this->execute($arrType,$arrParam); 
+    // }
     
     
     private function consultarUnidadesSinPropietario()
@@ -149,20 +176,4 @@ class Unidad
         try { $this->superficie = $this->validator->validarVariableNumerica($superficie);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
 
-    // private function validarVariableString($var)
-    // {
-    //     if (!empty($var) && is_string($var)) {
-    //         return $var;
-    //     } else {
-    //         throw new Exception("El valor es null o no es de tipo String");
-    //     }
-    // }
-    // private function validarVariableNumerica($var)
-    // {
-    //     if (!empty($var) && is_numeric($var)) {
-    //         return $var;
-    //     } else {
-    //         throw new Exception("El valor es null o no es de tipo Numerico");
-    //     }
-    // }
 }
