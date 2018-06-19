@@ -74,11 +74,12 @@ class Unidad
     
     private function consultarUnidadesSinPropietario()
     {
-        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS depto
+        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
                             FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
                             AND p.user is null";
         $arrType = array ("i");
+        // echo $this->id_consorcio;die;
         $arrParam = array(
             $this->id_consorcio
         );
@@ -86,7 +87,7 @@ class Unidad
     }
     private function consultarUnidadesConPropietario()
     {    
-        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS depto
+        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
                             FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
                             AND p.user is not null
