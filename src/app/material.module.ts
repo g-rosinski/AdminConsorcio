@@ -4,7 +4,7 @@ import { MaterializeModule } from "angular2-materialize";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatBadgeModule, MatExpansionModule, MatTableModule, MatButtonModule, MatCheckboxModule,
-  MatCardModule, MatInputModule, MatIconModule, MatSelectModule, MatRadioModule
+  MatCardModule, MatInputModule, MatIconModule, MatSelectModule, MatRadioModule, MatDialogModule
 } from '@angular/material';
 
 const MODULES = [
@@ -21,6 +21,7 @@ const MODULES = [
   MatInputModule,
   MatIconModule,
   MatRadioModule,
+  MatDialogModule,
 ];
 
 @NgModule({

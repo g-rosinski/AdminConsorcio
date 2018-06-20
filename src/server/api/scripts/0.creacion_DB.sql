@@ -3,6 +3,13 @@ create database if not exists iani;
 
 use iani;
 
+
+create table usuario
+(user varchar (50) not null,
+pass varchar(50) not null,
+estado varchar (50) not null,
+primary key (user));
+
 create table persona
 (id_persona int unsigned auto_increment not null,
 nombre varchar (100) not null,
@@ -11,15 +18,9 @@ dni varchar (50) not null,
 email varchar (200) not null,
 cuil varchar (50),
 razon_social varchar (200),
-primary key (id_persona));
-
-create table usuario
-(user varchar (50) not null,
-pass varchar(50) not null,
-estado varchar (50) not null,
-id_persona int unsigned not null,
-primary key (user),
-constraint persona_fk_u foreign key (id_persona) references persona (id_persona));
+user varchar (50) not null,
+primary key (id_persona),
+constraint user_fk_per foreign key (user) references usuario (user));
 
 create table rol
 (id_rol int unsigned auto_increment not null,
