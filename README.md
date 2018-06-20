@@ -24,5 +24,6 @@
 ## Aclaraciones.
 - Todo lo que sea PHP se encuentra dentro de "./src/server" ahi adentro van todos nuestros archivos PHP.
 - Si tienen que modificar un archivo PHP, lo tienen que hacer dentro de "./src/server" y ejecutar "ng build" (Ver paso 4), todo lo que modifiquen dentro de la carpeta "dist" no es tenido en cuenta por GIT.
+- Chequeen si tiene configurado el timezone en C:/xampp/php/php.ini, busquen [DATE], debe tener el valor America/Argentina/Buenos_Aires
 - Cualquier cosa me preguntan 
 - BYE :D
