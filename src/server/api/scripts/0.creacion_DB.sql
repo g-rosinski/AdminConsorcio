@@ -109,7 +109,7 @@ create table pagoExpensa
 (id_pago_expensa int unsigned auto_increment,
 importe double not null,
 fecha date not null,
-hora datetime not null,
+hora time not null,
 id_ctacte int unsigned not null,
 user varchar (50) not null,
 id_forma_pago int unsigned not null,
@@ -174,10 +174,10 @@ id_rubro_gasto int unsigned not null,
 primary key (id_motivo_gasto),
 constraint rubro_gasto_fk_mg foreign key (id_rubro_gasto) references rubroGasto (id_rubro_gasto));
 
-create table motivoReclamo
-(id_motivo_reclamo int unsigned auto_increment not null,
+create table estadoReclamo
+(id_estado_reclamo int unsigned auto_increment not null,
 descripcion varchar (200) not null,
-primary key (id_motivo_reclamo));
+primary key (id_estado_reclamo));
 
 create table reclamo
 (id_reclamo int unsigned auto_increment,
@@ -185,12 +185,12 @@ nro_reclamo int not null,
 titulo varchar (500) not null,
 mensaje varchar (3000) not null,
 fecha date not null,
-hora datetime not null,
+hora time not null,
 user varchar (50) not null,
-id_motivo_reclamo int unsigned not null,
+id_estado_reclamo int unsigned not null,
 primary key (id_reclamo),
 constraint propietario_fk_r foreign key (user) references usuario (user),
-constraint motivo_fk_r foreign key (id_motivo_reclamo) references motivoReclamo (id_motivo_reclamo));
+constraint estado_fk_r foreign key (id_estado_reclamo) references estadoReclamo (id_estado_reclamo));
 
 create table gasto
 (id_gasto int unsigned auto_increment not null,

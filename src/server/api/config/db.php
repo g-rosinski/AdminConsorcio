@@ -43,7 +43,8 @@ class DB
             return $respuesta;
         } catch (Exception $e) {
             header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-            echo json_encode(array("success" => false, "message" => $e->getMessage()));
+            echo "<br>".json_encode(array("success" => false, "message" => $e->getMessage()));
+            throw $e;
         }
     }
 
@@ -61,12 +62,13 @@ class DB
                     $stataments = file_get_contents($directorio . $file);
                     $stataments = explode(";", $stataments);
                     $stataments = preg_replace("/\s/", ' ', $stataments);
-
+                    echo "Ejecutando  ".$file."   ";
                     foreach ($stataments as $query) {
                         if (trim($query) != '') {
                             $this->ejecutar($query);
                         }
                     }
+                    echo "....Ok<br>";
                 }
             }
         } catch (Exception $e) {
