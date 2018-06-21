@@ -41,6 +41,7 @@ class Reclamo
     public function cambiarEstadoReclamo($idReclamo,$idEstado){
         $this->setIdReclamo($idReclamo);
         $this->setIdEstadoReclamo($idEstado);
+        $this->setFechaMovimiento($this->setDateTime());
         return $this->insertMovimiento();
     }
     public function traerEstadoDeReclamoPorUsuario($user){  
@@ -53,10 +54,11 @@ class Reclamo
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
     private function insertMovimiento(){
-        $this->query = "UPDATE ".$this->tabla." SET id_estado_reclamo = ? WHERE id_reclamo = ?";
-        $arrType = array("i","i");
+        $this->query = "UPDATE ".$this->tabla." SET id_estado_reclamo = ? , fechaMovimiento = ? WHERE id_reclamo = ?";
+        $arrType = array("i","s","i");
         $arrParam= array(
             $this->id_estado_reclamo,
+            $this->fechaMovimiento,
             $this->id_reclamo
         );
         return $this->executeQuery($arrType,$arrParam);
