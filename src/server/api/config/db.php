@@ -62,13 +62,13 @@ class DB
                     $stataments = file_get_contents($directorio . $file);
                     $stataments = explode(";", $stataments);
                     $stataments = preg_replace("/\s/", ' ', $stataments);
-                    echo "Ejecutando  ".$file."   ";
+                    echo "Ejecutando  ".$file;
                     foreach ($stataments as $query) {
                         if (trim($query) != '') {
                             $this->ejecutar($query);
                         }
                     }
-                    echo "....Ok<br>";
+                    echo "   ....Ok<br>";
                 }
             }
         } catch (Exception $e) {
