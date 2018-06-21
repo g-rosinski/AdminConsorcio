@@ -184,12 +184,12 @@ create table reclamo
 nro_reclamo int not null,
 titulo varchar (500) not null,
 mensaje varchar (3000) not null,
-fecha date not null,
-hora time not null,
-user varchar (50) not null,
+fechaCreacion datetime not null,
+fechaMovimiento datetime not null,
+id_unidad int unsigned not null,
 id_estado_reclamo int unsigned not null,
 primary key (id_reclamo),
-constraint propietario_fk_r foreign key (user) references usuario (user),
+constraint unidad_fk_r foreign key (id_unidad) references unidad (id_unidad),
 constraint estado_fk_r foreign key (id_estado_reclamo) references estadoReclamo (id_estado_reclamo));
 
 create table gasto
