@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ReviewUsersComponent } from './home/review-users/review-users.component';
 import { ListarConsorciosComponent } from './home/listar-consorcios/listar-consorcios.component';
+import { AgregarOperadorComponent } from './home/modals/agregar-operador.component'
 
 import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
@@ -26,7 +27,8 @@ import { UnidadService } from './services/unidad.service';
     SinginComponent,
     HomeComponent,
     ReviewUsersComponent,
-    ListarConsorciosComponent
+    ListarConsorciosComponent,
+    AgregarOperadorComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +41,7 @@ import { UnidadService } from './services/unidad.service';
       apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
     }),
   ],
+  entryComponents: [AgregarOperadorComponent],
   providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService],
   bootstrap: [AppComponent]
 })

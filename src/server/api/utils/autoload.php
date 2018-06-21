@@ -18,7 +18,7 @@ spl_autoload_register(function ($class) {
    			$found=true;
    		}
    }
-   if(!$found){throw new Exception("No se encuentra la clase que estas buscando");}
+   if(!$found){throw new Exception("No se encuentra la clase ".$class." que estas buscando");}
 });
 ?>
 

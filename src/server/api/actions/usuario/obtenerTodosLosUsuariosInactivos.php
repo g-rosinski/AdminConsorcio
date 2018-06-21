@@ -11,8 +11,8 @@ function obtenerTodosLosUsuariosInactivos()
 {
     $db = new DB();
     $usuario = new Usuario($db);
-
-    $resultados = $usuario->obtenerTodosLosUsuariosInactivos();
+    $usuario->estado = 'INACTIVO';
+    $resultados = $usuario->obtenerUsuarioTotalPorEstado();
     $usuarios = array();
 
     while ($obj = $resultados->fetch_object()) {

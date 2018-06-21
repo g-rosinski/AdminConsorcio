@@ -3,20 +3,20 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 require_once './../../utils/autoload.php';
 
-echo consultarMotivoReclamo();
+echo listarEstadoReclamoExistentes();
 
-function consultarMotivoReclamo()
+function listarEstadoReclamoExistentes()
 {
 
     try{
     	$db = new DB();
-    	$motivoReclamo = new MotivoReclamo($db);
+    	$motivoReclamo = new EstadoReclamo($db);
     }catch(Exception $e){echo "Msj:".$e->getMessage();}
     $data = $_GET;
-    $motivosEncontrados = $motivoReclamo->traerMotivosDeReclamo();
-    $arrayMotivosReclamo = array();
+    $motivosEncontrados = $motivoReclamo->traerEstadosDeReclamo();
+    $arrayEstadosReclamo = array();
     while ($obj = $motivosEncontrados->fetch_object()) {
-        $arrayMotivosReclamo[] = $obj;
+        $arrayEstadosReclamo[] = $obj;
     }
-    return json_encode($arrayMotivosReclamo);
+    return json_encode($arrayEstadosReclamo);
 }

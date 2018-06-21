@@ -3,19 +3,22 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 require_once './../../utils/autoload.php';
 
-echo agregarMotivoReclamo();
+echo actualizarReclamo();
 
-function agregarMotivoReclamo()
+function actualizarReclamo()
 {
 
     try{
     	$db = new DB();
-    	$motivo = new MotivoReclamo($db);
+    	$reclamo = new Reclamo($db);
     }catch(Exception $e){echo "Msj:".$e->getMessage();}
     
     $data = $_POST;
 
-    $motivo->agregarMotivoReclamo($data['descripcion']);
+    $reclamo->cambiarEstadoReclamo(
+        $data['id_reclamo'],
+        $data['id_estado']
+    );
     
 }
 

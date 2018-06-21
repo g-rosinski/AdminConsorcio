@@ -3,6 +3,13 @@ create database if not exists iani;
 
 use iani;
 
+
+create table usuario
+(user varchar (50) not null,
+pass varchar(50) not null,
+estado varchar (50) not null,
+primary key (user));
+
 create table persona
 (id_persona int unsigned auto_increment not null,
 nombre varchar (100) not null,
@@ -11,15 +18,9 @@ dni varchar (50) not null,
 email varchar (200) not null,
 cuil varchar (50),
 razon_social varchar (200),
-primary key (id_persona));
-
-create table usuario
-(user varchar (50) not null,
-pass varchar(50) not null,
-estado varchar (50) not null,
-id_persona int unsigned not null,
-primary key (user),
-constraint persona_fk_u foreign key (id_persona) references persona (id_persona));
+user varchar (50) not null,
+primary key (id_persona),
+constraint user_fk_per foreign key (user) references usuario (user));
 
 create table rol
 (id_rol int unsigned auto_increment not null,
@@ -108,7 +109,7 @@ create table pagoExpensa
 (id_pago_expensa int unsigned auto_increment,
 importe double not null,
 fecha date not null,
-hora datetime not null,
+hora time not null,
 id_ctacte int unsigned not null,
 user varchar (50) not null,
 id_forma_pago int unsigned not null,
@@ -173,23 +174,23 @@ id_rubro_gasto int unsigned not null,
 primary key (id_motivo_gasto),
 constraint rubro_gasto_fk_mg foreign key (id_rubro_gasto) references rubroGasto (id_rubro_gasto));
 
-create table motivoReclamo
-(id_motivo_reclamo int unsigned auto_increment not null,
+create table estadoReclamo
+(id_estado_reclamo int unsigned auto_increment not null,
 descripcion varchar (200) not null,
-primary key (id_motivo_reclamo));
+primary key (id_estado_reclamo));
 
 create table reclamo
 (id_reclamo int unsigned auto_increment,
 nro_reclamo int not null,
 titulo varchar (500) not null,
 mensaje varchar (3000) not null,
-fecha date not null,
-hora datetime not null,
-user varchar (50) not null,
-id_motivo_reclamo int unsigned not null,
+fechaCreacion datetime not null,
+fechaMovimiento datetime not null,
+id_unidad int unsigned not null,
+id_estado_reclamo int unsigned not null,
 primary key (id_reclamo),
-constraint propietario_fk_r foreign key (user) references usuario (user),
-constraint motivo_fk_r foreign key (id_motivo_reclamo) references motivoReclamo (id_motivo_reclamo));
+constraint unidad_fk_r foreign key (id_unidad) references unidad (id_unidad),
+constraint estado_fk_r foreign key (id_estado_reclamo) references estadoReclamo (id_estado_reclamo));
 
 create table gasto
 (id_gasto int unsigned auto_increment not null,

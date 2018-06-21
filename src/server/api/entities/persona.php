@@ -21,7 +21,7 @@ class Persona
 
     public function agregar()
     {
-        $query = "INSERT INTO persona (apellido, nombre, dni, email) VALUES (('$this->apellido'),('$this->nombre'),('$this->dni'),('$this->email'))";
+        $query = "INSERT INTO persona (apellido, nombre, dni, email, user) VALUES (('$this->apellido'),('$this->nombre'),('$this->dni'),('$this->email'), ('$this->user'))";
         return $this->connection->ejecutar($query);
     }
 }

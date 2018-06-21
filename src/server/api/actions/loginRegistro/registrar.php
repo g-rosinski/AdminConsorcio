@@ -15,24 +15,25 @@ function registrar(&$db)
 {
     $errores = validar($db);
     if (empty($errores)) {
+        agregarUsuario($db);
         agregarPersona($db);
-        // OBTENGO EL ID la persona que acabo de generar.
-        $idPersona = $db->obtenerUltimoInsertId();
-        agregarUsuario($db, $idPersona);
-        agregarRelacionUnidadPersona($db);
+        if ($_POST['rol'] != 'operador' || $_POST['rol'] != 'administrador') {
+            agregarRelacionUnidadPersona($db);
+        }
     }
 
     return json_encode($errores);
 }
 
-function agregarUsuario($db, $idPersona)
+function agregarUsuario($db)
 {
     $usuario = new Usuario($db);
     $data = $_POST;
 
     $usuario->user = $data['user'];
     $usuario->pass = md5($data['pass']);
-    $usuario->id_persona = $idPersona;
+    // HORRIBLE: DEBERIAMOS CONSULTAR LA BASE DE DATOS OBTENIENDO TODOS LOS CODIGOS. PERO ES LO QUE HAY POR AHORA.
+    $usuario->id_rol = $_POST['rol'] == 'administrador' ? 1 : ($_POST['rol'] == 'operador' ? 2 : ($_POST['rol'] == 'propietario' ? 3 : 4));
     $usuario->estado = 'INACTIVO';
 
     return $usuario->agregarUsuario();
@@ -43,6 +44,7 @@ function agregarPersona(&$conexion)
     $persona = new Persona($conexion);
     $data = $_POST;
 
+    $persona->user = $data['user'];
     $persona->apellido = $data['lastName'];
     $persona->nombre = $data['name'];
     $persona->dni = $data['dni'];
@@ -68,7 +70,12 @@ function validarSiElUsuarioExiste($db)
 
 function validar($db)
 {
-    $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni', 'consorcio', 'unit');
+    $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni');
+
+    if ($_POST['rol'] != 'operador' || $_POST['rol'] != 'administrador') {
+        $campos[] = 'consorcio';
+        $campos[] = 'unit';
+    }
 
     foreach ($campos as &$valor) {
         if (empty(($_POST[$valor]))) {

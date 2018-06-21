@@ -36,18 +36,21 @@ export class RegistroLoginService {
 
     registrar(formModel: any): Promise<any> {
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        const body = new HttpParams()
+        let body = new HttpParams()
             .set('user', formModel.user.toLocaleLowerCase().trim())
             .set('pass', formModel.pass)
             .set('repass', formModel.repass)
             .set('name', formModel.name)
             .set('lastName', formModel.lastName)
             .set('email', formModel.email)
-            .set('consorcio', formModel.consorcio)
-            .set('unit', formModel.unit)
-            .set('rol', formModel.rol)
-            .set('dni', formModel.dni.toString());
+            .set('dni', formModel.dni.toString())
+            .set('rol', formModel.rol.toLocaleLowerCase());
 
+        if (formModel.rol !== 'OPERADOR' || formModel.rol !== 'ADMINISTRADOR') {
+            body = body.set('consorcio', formModel.consorcio);
+            body = body.set('unit', formModel.unit);
+        }
+        
         return this.http.post(RegistroLoginService.BASE_URL + '/registrar.php', body.toString(), { headers: headers })
             .toPromise();
     }

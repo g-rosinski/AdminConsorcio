@@ -6,10 +6,13 @@
         <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
           <div class="full-width">
             <label>Tipo de usuario: </label>
-            <mat-radio-group (change)="onRadioChange($event)" [(ngModel)]="formModel.rol" [ngModelOptions]="{standalone: true}">
+            <mat-radio-group *ngIf="!isSignupOperator" (change)="onRadioChange($event)" [(ngModel)]="formModel.rol" [ngModelOptions]="{standalone: true}">
               <mat-radio-button [value]="'PROPIETARIO'">Propietario</mat-radio-button>
               <mat-radio-button [value]="'INQUILINO'">Inquilino</mat-radio-button>
             </mat-radio-group>
+            <label>
+              <strong *ngIf="isSignupOperator"> Operador</strong>
+            </label>
           </div>
 
           <mat-form-field class="full-width">
@@ -19,7 +22,7 @@
 
           <mat-form-field class="full-width">
             <mat-icon matSuffix>email</mat-icon>
-            <input [(ngModel)]="formModel.email" name="email" [type]="'email'" required matInput placeholder="Email">
+            <input [(ngModel)]="formModel.email" [disabled]="isSignupOperator" name="email" [type]="'email'" required matInput placeholder="Email">
           </mat-form-field>
 
           <mat-form-field class="half-width">
@@ -43,20 +46,21 @@
             <input [(ngModel)]="formModel.dni" name="dni" required matInput [type]="'number'" placeholder="DNI">
           </mat-form-field>
 
-          <mat-card-title>Datos de la unidad</mat-card-title>
+          <ng-container *ngIf="!isSignupOperator">
+            <mat-card-title>Datos de la unidad</mat-card-title>
 
-          <mat-form-field class="full-width">
-            <mat-select placeholder="Consorcio" required [(ngModel)]="formModel.consorcio" name="consorcio" (selectionChange)="onConsorcioChange($event)">
-              <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-select placeholder="Consorcio" required [(ngModel)]="formModel.consorcio" name="consorcio" (selectionChange)="onConsorcioChange($event)">
+                <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-          <mat-form-field class="full-width">
-            <mat-select placeholder="Unidad" required [(ngModel)]="formModel.unit" name="unit" >
-              <mat-option *ngFor="let unidad of unidades |async" [value]="unidad['id_unidad']">{{unidad.piso + unidad.deptoUnidad}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
+            <mat-form-field class="full-width">
+              <mat-select placeholder="Unidad" required [(ngModel)]="formModel.unit" name="unit">
+                <mat-option *ngFor="let unidad of unidades |async" [value]="unidad['id_unidad']">{{unidad.piso + unidad.deptoUnidad}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
           <p style="text-align: center;color: red;">{{error}}</p>
 
           <div class="text-right">

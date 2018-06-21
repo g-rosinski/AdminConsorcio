@@ -6,7 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 include_once './../config/db.php';
 
-echo ejecutarSeeders();
+echo json_encode(ejecutarSeeders());
 
 // http://localhost/server/api/actions/seeders.php
 function ejecutarSeeders()
