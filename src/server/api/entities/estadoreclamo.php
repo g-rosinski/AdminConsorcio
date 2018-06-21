@@ -1,8 +1,8 @@
 <?php
 require_once './../../utils/autoload.php';
 
-class MotivoReclamo {
-    private $id_motivo_reclamo;
+class EstadoReclamo {
+    private $id_estado_reclamo;
     private $descripcion;
     private $connection;
     private $query;
@@ -15,19 +15,19 @@ class MotivoReclamo {
         catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
 
-    public function traerMotivosDeReclamo(){
-    	return $this->consultaMotivoReclamo();
+    public function traerEstadosDeReclamo(){
+    	return $this->consultaEstadoReclamo();
     }
-    public function agregarMotivoReclamo($descripcion){
+    public function agregarEstadoReclamo($descripcion){
     	$this->setDescripcion($descripcion);
-    	return $this->insertMotivoReclamo();
+    	return $this->insertEstadoReclamo();
     }
-    private function consultaMotivoReclamo(){
-    	$this->query = "SELECT id_motivo_reclamo, descripcion FROM motivoreclamo";
+    private function consultaEstadoReclamo(){
+    	$this->query = "SELECT id_estado_reclamo, descripcion FROM estadoreclamo";
         return $this->executeQuery();
     }
-    private function insertMotivoReclamo(){
-    	$this->query = "INSERT INTO motivoreclamo (descripcion) VALUES (?)";
+    private function insertEstadoReclamo(){
+    	$this->query = "INSERT INTO estadoreclamo (descripcion) VALUES (?)";
         $arrType = array("s");
         $arrParam = array(
             $this->descripcion
@@ -51,9 +51,9 @@ class MotivoReclamo {
         return $q->execute(array($this->query),$arrType,$arrParam);
     }
 
-	private function setIdMotivoReclamo($id_motivo_reclamo)
+	private function setIdEstadoReclamo($id_estado_reclamo)
     {
-        try { $this->id_motivo_reclamo = $this->validator->validarVariableNumerica($id_motivo_reclamo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->id_estado_reclamo = $this->validator->validarVariableNumerica($id_estado_reclamo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setDescripcion($descripcion)
     {

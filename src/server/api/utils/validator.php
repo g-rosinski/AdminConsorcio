@@ -34,6 +34,9 @@
 		            return 'Por favor complete todos los campos';
 		        }
 		    }
-	    }
+		}		
+		public function validarArray($arr){
+        if(count($arr)==0 || !is_array($arr)){throw new Exception("es un array vacio o no es un array");}
+    	}
 	}
 ?>

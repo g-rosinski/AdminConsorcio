@@ -12,16 +12,21 @@ class Query{
     }
 
     public function prepare($query){
-        $this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);
+        try{$this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);}
+        catch(Exception $e){echo "Msj:" . $e->getMessage();}
+        
     } 
     public function sendData($type,$param){
-        if (!empty($type) && !empty($param)) {
-            call_user_func_array(array($this->query,'bind_param'),$this->bindTypeAndParams($type, $param) );
+        try{
+            if (!empty($type)&& !empty($param)) {
+                call_user_func_array(array($this->query,'bind_param'),$this->bindTypeAndParams($type, $param) );
+            }
+            $this->query->execute();        
+            $result = $this->query->get_result();
+            $this->query->close();
+            return $result;
         }
-        $this->query->execute();        
-        $result = $this->query->get_result();
-        $this->query->close();
-        return $result;
+        catch(Exception $e){echo "Msj:" . $e->getMessage();}
     }
     public function execute($query, $type, $param){
         $this->prepare($query);                
@@ -43,7 +48,7 @@ class Query{
 
         return $arrParam;
     }
-
+   
     public function select($campos){
         $q= "SELECT ";
         if(count($campos)==0){

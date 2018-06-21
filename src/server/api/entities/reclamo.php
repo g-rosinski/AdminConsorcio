@@ -9,13 +9,13 @@ class Reclamo
     private $tabla = "reclamo";
     /* Campos de la tabla */
     private $id_reclamo;
-    private $nro_reclamo = 1;
+    private $nro_reclamo;
     private $titulo;
     private $mensaje;
-    private $fecha;
-    private $hora;
-    private $id_propietario;
-    private $id_motivo_reclamo;
+    private $fechaCreacion;
+    private $fechaMovimiento;
+    private $id_unidad;
+    private $id_estado_reclamo;
 
 
     public function __construct($connection)
@@ -25,67 +25,103 @@ class Reclamo
         catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
 
-    // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
-    // $arrType = array("i","s","s") /* int string string */
-    // $arrParam = array(14,"Calle Falsa","432");
-    private function executeQuery($arrType = null, $arrParam = null)
-    {   
-        try{ $q = new Query($this->connection); }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
-        
-        return $q->execute(array($this->query),$arrType,$arrParam);
-    }
-    
-    public function nuevoReclamo($id_propietario,$titulo,$mensaje, $motivo=1){
-        $this->setIdPropietario($id_propietario);
+    /**************************** */
+    /*     FUNCIONES PUBLICAS     */
+    /**************************** */
+    public function nuevoReclamo($id_unidad,$titulo,$mensaje){
+        $this->setIdUnidad($id_unidad);
         $this->setNroReclamo($this->nuevoNumeroDeReclamo());
         $this->setTitulo($titulo);
         $this->setMensaje($mensaje);
-        $this->setIdMotivoReclamo($motivo);
-        $this->setDateTime();
+        $this->setIdEstadoReclamo($this->getIdEstado('NUEVO'));
+        $this->setFechaCreacion($this->setDateTime());
+        $this->setFechaMovimiento($this->setDateTime());
         return $this->insertReclamo();
     }
-    public function traerReclamos($consorcio){    }
-    public function consultarEstadoDeReclamo($consorcio){    }
-   
+    public function cambiarEstadoReclamo($idReclamo,$idEstado){
+        $this->setIdReclamo($idReclamo);
+        $this->setIdEstadoReclamo($idEstado);
+        return $this->insertMovimiento();
+    }
+    public function traerEstadoDeReclamoPorUsuario($user){  
+        return $this->consultarEstadoDeReclamoPorUsuario($user);
+    }
+    public function traerEstadoDeReclamoPorConsorcio($consorcio){ 
+        return $this->consultarEstadoDeReclamoPorConsorcio($consorcio);
+    }
+    /**************************** */
+    /*     FUNCIONES PRIVADAS     */
+    /**************************** */
+    private function insertMovimiento(){
+        $this->query = "UPDATE ".$this->tabla." SET id_estado_reclamo = ? WHERE id_reclamo = ?";
+        $arrType = array("i","i");
+        $arrParam= array(
+            $this->id_estado_reclamo,
+            $this->id_reclamo
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function insertReclamo(){
-        $this->query = "INSERT INTO ".$this->tabla. "(nro_reclamo,titulo,mensaje,fecha,hora,user, id_motivo_reclamo) VALUES( ?,?,?,?,?,?,? )";
+        $this->query = "INSERT INTO ".$this->tabla." (nro_reclamo,titulo,mensaje,fechaCreacion,fechaMovimiento,id_unidad, id_estado_reclamo) VALUES( ?,?,?,?,?,?,? )";
         $arrType = array("i","s","s","s","s","s","i");
         $arrParam= array(
             $this->nro_reclamo,
             $this->titulo,
             $this->mensaje,
-            $this->fecha,
-            $this->hora,
-            $this->id_propietario,
-            $this->id_motivo_reclamo
+            $this->fechaCreacion,
+            $this->fechaMovimiento,
+            $this->id_unidad,
+            $this->id_estado_reclamo
         );
         return $this->executeQuery($arrType,$arrParam);
     }
-/*     private function consultarUnidadesOcupadasPorConsorcio(){
-        $this->query =     "SELECT p.id_unidad 
-                            FROM propietariounidad p
-                            INNER JOIN unidad u on p.id_unidad = u.id_unidad 
-                            WHERE  p.inquilino_de IS NOT NULL
-                            AND u.id_consorcio = ?";
+    private function consultarEstadoDeReclamoPorUsuario($user){
+        
+        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado
+                        FROM propietariounidad pu
+                        INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
+                        INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
+                        WHERE pu.user LIKE ?";
+        $arrType = array ("s");
+        $arrParam = array( $user);
+        return $this->executeQuery($arrType,$arrParam);
+    }
+    public function consultarEstadoDeReclamoPorConsorcio($consorcio){
+        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado
+                        FROM propietariounidad pu
+                        INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
+                        INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
+                        INNER JOIN  unidad u ON u.id_unidad = pu.id_unidad
+                        WHERE u.id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array(
-            $this->id_consorcio
+            $consorcio            
         );
         return $this->executeQuery($arrType,$arrParam);
-    } */
+    }
     
     private function setDateTime(){
         date_default_timezone_get('America/Argentina/Buenos_Aires');
-        $this->setFecha(date("Y-m-d"));
-        $this->setHora(date("Y-m-d G:i:s"));
+        return date("Y-m-d G:i:s");        
+    }
+    private function formatearFecha($fecha){
+        
     }
     // Por ahora que el numero de Reclamo funcione asi
     private function nuevoNumeroDeReclamo(){
-        $this->query = "select MAX(nro_reclamo) nroReclamo from reclamo LIMIT 1";
+        $this->query = "SELECT MAX(nro_reclamo) as nroReclamo FROM reclamo LIMIT 1";
         $ultReclamo = $this->executeQuery()->fetch_assoc();
-        return ++$ultReclamo['nroReclamo'];
+        ($ultReclamo['nroReclamo']==null) ? $ultReclamo['nroReclamo']=1 : $ultReclamo['nroReclamo']++; 
+        return $ultReclamo['nroReclamo'];
     }
+    private function getIdEstado($estadoBuscado){
+        $this->query = "SELECT id_estado_reclamo as id FROM estadoreclamo WHERE descripcion like ?";
+        $arrType = array("s");
+        $arrParam= array($estadoBuscado);
+        $estado = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
+        return $estado['id'];
+    }
+    
     private function setIdReclamo($id_reclamo)
     {
         try { $this->id_reclamo = $this->validator->validarVariableNumerica($id_reclamo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
@@ -102,22 +138,32 @@ class Reclamo
     {
         try { $this->mensaje = $this->validator->validarVariableString($mensaje);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
-    private function setFecha($fecha)
+    private function setFechaCreacion($fecha)
     {
-        $this->fecha=$fecha;
+        $this->fechaCreacion=$fecha;
     }
-    private function setHora($hora)
+    private function setFechaMovimiento($fecha)
     {
-        $this->hora=$hora;
+        $this->fechaMovimiento=$fecha;
     }
-    private function setIdPropietario($id_propietario)
+    private function setIdUnidad($id_unidad)
     {
-        try { $this->id_propietario = $this->validator->validarVariableString($id_propietario);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->id_unidad = $this->validator->validarVariableString($id_unidad);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
-    private function setIdMotivoReclamo($id_motivo_reclamo)
+    private function setIdEstadoReclamo($id_estado_reclamo)
     {
-        try { $this->id_motivo_reclamo = $this->validator->validarVariableNumerica($id_motivo_reclamo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->id_estado_reclamo = $this->validator->validarVariableNumerica($id_estado_reclamo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
+    // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
+    // $arrType = array("i","s","s") /* int string string */
+    // $arrParam = array(14,"Calle Falsa","432");
+    private function executeQuery($arrType = null, $arrParam = null)
+    {   
+        try{ $q = new Query($this->connection); }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        
+        return $q->execute(array($this->query),$arrType,$arrParam);
     }
     
-
+    
 }
