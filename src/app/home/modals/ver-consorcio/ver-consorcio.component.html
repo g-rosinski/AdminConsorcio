@@ -1,0 +1,24 @@
+<mat-dialog-content style="display: flex; justify-content: space-between;">
+  <div style="width: 55%;">
+    <agm-map [latitude]="+consorcio.consorcio.coordenadaLatitud" [longitude]="+consorcio.consorcio.coordenadaLongitud" [zoom]="zoom">
+      <agm-marker [latitude]="+consorcio.consorcio.coordenadaLatitud" [longitude]="+consorcio.consorcio.coordenadaLongitud"></agm-marker>
+    </agm-map>
+  </div>
+  <div style="width: 40%;">
+    <mat-card style="float:right">
+      <h1 mat-card-title>Consorcio {{consorcio.consorcio.nombre}}</h1>
+      <mat-card-content>
+        <p>Ubicacion: <strong>{{consorcio.consorcio.calle}} {{consorcio.consorcio.altura}}</strong></p>
+        <p>Barrio: <strong>Modificar Query</strong></p>
+        <p>CUIT: <strong>{{consorcio.consorcio.cuit}}</strong></p>
+        <p>Telefono: <strong>{{consorcio.consorcio.telefono}}</strong></p>
+        <p>Superficie total: <strong>{{consorcio.consorcio.superficie}}</strong></p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div style="text-align: right; width: 100%;">
+    <button type="button" mat-button color="accent" (click)="dialogRef.close()">Cerrar</button>
+  </div>
+</mat-dialog-actions>

@@ -25,6 +25,7 @@ import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
 import { RegistroLoginService } from './services/registro-login.service';
 import { ReclamoService } from './services/reclamo.service';
+import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ReclamoService } from './services/reclamo.service';
     ListarReclamosComponent,
     ListarExpensasComponent,
     FabButtonComponent,
-    AgregarReclamoComponent
+    AgregarReclamoComponent,
+    VerConsorcioComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,7 @@ import { ReclamoService } from './services/reclamo.service';
       apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
     }),
   ],
-  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent],
+  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent],
   providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService],
   bootstrap: [AppComponent]
 })

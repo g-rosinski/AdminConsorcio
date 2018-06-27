@@ -1,0 +1,11 @@
+agm-map {
+  height: 350px;
+  /* width: 45%; */
+}
+
+.mat-card {
+  background: #0D47A1 !important;
+  color: white;
+  height: 100%;
+  width: 100%;
+}

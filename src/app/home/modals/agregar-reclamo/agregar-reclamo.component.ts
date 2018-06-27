@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ReclamoService } from '../../../services/reclamo.service';
+
 @Component({
   selector: 'app-agregar-reclamo',
   templateUrl: './agregar-reclamo.component.html',
