@@ -8,6 +8,28 @@
       <mat-icon *ngIf="isOpen" (click)="openDialog()">add_circle_outline</mat-icon>
     </mat-panel-description>
   </mat-expansion-panel-header>
+
+  <div class="container-filtros" style="width: 100%; display: flex;" *ngIf="usuario.id_rol <= 2">
+    <div style="width: 50%;">
+      <mat-form-field style="width: 300px;">
+        <mat-select placeholder="Consorcios">
+          <mat-option [value]="1">foo</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- <div style="width: 33.33%;">
+      <mat-checkbox style="margin: 0 1rem;" [(ngModel)]="formModel.estado" >Nuevo</mat-checkbox>
+      <mat-checkbox style="margin: 0 1rem;" [(ngModel)]="formModel.estado">En curso</mat-checkbox>
+      <mat-checkbox style="margin: 0 1rem;" [(ngModel)]="formModel.estado">Finalizado</mat-checkbox>
+    </div>
+
+    <div style="width: 33.33%; text-align: right;">
+      <button mat-button color="accent" (click)="marcarUsuarioComoActivo(usuario.user)">BUSCAR</button>
+    </div> -->
+
+  </div>
+
   <table class="table">
     <thead>
       <tr>
