@@ -12,8 +12,8 @@
   <div class="container-filtros" style="width: 100%; display: flex;" *ngIf="usuario.id_rol <= 2">
     <div style="width: 50%;">
       <mat-form-field style="width: 300px;">
-        <mat-select placeholder="Consorcios">
-          <mat-option [value]="1">foo</mat-option>
+        <mat-select placeholder="Consorcios" (selectionChange)="onConsorcioChange($event)">
+          <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio" >{{consorcio.nombre}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -30,7 +30,7 @@
 
   </div>
 
-  <table class="table">
+  <table class="table" *ngIf="(reclamos | async)?.length > 0">
     <thead>
       <tr>
         <th>N°</th>

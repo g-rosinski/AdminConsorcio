@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
-import { AgregarOperadorComponent } from '../modals/agregar-operador.component';
+import { AgregarOperadorComponent } from '../modals/agregar-operador/agregar-operador.component';
 import { RegistroLoginService } from '../../services/registro-login.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class FabButtonComponent implements OnInit {
   }
 
   openDialog(): void {
-    let dialogRef = this.dialog.open(AgregarOperadorComponent, { width: '500px' });
+    let dialogRef = this.dialog.open(AgregarOperadorComponent, { width: '700px' });
   }
 
   logout() {

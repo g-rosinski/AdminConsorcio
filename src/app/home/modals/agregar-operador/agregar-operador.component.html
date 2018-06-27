@@ -1,0 +1,13 @@
+<mat-form-field style="width: 100%;">
+  <input [(ngModel)]="email" matInput placeholder="Email del operador">
+</mat-form-field>
+<mat-card *ngIf="email">
+  <mat-card-content>
+    <p>{{location}}/register?operator={{email}}</p>
+  </mat-card-content>
+</mat-card>
+<mat-dialog-actions *ngIf="email">
+  <div style="text-align: right; width: 100%;">
+    <button type="button" mat-button color="accent" (click)="onNoClick()">COPIAR LINK</button>
+  </div>
+</mat-dialog-actions>

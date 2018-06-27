@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ReclamoService } from '../../../services/reclamo.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSelectChange } from '@angular/material';
 import { Observable } from 'rxjs/internal/Observable';
 import { AgregarReclamoComponent } from '../../modals/agregar-reclamo/agregar-reclamo.component'
+import { ConsorcioService } from '../../../services/consorcio.service';
 
 @Component({
   selector: 'app-listar-reclamos',
@@ -31,15 +32,18 @@ import { AgregarReclamoComponent } from '../../modals/agregar-reclamo/agregar-re
 })
 export class ListarReclamosComponent implements OnInit {
   reclamos: Observable<any>;
+  consorcios: Observable<any>;
   isOpen = false;
   @Input() usuario;
 
   constructor(
     private dialog: MatDialog,
     private reclamoService: ReclamoService,
+    private consorcioService: ConsorcioService
   ) { }
 
   ngOnInit() {
+    this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
     // this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario('ariel')
   }
 
@@ -52,5 +56,9 @@ export class ListarReclamosComponent implements OnInit {
 
   onOpenClosePanel() {
     this.isOpen = !this.isOpen;
+  }
+
+  onConsorcioChange(e: MatSelectChange) {
+    alert(e.value);
   }
 }

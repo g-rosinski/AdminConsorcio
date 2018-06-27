@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ReviewUsersComponent } from './home/panels/review-users/review-users.component';
 import { ListarConsorciosComponent } from './home/panels/listar-consorcios/listar-consorcios.component';
-import { AgregarOperadorComponent } from './home/modals/agregar-operador.component'
+import { AgregarOperadorComponent } from './home/modals/agregar-operador/agregar-operador.component';
 import { UnidadService } from './services/unidad.service';
 import { MensajesComponent } from './home/panels/mensajes/mensajes.component';
 import { ListarReclamosComponent } from './home/panels/listar-reclamos/listar-reclamos.component';
