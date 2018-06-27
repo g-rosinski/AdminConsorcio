@@ -3,9 +3,9 @@
     <app-mensajes [usuario]="usuario"></app-mensajes>
 
     <mat-accordion>
-      <app-review-users *ngIf="usuario.id_rol === 0"></app-review-users>
+      <app-review-users *ngIf="usuario.id_rol === 1"></app-review-users>
       <app-listar-reclamos></app-listar-reclamos>
-      <app-listar-consorcios *ngIf="usuario.id_rol === 0 || usuario.id_rol === 1"></app-listar-consorcios>
+      <app-listar-consorcios *ngIf="usuario.id_rol === 1 || usuario.id_rol === 2"></app-listar-consorcios>
       <app-listar-expensas></app-listar-expensas>
     </mat-accordion>
 

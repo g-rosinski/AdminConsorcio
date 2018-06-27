@@ -1,4 +1,4 @@
-<div class="fixed-action-btn">
+<div class="fixed-action-btn" *ngIf="usuario">
   <a class="btn-floating btn-large red">
     <i class="large material-icons">mode_edit</i>
   </a>
@@ -11,7 +11,7 @@
       <a class="btn-floating mobile-fab-tip">Logout</a>
     </li>
 
-    <li *ngIf="usuario.id_rol === 0">
+    <li *ngIf="usuario.id_rol === 1">
       <a class="btn-floating amber darken-1" (click)="openDialog()">
         <i class="material-icons">face</i>
       </a>

@@ -1,4 +1,4 @@
-insert into rubroproveedor (id_rubro_proveedor, descripcion) 
+insert into rubroProveedor (id_rubro_proveedor, descripcion) 
 values 	(1, 'Consumer Services'),
 		(2, 'Technology'),
 		(3, 'Public Utilities'),

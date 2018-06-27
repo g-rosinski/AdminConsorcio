@@ -1,4 +1,4 @@
-INSERT INTO estadoreclamo(descripcion)
+INSERT INTO estadoReclamo(descripcion)
 VALUES  ("NUEVO"),
         ("EN CURSO"),
         ("FINALIZADO");

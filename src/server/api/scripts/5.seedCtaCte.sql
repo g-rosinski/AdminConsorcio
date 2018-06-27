@@ -1,4 +1,4 @@
-insert into cuentacorriente(saldo,saldo_favor,id_unidad)
+insert into cuentaCorriente(saldo,saldo_favor,id_unidad)
 values	(0,0,	1),
 		(0,0,	2),
 		(0,0,	3), 
