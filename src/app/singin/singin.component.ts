@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegistroLoginService } from './../services/registro-login.service';
 import { Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-singin',
@@ -15,7 +16,8 @@ export class SinginComponent {
   constructor(
     private login: RegistroLoginService,
     private router: Router,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private usuario: UsuarioService,
   ) { }
 
   onSubmit() {
@@ -24,7 +26,7 @@ export class SinginComponent {
         if (x)
           this.toast.error(x);
         else
-          this.router.navigate(['home']);
+          this.usuario.init(this.formModel.user).then(() => this.router.navigate(['home']))
       });
   }
 

@@ -8,11 +8,11 @@ echo agregarReclamo();
 function agregarReclamo()
 {
 
-    try{
-    	$db = new DB();
-    	$reclamo = new Reclamo($db);
-    }catch(Exception $e){echo "Msj:".$e->getMessage();}
-    
+    try {
+        $db = new DB();
+        $reclamo = new Reclamo($db);
+    } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+
     $data = $_POST;
 
     $reclamo->nuevoReclamo(
@@ -20,7 +20,5 @@ function agregarReclamo()
         $data['titulo'],
         $data['mensaje']
     );
-    
-}
 
-?>
+}

@@ -49,36 +49,48 @@ class Usuario
 
     public function obtenerUsuarioTotalPorEstado()
     {
-        $query = "
-            SELECT
-                U.user,
-                CONCAT(UN.piso, UN.departamento) AS unidad,
-                R.descripcion AS rol,
-                C.nombre AS consorcio,
-                CONCAT(PE.nombre, ' ', PE.apellido) AS persona
-            FROM
-                usuario AS U
-            INNER JOIN propietariounidad AS PU
-            ON
-                U.user = PU.user
-            INNER JOIN unidad AS UN
-            ON
-                PU.id_unidad = UN.id_unidad
-            INNER JOIN rolusuario AS RU
-            ON
-                RU.user = U.user
-            INNER JOIN rol AS R
-            ON
-                R.id_rol = RU.id_rol
-            INNER JOIN consorcio AS C
-            ON
-                C.id_consorcio = UN.id_consorcio
-            INNER JOIN persona AS PE
-            ON
-                PE.user = U.user
-            WHERE
-                U.estado = ('$this->estado')";
+        $query = $this->obtenerBaseQuerySelectFullUsuario();
+        $query = $query . " WHERE U.estado = ('$this->estado')";
         return $this->connection->ejecutar($query);
+    }
 
+    public function obtenerFullUsuario()
+    {
+        $query = $this->obtenerBaseQuerySelectFullUsuario();
+        $query = $query . " WHERE U.user = ('$this->user')";
+        return $this->connection->ejecutar($query);
+    }
+
+    private function obtenerBaseQuerySelectFullUsuario()
+    {
+        $query = "
+        SELECT
+            U.user,
+            CONCAT(UN.piso, UN.departamento) AS unidad,
+            R.descripcion AS rol,
+            C.nombre AS consorcio,
+            CONCAT(PE.nombre, ' ', PE.apellido) AS persona
+        FROM
+            usuario AS U
+        LEFT JOIN propietariounidad AS PU
+        ON
+            U.user = PU.user
+        LEFT JOIN unidad AS UN
+        ON
+            PU.id_unidad = UN.id_unidad
+        LEFT JOIN consorcio AS C
+        ON
+            C.id_consorcio = UN.id_consorcio
+        LEFT JOIN persona AS PE
+        ON
+            PE.user = U.user
+        INNER JOIN rolusuario AS RU
+        ON
+            RU.user = U.user
+        INNER JOIN rol AS R
+        ON
+            R.id_rol = RU.id_rol
+        ";
+        return $query;
     }
 }

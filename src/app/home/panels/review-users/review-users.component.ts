@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { UsuarioService } from '../../services/usuario.service';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-review-users',

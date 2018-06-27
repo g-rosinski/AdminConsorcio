@@ -8,10 +8,10 @@ echo verEstadoDeReclamosPorUsuario();
 function verEstadoDeReclamosPorUsuario()
 {
 
-    try{
-    	$db = new DB();
-    	$reclamo = new Reclamo($db);
-    }catch(Exception $e){echo "Msj:".$e->getMessage();}
+    try {
+        $db = new DB();
+        $reclamo = new Reclamo($db);
+    } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     $data = $_GET;
     $reclamoEncontrados = $reclamo->traerEstadoDeReclamoPorUsuario($data['user']);
     $arrayReclamo = array();

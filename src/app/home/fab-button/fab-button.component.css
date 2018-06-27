@@ -1,0 +1,12 @@
+@import "~materialize-css\dist\css\materialize.css";
+
+.mobile-fab-tip {
+	position: fixed;
+	right: 85px;
+	padding:0px 0.5rem;
+	text-align: right;
+	background-color: #323232;
+	border-radius: 2px;
+	color: #FFF !important;
+	width:auto;
+}

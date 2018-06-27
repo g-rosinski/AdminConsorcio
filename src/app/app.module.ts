@@ -11,14 +11,18 @@ import { SingupComponent } from './singup/singup.component';
 import { SinginComponent } from './singin/singin.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
-import { ReviewUsersComponent } from './home/review-users/review-users.component';
-import { ListarConsorciosComponent } from './home/listar-consorcios/listar-consorcios.component';
+import { ReviewUsersComponent } from './home/panels/review-users/review-users.component';
+import { ListarConsorciosComponent } from './home/panels/listar-consorcios/listar-consorcios.component';
 import { AgregarOperadorComponent } from './home/modals/agregar-operador.component'
 
 import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
 import { RegistroLoginService } from './services/registro-login.service';
 import { UnidadService } from './services/unidad.service';
+import { MensajesComponent } from './home/panels/mensajes/mensajes.component';
+import { ListarReclamosComponent } from './home/panels/listar-reclamos/listar-reclamos.component';
+import { ListarExpensasComponent } from './home/panels/listar-expensas/listar-expensas.component';
+import { FabButtonComponent } from './home/fab-button/fab-button.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import { UnidadService } from './services/unidad.service';
     HomeComponent,
     ReviewUsersComponent,
     ListarConsorciosComponent,
-    AgregarOperadorComponent
+    AgregarOperadorComponent,
+    MensajesComponent,
+    ListarReclamosComponent,
+    ListarExpensasComponent,
+    FabButtonComponent
   ],
   imports: [
     BrowserModule,

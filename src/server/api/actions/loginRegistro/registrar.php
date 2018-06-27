@@ -72,7 +72,7 @@ function validar($db)
 {
     $campos = array('user', 'pass', 'repass', 'email', 'name', 'lastName', 'dni');
 
-    if ($_POST['rol'] != 'operador' || $_POST['rol'] != 'administrador') {
+    if ($_POST['rol'] != 'operador' && $_POST['rol'] != 'administrador') {
         $campos[] = 'consorcio';
         $campos[] = 'unit';
     }

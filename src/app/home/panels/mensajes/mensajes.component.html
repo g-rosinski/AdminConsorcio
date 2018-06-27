@@ -1,0 +1,14 @@
+<mat-card style="margin-bottom: 10px;">
+  <mat-card-title>¡Bienvenido {{usuario.persona}}!</mat-card-title>
+  <mat-card-content>
+    <p *ngIf="usuario.consorcio">Usted se encuentra registrado bajo el consorcio:
+      <strong>{{usuario.consorcio}}</strong>
+    </p>
+    <p *ngIf="usuario.rol">Su rol actual es: 
+      <strong>{{usuario.rol}}</strong>
+    </p>
+    <p>A continuacion le presentamos unos datos rapidos, en la esquina inferior derecha tiene mas acciones en donde puede
+      encontrar los datos completos.</p>
+    <p>Esperamos que este teniendo un agradable día.</p>
+  </mat-card-content>
+</mat-card>
