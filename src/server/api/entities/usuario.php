@@ -67,6 +67,7 @@ class Usuario
         SELECT
             U.user,
             CONCAT(UN.piso, UN.departamento) AS unidad,
+            UN.id_unidad as id_unidad,
             R.descripcion AS rol,
             R.id_rol as id_rol,
             C.nombre AS consorcio,

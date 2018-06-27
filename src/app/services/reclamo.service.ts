@@ -17,4 +17,20 @@ export class ReclamoService {
     const params = new HttpParams().set('user', user);
     return this.http.get(ReclamoService.BASE_URL + '/verEstadoDeReclamosPorUsuario.php', { headers, params });
   }
+
+  agregarReclamo(formModel, id) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('titulo', formModel.titulo)
+      .set('id_unidad', id)
+      .set('mensaje', formModel.mensaje);
+
+    if (formModel.rol !== 'OPERADOR' || formModel.rol !== 'ADMINISTRADOR') {
+      body = body.set('consorcio', formModel.consorcio);
+      body = body.set('unit', formModel.unit);
+    }
+
+    return this.http.post(ReclamoService.BASE_URL + '/agregarReclamo.php', body.toString(), { headers: headers })
+      .toPromise();
+  }
 }

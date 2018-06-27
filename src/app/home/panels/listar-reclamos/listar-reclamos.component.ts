@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ReclamoService } from '../../../services/reclamo.service';
 import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs/internal/Observable';
@@ -32,6 +32,8 @@ import { AgregarReclamoComponent } from '../../modals/agregar-reclamo/agregar-re
 export class ListarReclamosComponent implements OnInit {
   reclamos: Observable<any>;
   isOpen = false;
+  @Input() usuario;
+
   constructor(
     private dialog: MatDialog,
     private reclamoService: ReclamoService,
@@ -42,7 +44,10 @@ export class ListarReclamosComponent implements OnInit {
   }
 
   openDialog(): void {
-    this.dialog.open(AgregarReclamoComponent, { width: '500px' });
+    this.dialog.open(AgregarReclamoComponent, {
+      width: '500px',
+      data: { usuario: this.usuario },
+    });
   }
 
   onOpenClosePanel() {

@@ -4,7 +4,7 @@
 
     <mat-accordion>
       <app-review-users *ngIf="usuario.id_rol === 1"></app-review-users>
-      <app-listar-reclamos></app-listar-reclamos>
+      <app-listar-reclamos [usuario]="usuario"></app-listar-reclamos>
       <app-listar-consorcios *ngIf="usuario.id_rol === 1 || usuario.id_rol === 2"></app-listar-consorcios>
       <app-listar-expensas></app-listar-expensas>
     </mat-accordion>
