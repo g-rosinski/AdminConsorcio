@@ -68,6 +68,7 @@ class Usuario
             U.user,
             CONCAT(UN.piso, UN.departamento) AS unidad,
             R.descripcion AS rol,
+            R.id_rol as id_rol,
             C.nombre AS consorcio,
             CONCAT(PE.nombre, ' ', PE.apellido) AS persona
         FROM

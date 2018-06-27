@@ -10,10 +10,10 @@
     text-transform: capitalize;
 }
 
-.mat-card-title {
+/* .mat-card-title {
     font-size: 15px;
     margin: 0;
-}
+} */
 
 :host /deep/ .mat-badge-content{
 	margin-bottom: 8px;

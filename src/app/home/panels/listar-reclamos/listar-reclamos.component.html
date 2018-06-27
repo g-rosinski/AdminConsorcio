@@ -1,11 +1,36 @@
-<mat-expansion-panel hideToggle="true">
+<mat-expansion-panel hideToggle="true" (opened)="onOpenClosePanel()" (closed)="onOpenClosePanel()">
   <mat-expansion-panel-header>
     <mat-panel-title>
       <a>Reclamos</a>
     </mat-panel-title>
     <mat-panel-description>
-      <mat-icon matBadge="0" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
+      <mat-icon *ngIf="!isOpen" matBadge="0" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
+      <mat-icon *ngIf="isOpen" (click)="openDialog()">add_circle_outline</mat-icon>
     </mat-panel-description>
   </mat-expansion-panel-header>
-  <p>Componente que muestre los reclamos</p>
-</mat-expansion-panel>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>N°</th>
+        <th>Titulo</th>
+        <th>Unidad</th>
+        <th>Estado</th>
+        <th>Ultima actualizacion</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let usuario of usuarios |async">
+        <td>{{usuario.user}}</td>
+        <td>{{usuario.persona}}</td>
+        <td>
+          <strong>{{usuario.rol}}</strong>
+        </td>
+        <td>{{usuario.consorcio}}</td>
+        <td>{{usuario.unidad}}</td>
+        <td>
+          <button mat-button color="accent" (click)="marcarUsuarioComoActivo(usuario.user)">DAR DE ALTA</button>
+        </td>
+      </tr> -->
+    </tbody>
+  </table></mat-expansion-panel>

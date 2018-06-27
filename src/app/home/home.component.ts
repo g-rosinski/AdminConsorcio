@@ -15,9 +15,11 @@ export class HomeComponent implements OnInit {
     private session: RegistroLoginService,
   ) { }
 
-  
-
   ngOnInit() {
-    this.usuarioService.obtenerUsuarioFull(this.session.usuario.user).subscribe(u => this.usuario = u);
+    this.usuarioService.obtenerUsuarioFull(this.session.usuario.user)
+      .subscribe(u => {
+        this.usuario = u
+        this.usuario.id_rol = +this.usuario.id_rol;
+      });
   }
 }

@@ -14,15 +14,17 @@ import { HomeComponent } from './home/home.component';
 import { ReviewUsersComponent } from './home/panels/review-users/review-users.component';
 import { ListarConsorciosComponent } from './home/panels/listar-consorcios/listar-consorcios.component';
 import { AgregarOperadorComponent } from './home/modals/agregar-operador.component'
-
-import { UsuarioService } from './services/usuario.service';
-import { ConsorcioService } from './services/consorcio.service';
-import { RegistroLoginService } from './services/registro-login.service';
 import { UnidadService } from './services/unidad.service';
 import { MensajesComponent } from './home/panels/mensajes/mensajes.component';
 import { ListarReclamosComponent } from './home/panels/listar-reclamos/listar-reclamos.component';
 import { ListarExpensasComponent } from './home/panels/listar-expensas/listar-expensas.component';
 import { FabButtonComponent } from './home/fab-button/fab-button.component';
+import { AgregarReclamoComponent } from './home/modals/agregar-reclamo/agregar-reclamo.component';
+
+import { UsuarioService } from './services/usuario.service';
+import { ConsorcioService } from './services/consorcio.service';
+import { RegistroLoginService } from './services/registro-login.service';
+import { ReclamoService } from './services/reclamo.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { FabButtonComponent } from './home/fab-button/fab-button.component';
     MensajesComponent,
     ListarReclamosComponent,
     ListarExpensasComponent,
-    FabButtonComponent
+    FabButtonComponent,
+    AgregarReclamoComponent
   ],
   imports: [
     BrowserModule,
@@ -49,8 +52,8 @@ import { FabButtonComponent } from './home/fab-button/fab-button.component';
       apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
     }),
   ],
-  entryComponents: [AgregarOperadorComponent],
-  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService],
+  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent],
+  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

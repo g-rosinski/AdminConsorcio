@@ -11,7 +11,7 @@
       <a class="btn-floating mobile-fab-tip">Logout</a>
     </li>
 
-    <li>
+    <li *ngIf="usuario.id_rol === 0">
       <a class="btn-floating amber darken-1" (click)="openDialog()">
         <i class="material-icons">face</i>
       </a>

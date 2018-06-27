@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
@@ -11,6 +11,8 @@ import { RegistroLoginService } from '../../services/registro-login.service';
   styleUrls: ['./fab-button.component.css']
 })
 export class FabButtonComponent implements OnInit {
+  @Input() usuario
+
   constructor(
     private router: Router,
     private toast: ToastrService,
