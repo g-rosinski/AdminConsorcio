@@ -123,9 +123,6 @@ create table gastoMensual
 periodo varchar (50) not null,
 fecha date not null,
 total double not null,
-importe_mantenimiento double,
-importe_luz double,
-importe_agua double,
 id_consorcio int unsigned not null,
 primary key (id_gasto_mensual),
 constraint consorcio_fk_gm foreign key (id_consorcio) references consorcio(id_consorcio));
