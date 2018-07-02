@@ -1,21 +1,21 @@
 <h1 mat-dialog-title>Agregar reclamo</h1>
-<form (ngSubmit)="onSubmit()" #formModel="ngForm" autocomplete="off">
+<form (ngSubmit)="onSubmit()" #reclamoForm="ngForm" autocomplete="off">
   <mat-dialog-content>
     <mat-form-field class="full-width">
-      <input [(ngModel)]="formModel.titulo" name="user" required matInput placeholder="Titulo">
+      <input [(ngModel)]="formModel.titulo" name="titulo" required matInput placeholder="Titulo">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <textarea [(ngModel)]="formModel.mensaje" name="pass" required matInput placeholder="Mensaje" rows="5"></textarea>
+      <textarea [(ngModel)]="formModel.mensaje" name="mensaje" required matInput placeholder="Mensaje" rows="5"></textarea>
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
     <div style="width: 50%;">
-      <p>Unidad: <strong>{{usuario.id_unidad}}</strong></p>
+      <p>Unidad: <strong>{{usuario.usuario.unidad}}</strong></p>
     </div>
     <div style="text-align: right; width: 50%;">
         <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
-        <button type="submit" [disabled]="!formModel.form.valid" mat-raised-button color="primary">Enviar</button>
+        <button type="submit" [disabled]="!reclamoForm.form.valid" mat-raised-button color="primary">Enviar</button>
     </div>
     </mat-dialog-actions>
 </form>

@@ -43,8 +43,11 @@ export class ListarReclamosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
-    // this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario('ariel')
+    if (this.usuario.id_rol <= 2) {
+      this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
+    } else {
+      this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario(this.usuario.user)
+    }
   }
 
   openDialog(): void {

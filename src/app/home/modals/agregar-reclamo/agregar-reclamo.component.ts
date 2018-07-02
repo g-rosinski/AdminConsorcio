@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ReclamoService } from '../../../services/reclamo.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-agregar-reclamo',
@@ -18,6 +19,7 @@ export class AgregarReclamoComponent implements OnInit {
     private dialogRef: MatDialogRef<AgregarReclamoComponent>,
     @Inject(MAT_DIALOG_DATA) public usuario,
     private reclamoService: ReclamoService,
+    private toast: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -28,8 +30,12 @@ export class AgregarReclamoComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.usuario.id_unidad) this.usuario.id_unidad = '';
-    this.reclamoService.agregarReclamo(this.formModel, this.usuario.id_unidad)
+    if (!this.usuario.usuario.id_unidad) this.usuario.usuario.id_unidad = '';
+    this.reclamoService.agregarReclamo(this.formModel, this.usuario.usuario.id_unidad)
+      .then(() => {
+        this.toast.info('Reclamo agregado correctamente.');
+        this.dialogRef.close();
+      });
   }
 
 }

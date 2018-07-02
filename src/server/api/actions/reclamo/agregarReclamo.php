@@ -3,7 +3,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 require_once './../../utils/autoload.php';
 
-echo agregarReclamo();
+echo json_encode(agregarReclamo());
 
 function agregarReclamo()
 {
@@ -15,7 +15,7 @@ function agregarReclamo()
 
     $data = $_POST;
 
-    $reclamo->nuevoReclamo(
+    return $reclamo->nuevoReclamo(
         $data['id_unidad'],
         $data['titulo'],
         $data['mensaje']

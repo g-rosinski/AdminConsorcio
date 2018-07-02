@@ -4,7 +4,7 @@
       <a>Reclamos</a>
     </mat-panel-title>
     <mat-panel-description>
-      <mat-icon *ngIf="!isOpen" matBadge="0" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
+      <mat-icon *ngIf="!isOpen" [matBadge]="(reclamos | async)?.length" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
       <mat-icon *ngIf="isOpen" (click)="openDialog()">add_circle_outline</mat-icon>
     </mat-panel-description>
   </mat-expansion-panel-header>
@@ -13,7 +13,7 @@
     <div style="width: 50%;">
       <mat-form-field style="width: 300px;">
         <mat-select placeholder="Consorcios" (selectionChange)="onConsorcioChange($event)">
-          <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio" >{{consorcio.nombre}}</mat-option>
+          <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -35,25 +35,25 @@
       <tr>
         <th>N°</th>
         <th>Titulo</th>
-        <th>Unidad</th>
+        <th *ngIf="usuario.id_rol <= 2">Unidad</th>
         <th>Estado</th>
         <th>Ultima actualizacion</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <!-- <tr *ngFor="let usuario of usuarios |async">
-        <td>{{usuario.user}}</td>
-        <td>{{usuario.persona}}</td>
+      <tr *ngFor="let reclamo of reclamos |async">
+        <td>{{reclamo.nroReclamo}}</td>
+        <td>{{reclamo.titulo}}</td>
+        <td *ngIf="usuario.id_rol <= 2"></td>
         <td>
-          <strong>{{usuario.rol}}</strong>
+          <strong>{{reclamo.estado}}</strong>
         </td>
-        <td>{{usuario.consorcio}}</td>
-        <td>{{usuario.unidad}}</td>
+        <td>{{reclamo.fecha}}</td>
         <td>
-          <button mat-button color="accent" (click)="marcarUsuarioComoActivo(usuario.user)">DAR DE ALTA</button>
+          <button mat-button color="accent">VER MAS</button>
         </td>
-      </tr> -->
+      </tr>
     </tbody>
   </table>
 </mat-expansion-panel>

@@ -80,7 +80,7 @@ class Reclamo
     }
     private function consultarEstadoDeReclamoPorUsuario($user){
         
-        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado
+        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado, r.fechaMovimiento fecha
                         FROM propietariounidad pu
                         INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
                         INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo

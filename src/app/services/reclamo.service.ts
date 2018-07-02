@@ -25,11 +25,6 @@ export class ReclamoService {
       .set('id_unidad', id)
       .set('mensaje', formModel.mensaje);
 
-    if (formModel.rol !== 'OPERADOR' || formModel.rol !== 'ADMINISTRADOR') {
-      body = body.set('consorcio', formModel.consorcio);
-      body = body.set('unit', formModel.unit);
-    }
-
     return this.http.post(ReclamoService.BASE_URL + '/agregarReclamo.php', body.toString(), { headers: headers })
       .toPromise();
   }
