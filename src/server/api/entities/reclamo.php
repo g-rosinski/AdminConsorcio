@@ -40,10 +40,10 @@ class Reclamo
         return $this->insertReclamo();
     }
     public function procesarReclamo($id_reclamo){
-        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('EN CURSO'))
+        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('EN CURSO'));
     }
     public function cerrarReclamo($id_reclamo){
-        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('FINALIZADO'))
+        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('FINALIZADO'));
     }
     public function cambiarEstadoReclamo($idReclamo,$idEstado){
         $this->setIdReclamo($idReclamo);
@@ -86,7 +86,7 @@ class Reclamo
     }
     private function consultarEstadoDeReclamoPorUsuario($user){
         
-        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado, r.fechaMovimiento fecha
+        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, r.mensaje mensaje, er.descripcion estado, r.fechaMovimiento fecha
                         FROM propietariounidad pu
                         INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
                         INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
@@ -96,7 +96,7 @@ class Reclamo
         return $this->executeQuery($arrType,$arrParam);
     }
     public function consultarEstadoDeReclamoPorConsorcio($consorcio){
-        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, er.descripcion estado
+        $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, r.mensaje mensaje, er.descripcion estado, r.fechaMovimiento fecha, u.piso piso, u.departamento
                         FROM propietariounidad pu
                         INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
                         INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo

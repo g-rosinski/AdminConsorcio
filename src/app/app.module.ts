@@ -20,12 +20,14 @@ import { ListarReclamosComponent } from './home/panels/listar-reclamos/listar-re
 import { ListarExpensasComponent } from './home/panels/listar-expensas/listar-expensas.component';
 import { FabButtonComponent } from './home/fab-button/fab-button.component';
 import { AgregarReclamoComponent } from './home/modals/agregar-reclamo/agregar-reclamo.component';
+import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio.component';
+import { AgregarGastoComponent } from './home/modals/agregar-gasto/agregar-gasto.component';
 
 import { UsuarioService } from './services/usuario.service';
 import { ConsorcioService } from './services/consorcio.service';
 import { RegistroLoginService } from './services/registro-login.service';
 import { ReclamoService } from './services/reclamo.service';
-import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio.component';
+import { ProveedorService } from './services/proveedores.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio
     ListarExpensasComponent,
     FabButtonComponent,
     AgregarReclamoComponent,
-    VerConsorcioComponent
+    VerConsorcioComponent,
+    AgregarGastoComponent
   ],
   imports: [
     BrowserModule,
@@ -54,8 +57,8 @@ import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio
       apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
     }),
   ],
-  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent],
-  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService],
+  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent],
+  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

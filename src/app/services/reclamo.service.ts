@@ -18,6 +18,12 @@ export class ReclamoService {
     return this.http.get(ReclamoService.BASE_URL + '/verEstadoDeReclamosPorUsuario.php', { headers, params });
   }
 
+  traerTodosLosReclamosPorConsorcio(id_consorcio: string): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().set('id_consorcio', id_consorcio);
+    return this.http.get(ReclamoService.BASE_URL + '/verEstadoDeReclamosPorConsorcio.php', { headers, params });
+  }
+
   agregarReclamo(formModel, id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let body = new HttpParams()

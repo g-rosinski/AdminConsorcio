@@ -13,6 +13,10 @@ export class ConsorcioService {
   ) { }
 
   obtenerTodosLosConsorcios(): Observable<any> {
-      return this.http.get(ConsorcioService.BASE_URL + '/obtenerTodosLosConsorcios.php');
+    return this.http.get(ConsorcioService.BASE_URL + '/obtenerTodosLosConsorcios.php');
+  }
+
+  obtenerConsorciosConReclamos(): Observable<any> {
+    return this.http.get(ConsorcioService.BASE_URL + '/obtenerConsorciosConReclamo.php');
   }
 }

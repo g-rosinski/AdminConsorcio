@@ -4,6 +4,7 @@ import { MatDialog, MatSelectChange } from '@angular/material';
 import { Observable } from 'rxjs/internal/Observable';
 import { AgregarReclamoComponent } from '../../modals/agregar-reclamo/agregar-reclamo.component'
 import { ConsorcioService } from '../../../services/consorcio.service';
+import { AgregarGastoComponent } from '../../modals/agregar-gasto/agregar-gasto.component';
 
 @Component({
   selector: 'app-listar-reclamos',
@@ -44,7 +45,7 @@ export class ListarReclamosComponent implements OnInit {
 
   ngOnInit() {
     if (this.usuario.id_rol <= 2) {
-      this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
+      this.consorcios = this.consorcioService.obtenerConsorciosConReclamos();
     } else {
       this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario(this.usuario.user)
     }
@@ -62,6 +63,15 @@ export class ListarReclamosComponent implements OnInit {
   }
 
   onConsorcioChange(e: MatSelectChange) {
-    alert(e.value);
+    // alert(e.value);
+    this.reclamos = this.reclamoService.traerTodosLosReclamosPorConsorcio(e.value);
+  }
+
+  generarGasto(reclamo): void {
+    this.dialog.open(AgregarGastoComponent,
+      {
+        width: '500px',
+        data: {usuario: this.usuario, reclamo},
+      });
   }
 }

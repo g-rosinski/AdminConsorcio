@@ -48,6 +48,24 @@ class Consorcio
         return $this->connection->ejecutar($query);
     }
 
+    public function listarConsorciosConReclamos()
+    {
+        $query = "
+            SELECT DISTINCT
+                C.id_consorcio AS id_consorcio,
+                C.nombre as nombre
+            FROM
+                reclamo AS R
+            INNER JOIN unidad AS U
+            ON
+                R.id_unidad = U.id_unidad
+            INNER JOIN consorcio AS C
+            ON
+                C.id_consorcio = U.id_consorcio
+        ";
+        return $this->connection->ejecutar($query);
+    }
+
     public function traerConsorcioByID($id)
     {
         $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
