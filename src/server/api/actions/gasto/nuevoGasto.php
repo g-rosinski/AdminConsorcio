@@ -12,17 +12,22 @@ function nuevoGasto()
         $db = new DB();
         $gasto = new Gasto($db);
         $reclamo = new Reclamo($db);
+        $gastoMensual = new GastoMensual($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
     $data = $_POST;
-
     $gasto->procesarGasto(
-        $data['id_reclamo'],
         $data['descripcion'],
+        $data['importe'],
+        $data['id_motivo_gasto'],
+        $data['id_proveedor'],
+        $gastoMensual->traerIdGastoMensual($data['id_consorcio']),        
+        $data['id_reclamo'],
         $data['operador']
     );
     $reclamo->procesarReclamo(
         $data['id_reclamo']
     );
+    echo "todo ok";
 
 }
