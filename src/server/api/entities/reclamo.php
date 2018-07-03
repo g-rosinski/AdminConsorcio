@@ -40,10 +40,10 @@ class Reclamo
         return $this->insertReclamo();
     }
     public function procesarReclamo($id_reclamo){
-        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('EN CURSO'))
+        return $this->cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('EN CURSO'));
     }
     public function cerrarReclamo($id_reclamo){
-        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('FINALIZADO'))
+        return cambiarEstadoReclamo($id_reclamo,$this->getIdEstado('FINALIZADO'));
     }
     public function cambiarEstadoReclamo($idReclamo,$idEstado){
         $this->setIdReclamo($idReclamo);
