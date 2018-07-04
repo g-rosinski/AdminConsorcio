@@ -4,6 +4,8 @@ import { ReclamoService } from '../../../services/reclamo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProveedorService } from '../../../services/proveedores.service';
 import { Observable } from 'rxjs';
+import { MotivoGastoService } from '../../../services/motivoGasto.service';
+import { GastoService } from '../../../services/gasto.service';
 
 @Component({
   selector: 'app-agregar-gasto',
@@ -17,21 +19,27 @@ export class AgregarGastoComponent implements OnInit {
     proveedor: '',
     motivo: '',
     importe: '',
+    id_reclamo: '',
   };
 
   proveedores: Observable<any>;
+  motivos: Observable<any>;
 
   constructor(
     private dialogRef: MatDialogRef<AgregarGastoComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
     private toast: ToastrService,
-    private proveedorService: ProveedorService
+    private proveedorService: ProveedorService,
+    private motivoService: MotivoGastoService,
+    private gastoService: GastoService
   ) { }
 
   ngOnInit() {
     this.formModel.operador = this.data.usuario.user;
+    this.formModel.id_reclamo = this.data.reclamo.nroReclamo;
     this.formModel.mensaje = this.data.reclamo.mensaje;
     this.proveedores = this.proveedorService.obtenerTodosLosProveedores();
+    this.motivos = this.motivoService.obtenerTodosLosMotivos();
   }
 
   onNoClick(): void {
@@ -39,12 +47,7 @@ export class AgregarGastoComponent implements OnInit {
   }
 
   onSubmit() {
-    // if (!this.usuario.usuario.id_unidad) this.usuario.usuario.id_unidad = '';
-    // this.reclamoService.agregarReclamo(this.formModel, this.usuario.usuario.id_unidad)
-    //   .then(() => {
-    //     this.toast.info('Reclamo agregado correctamente.');
-    //     this.dialogRef.close();
-    //   });
+    this.gastoService.agregarGasto(this.formModel).then(()=> this.onNoClick())
   }
 
 }

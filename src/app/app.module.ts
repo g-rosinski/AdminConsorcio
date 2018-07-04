@@ -28,6 +28,8 @@ import { ConsorcioService } from './services/consorcio.service';
 import { RegistroLoginService } from './services/registro-login.service';
 import { ReclamoService } from './services/reclamo.service';
 import { ProveedorService } from './services/proveedores.service';
+import { MotivoGastoService } from './services/motivoGasto.service';
+import { GastoService } from './services/gasto.service';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,7 @@ import { ProveedorService } from './services/proveedores.service';
     }),
   ],
   entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent],
-  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService],
+  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService, MotivoGastoService, GastoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

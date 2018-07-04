@@ -6,25 +6,25 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select placeholder="Proveedor" required [(ngModel)]="formModel.proveedor" name="proveedor">
+    <mat-select [ngModelOptions]="{standalone: true}" placeholder="Proveedor" required [(ngModel)]="formModel.proveedor" name="proveedor">
       <mat-option *ngFor="let proveedor of proveedores |async" [value]="proveedor.id_proveedor">{{proveedor.razon_social}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field class="half-width">
-    <mat-select placeholder="Motivo Gasto" required [(ngModel)]="formModel.motivoGasto" name="motivoGasto">
-      <!-- <mat-option *ngFor="let proveedor of proveedores |async" [value]="proveedor.id_proveedor">{{proveedor.razon_social}}</mat-option> -->
+    <mat-select [ngModelOptions]="{standalone: true}" placeholder="Motivo Gasto" required [(ngModel)]="formModel.motivo" name="motivoGasto">
+      <mat-option *ngFor="let motivo of motivos |async" [value]="motivo.id_motivo_gasto">{{motivo.descripcion}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field class="half-width">
     <span matPrefix>$</span>
-    <input type="number" [(ngModel)]="formModel.importe" matInput placeholder="Importe" class="example-right-align">
+    <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="formModel.importe" matInput placeholder="Importe" class="example-right-align">
   </mat-form-field>
 
   <mat-dialog-content>
     <mat-form-field class="full-width">
-      <textarea [(ngModel)]="formModel.mensaje" disabled name="mensaje" required matInput placeholder="Mensaje" rows="5"></textarea>
+      <textarea [(ngModel)]="formModel.mensaje" [ngModelOptions]="{standalone: true}" disabled name="mensaje" required matInput placeholder="Mensaje" rows="5"></textarea>
     </mat-form-field>
 
   </mat-dialog-content>
