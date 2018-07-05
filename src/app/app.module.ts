@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { ToastrModule } from 'ngx-toastr';
@@ -30,6 +30,13 @@ import { ReclamoService } from './services/reclamo.service';
 import { ProveedorService } from './services/proveedores.service';
 import { MotivoGastoService } from './services/motivoGasto.service';
 import { GastoService } from './services/gasto.service';
+import { MyHttpInterceptor } from './services/http-interceptor.service';
+
+const httpInter = {
+  provide: HTTP_INTERCEPTORS, 
+  useClass: MyHttpInterceptor, 
+  multi: true 
+};
 
 @NgModule({
   declarations: [
@@ -60,7 +67,7 @@ import { GastoService } from './services/gasto.service';
     }),
   ],
   entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent],
-  providers: [UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService, MotivoGastoService, GastoService],
+  providers: [httpInter, UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService, MotivoGastoService, GastoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
