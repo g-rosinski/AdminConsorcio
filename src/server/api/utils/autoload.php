@@ -1,4 +1,10 @@
 <?php 
+
+set_error_handler(function($error) {
+    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+    echo json_encode($error);
+});
+
 spl_autoload_register(function ($class) {
 
    $className = strtolower($class);
