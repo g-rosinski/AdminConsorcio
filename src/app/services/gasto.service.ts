@@ -16,10 +16,11 @@ export class GastoService {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let body = new HttpParams()
       .set('descripcion', formModel.mensaje)
-      .set('import', formModel.importe)
+      .set('importe', formModel.importe)
       .set('id_proveedor', formModel.proveedor)
       .set('id_motivo_gasto', formModel.motivo)
       .set('operador', formModel.operador)
+      .set('id_consorcio', formModel.id_consorcio)
       .set('id_reclamo', formModel.id_reclamo);
 
     return this.http.post(GastoService.BASE_URL + '/nuevoGasto.php', body.toString(), { headers: headers })

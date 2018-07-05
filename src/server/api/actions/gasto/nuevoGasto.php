@@ -3,7 +3,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 require_once './../../utils/autoload.php';
 
-echo nuevoGasto();
+echo json_encode(nuevoGasto());
 
 function nuevoGasto()
 {
@@ -29,6 +29,6 @@ function nuevoGasto()
     $reclamo->procesarReclamo(
         $data['id_reclamo']
     );
-    echo "todo ok";
+    // echo "todo ok";
 
 }
