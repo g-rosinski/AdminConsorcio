@@ -1,4 +1,5 @@
 <?php
+include_once './../../utils/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 include_once './../../config/db.php';

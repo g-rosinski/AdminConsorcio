@@ -1,4 +1,11 @@
 <?php 
+session_start();
+
+if(isset($_SESSION['user']) && ($_SESSION['expire'] > time())){
+     $_SESSION['expire'] = time() + (60 * 10);
+} else {
+    session_destroy();
+}
 
 set_error_handler(function($error) {
     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);

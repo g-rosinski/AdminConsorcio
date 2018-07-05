@@ -26,6 +26,7 @@ function loguear()
             return 'Su Usuario no ha sido activado. Consulte con el administrador';
         }
 
+        $_SESSION['expire'] = time() + (10 * 60);
         $_SESSION['user'] = $userDB;
         return;
     } else {
