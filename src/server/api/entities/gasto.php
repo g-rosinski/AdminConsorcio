@@ -48,9 +48,23 @@ class Gasto
         return $this->consultarGastosPorConsorcio($consorcio);
     }
 
+    public function traerDetalleGasto($idGasto){
+        $this->setIdGasto($idGasto);
+        return $this->consultarGasto();
+    }
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function consultarGasto(){
+        $this->query = "SELECT id_gasto idGasto, nro_comprobante nroComprobante, fecha, descripcion, importe,"
+        ."  id_motivo_gasto idMotivoGasto, id_proveedor idProveedor, id_gasto_mensual idGastoMensual,"
+        ."  id_reclamo idReclamo, id_operador idOperador"
+        ." FROM ".$this->tabla
+        ." WHERE id_gasto = ?";
+        $arrType = array ("i");
+        $arrParam = array($this->id_gasto);
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function consultarGastosPorConsorcio($consorcio){
         $this->query = "SELECT g.id_gasto idGasto, g.nro_comprobante nroComprobante, g.fecha, g.descripcion, g.importe FROM ".$this->tabla." as g
                         INNER JOIN gastomensual gm on gm.id_gasto_mensual = g.id_gasto_mensual
