@@ -29,6 +29,5 @@ function nuevoGasto()
     $reclamo->procesarReclamo(
         $data['id_reclamo']
     );
-    // echo "todo ok";
 
 }

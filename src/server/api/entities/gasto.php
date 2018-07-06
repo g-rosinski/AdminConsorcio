@@ -44,12 +44,17 @@ class Gasto
         return $this->insertGasto();
     }
 
+    public function traerGastosPorUnConsorcio($consorcio){
+        return $this->consultarGastosPorConsorcio($consorcio);
+    }
+
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
-    private function obtenerGastoMensualEnCurso($consorcio){
-        $this->query = "SELECT MAX(id_gasto_mensual) FROM gastomensual
-                        WHERE id_consorcio = 3;";
+    private function consultarGastosPorConsorcio($consorcio){
+        $this->query = "SELECT g.id_gasto idGasto, g.nro_comprobante nroComprobante, g.fecha, g.descripcion, g.importe FROM ".$this->tabla." as g
+                        INNER JOIN gastomensual gm on gm.id_gasto_mensual = g.id_gasto_mensual
+                        WHERE gm.id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array($consorcio);
         return $this->executeQuery($arrType,$arrParam);
