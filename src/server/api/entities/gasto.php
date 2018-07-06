@@ -44,10 +44,13 @@ class Gasto
         return $this->insertGasto();
     }
 
-    public function traerGastosPorUnConsorcio($consorcio){
+    public function traerGastosPorUnConsorcio($consorcio, $idGastoMensualActual){
+        $this->setIdGastoMensual($idGastoMensualActual);
         return $this->consultarGastosPorConsorcio($consorcio);
     }
-
+    public function traerGastosHistoricosPorUnConsorcio($consorcio){
+        return $this->consultarGastosHistoricosPorConsorcio($consorcio);  
+    }
     public function traerDetalleGasto($idGasto){
         $this->setIdGasto($idGasto);
         return $this->consultarGasto();
@@ -57,18 +60,28 @@ class Gasto
     /**************************** */
     private function consultarGasto(){
         $this->query = "SELECT id_gasto idGasto, nro_comprobante nroComprobante, fecha, descripcion, importe,"
-        ."  id_motivo_gasto idMotivoGasto, id_proveedor idProveedor, id_gasto_mensual idGastoMensual,"
-        ."  id_reclamo idReclamo, id_operador idOperador"
-        ." FROM ".$this->tabla
-        ." WHERE id_gasto = ?";
+                        ."  id_motivo_gasto idMotivoGasto, id_proveedor idProveedor, id_gasto_mensual idGastoMensual,"
+                        ."  id_reclamo idReclamo, id_operador idOperador"
+                        ." FROM ".$this->tabla
+                        ." WHERE id_gasto = ?";
         $arrType = array ("i");
         $arrParam = array($this->id_gasto);
         return $this->executeQuery($arrType,$arrParam);
     }
     private function consultarGastosPorConsorcio($consorcio){
-        $this->query = "SELECT g.id_gasto idGasto, g.nro_comprobante nroComprobante, g.fecha, g.descripcion, g.importe FROM ".$this->tabla." as g
-                        INNER JOIN gastomensual gm on gm.id_gasto_mensual = g.id_gasto_mensual
-                        WHERE gm.id_consorcio = ?";
+        $this->query = "SELECT g.id_gasto idGasto, g.nro_comprobante nroComprobante, g.fecha, g.descripcion, g.importe FROM ".$this->tabla." as g"
+                        ." INNER JOIN gastomensual gm on gm.id_gasto_mensual = g.id_gasto_mensual"
+                        ." WHERE gm.id_consorcio = ?"
+                        ." AND g.id_gasto_mensual = ?";
+        $arrType = array ("i","i");
+        $arrParam = array($consorcio, $this->id_gasto_mensual);
+        return $this->executeQuery($arrType,$arrParam);
+    }
+    private function consultarGastosHistoricosPorConsorcio($consorcio){
+        $this->query = "SELECT g.id_gasto idGasto, g.nro_comprobante nroComprobante, g.fecha, g.descripcion, g.importe FROM ".$this->tabla." as g"
+                        ." INNER JOIN gastomensual gm on gm.id_gasto_mensual = g.id_gasto_mensual"
+                        ." WHERE gm.id_consorcio = ?"
+                        ." ORDER BY g.id_gasto_mensual";
         $arrType = array ("i");
         $arrParam = array($consorcio);
         return $this->executeQuery($arrType,$arrParam);

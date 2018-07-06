@@ -3,21 +3,19 @@ require_once './../../utils/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-echo listarGastosPorConsorcio();
+echo listarGastosHistoricosPorConsorcio();
 
-function listarGastosPorConsorcio()
+function listarGastosHistoricosPorConsorcio()
 {
 
     try {
         $db = new DB();
         $gasto = new Gasto($db);
-        $gastoMensual = new GastoMensual($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
-    // Solo requiere el Id de Consorcio, traera los gastos del mes corriente
+    // Solo requiere el Id de Consorcio, traera todos los gastos de un consorcio
     $data = $_GET;
-    $idGastoMensualActual = $gastoMensual->traerIdGastoMensual($data['id_consorcio']);
-    $gastosEncontrados = $gasto->traerGastosPorUnConsorcio($data['id_consorcio'], $idGastoMensualActual);
+    $gastosEncontrados = $gasto->traerGastosHistoricosPorUnConsorcio($data['id_consorcio']);
 
     $arrayGastos = array();
     while ($obj = $gastosEncontrados->fetch_object()) {
