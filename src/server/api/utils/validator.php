@@ -6,7 +6,7 @@
 	        if (!empty($var) && is_string($var)) {
 	            return $var;
 	        } else {
-	            throw new Exception("El valor ".$var." es null o no es de tipo String");
+	            throw new Exception("El valor ".$var." es null o no es de tipo String<br>");
 	        }
 	    }
 	    public function validarVariableNumerica($var)
@@ -14,7 +14,7 @@
 	        if (!empty($var) && is_numeric($var)) {
 	            return $var;
 	        } else {
-	            throw new Exception("El valor ".$var." es null o no es de tipo Numerico");
+	            throw new Exception("El valor ".$var." es null o no es de tipo Numerico<br>");
 	        }
 	    }
 	    public function validarCampoEmail($email){

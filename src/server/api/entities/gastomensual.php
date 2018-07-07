@@ -25,23 +25,50 @@ class GastoMensual
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
-    public function traerIdGastoMensual($consorcio){
+    public function traerIdGastoMensual($consorcio)
+    {
     	$this->setIdConsorcio($consorcio);
     	return $this->obtenerIdGastoMensualEnCurso();
     }
-
+    public function actualizarTotalGastoMensual($idGastoMensual, $importe)
+    {
+        $this->setIdGastoMensual($idGastoMensual);
+        $total = $this->obtenerTotal($this->idGastoMensual) + $importe;
+        $this->setTotal($total);
+        return $this->actualizarTotal();
+    }
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
-    private function obtenerIdGastoMensualEnCurso(){
-        $this->query = "SELECT MAX(id_gasto_mensual) id FROM ".$this->tabla.
-                       " WHERE id_consorcio = ?";
+    private function obtenerIdGastoMensualEnCurso()
+    {
+        $this->query = "SELECT MAX(id_gasto_mensual) id FROM ".$this->tabla
+                       ." WHERE id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array ($this->id_consorcio);
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
         return $gastomensual['id'];
     }
-    private function setDate(){
+    private function actualizarTotal()
+    {
+        $this->query = "UPDATE ".$this->tabla." SET total = ?  WHERE id_gasto_mensual = ?";
+        $arrType = array("i","i");
+        $arrParam= array(
+            $this->total,
+            $this->idGastoMensual
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
+    private function obtenerTotal($idGastoMensual){
+        $this->query = "SELECT total FROM ". $this->tabla
+                       ." WHERE id_gasto_mensual = ?";
+        $arrType = array ("i");
+        $arrParam = array ($idGastoMensual);
+        $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
+        return $gastomensual['total'];
+    }
+    private function setDate()
+    {
         date_default_timezone_get('America/Argentina/Buenos_Aires');
         return date("Y-m-d");        
     }

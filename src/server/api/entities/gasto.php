@@ -55,6 +55,10 @@ class Gasto
         $this->setIdGasto($idGasto);
         return $this->consultarGasto();
     }
+    public function traerIdGastoMensual($id_gasto){
+        $this->setIdGasto($id_gasto);
+        return $this->obtenerIdGastoMensual();
+    }
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
@@ -102,7 +106,15 @@ class Gasto
         );
         return $this->executeQuery($arrType,$arrParam);
     }
-
+    private function obtenerIdGastoMensual(){
+        $this->query = "SELECT id_gasto_mensual id FROM ".$this->tabla.
+                       " WHERE id_gasto = ?";
+        $arrType = array ("i");
+        $arrParam = array ($this->id_gasto);
+        $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
+        return $gastomensual['id'];
+    }
+    
     private function nuevoNumeroDeComprobante(){
         $this->query = "SELECT MAX(nro_comprobante) as nroComprobante FROM ".$this->tabla." LIMIT 1";
         $ultGasto = $this->executeQuery()->fetch_assoc();
