@@ -121,7 +121,8 @@ constraint formaPago_fk_pe foreign key (id_forma_pago) references formaPago (id_
 create table gastoMensual
 (id_gasto_mensual int unsigned auto_increment not null,
 periodo varchar (50) not null,
-fecha date not null,
+fechaInicio date not null,
+fechaLiquidacion date,
 total double not null,
 id_consorcio int unsigned not null,
 primary key (id_gasto_mensual),

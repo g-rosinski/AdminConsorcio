@@ -71,7 +71,22 @@ class Consorcio
         $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
         return mysql_fetch_assoc($this->connection->ejecutar($query));
     }
-
+    public function traerParticipacionDelConsorcio($consorcio){
+        return $this->obtenerParticipacionDelConsorcio($consorcio);
+    }
+    private function obtenerParticipacionDelConsorcio($consorcio){
+        $this->query = "SELECT u.id_unidad, u.prc_participacion participacion FROM ". $this->tabla ." c"
+                       ." INNER JOIN unidad u ON c.id_consorcio = u.id_consorcio"
+                       ." WHERE c.id_consorcio = ?";
+        $arrType = array ("i");
+        $arrParam = array ($consorcio);
+        while ($unidad = $this->executeQuery($arrType,$arrParam)->fetch_assoc())
+        {
+            $unidadesEncontradas[$unidad['id_unidad']] = $unidad['participacion'];
+        }
+        ;
+        return $unidadesEncontradas;
+    }
     private function insertConsorcio()
     {
         $query = "INSERT INTO "
