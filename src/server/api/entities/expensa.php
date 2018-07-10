@@ -29,14 +29,27 @@ class Expensa
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
-    public function liquidarExpensas(){}
+    public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
+    {
+        $this->setCuotaExtraordinaria(0); // Sera expensa sin contar la mora
+        $this->setCuotaMora(0); // Aun falta hacer el calculo de la mora
+        $this->setCuotaMes($this->obtenerNumeroDeCuotaAnual($idGastoMensual));
+        $this->setCuotaEstado(1); // Por ahora el 1 sera 'Sin imputar', 2 'Sin vencer', 3'Vencido, 4 'Pago'
+        $this->setCuotaVencimiento($cuotaVencimiento);
+        $this->setIdGastoMensual($idGastoMensual);
+        $arrExpensasCalculadas = $this->calcularExpensas($cuentasALiquidar,$totalDelMes);
+        foreach($arrExpensasCalculadas as $idCtaCte => $importeExpensa){
+            $this->setIdCtaCte($id_ctacte);
+            $this->setCuotaExpensa($cuotaExpensa);
+        }
+    }
 
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
-    private function calcularExpensas($listUnidades, $total){
-        foreach($listUnidades as $idUnidad => $prcParticipacion){
-            $expPorUnidad[$idUnidad] = ($total / 100)*$prcParticipacion;
+    private function calcularExpensas($arrCtaCtes, $total){
+        foreach($arrCtaCtes as $idCtaCte => $prcParticipacion){
+            $expPorUnidad[$idCtaCte] = ($total / 100)*$prcParticipacion;
         }
         return $expPorUnidad;
     }
@@ -57,6 +70,15 @@ class Expensa
             $this->id_gasto_mensual
         );
         return $this->executeQuery($arrType,$arrParam);
+    }
+    private function obtenerNumeroDeCuotaAnual($id_gasto_mensual){
+        $this->query = "SELECT periodo numero FROM ".$this->tabla
+                       ." WHERE id_gasto_mensual = ?";
+        $arrType = array ("i");
+        $arrParam = array ($id_gasto_mensual);
+        $periodo = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
+        $numeroPeriodo = explode("-",trim($periodo['numero'])); // '2018 - 06'
+        return (int)$numeroPeriodo[1];
     }
 
     private function setIdExpensa($idExpensa){

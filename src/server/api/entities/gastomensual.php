@@ -39,13 +39,13 @@ class GastoMensual
         return $this->actualizarTotal();
     }
     public function liquidarGastoMensualPorConsorcio($consorcios = array()){
+        $this->setFechaInicio($this->setDate());
         $this->setFechaLiquidacion($this->setDate());
         $this->setPeriodo($this->obtenerPeriodo());
+        $this->setTotal(0);
         foreach($consorcios as $id_consorcio){
             $this->setIdConsorcio($id_consorcio);
-            $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso());            
-            $expALiquidar = $this->calcularExpensas($this->obtenerTotal($this->idGastoMensual()));
-            $this->liquidarExpensas($expALiquidar);
+            $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso());
             $this->liquidarPeriodoPorConsorcio();
             $this->nuevoPeriodoPorConsorcio();
         }
@@ -53,7 +53,7 @@ class GastoMensual
     public function obtenerTotalDelMes($id_consorcio){
         $this->setIdConsorcio($id_consorcio);
         $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso()); 
-        return $this->obtenerTotal($this->idGastoMensual());
+        return $this->obtenerTotal($this->idGastoMensual);
     }
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
@@ -84,10 +84,6 @@ class GastoMensual
         $arrParam = array ($idGastoMensual);
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
         return $gastomensual['total'];
-    }
-    private function liquidarExpensas($arrUnidades){
-        try{$consorcio = new Consorcio($this->connection);}        
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
     private function liquidarPeriodoPorConsorcio(){
         $this->query = "UPDATE ".$this->tabla." SET fechaLiquidacion = ?  WHERE id_consorcio = ?"

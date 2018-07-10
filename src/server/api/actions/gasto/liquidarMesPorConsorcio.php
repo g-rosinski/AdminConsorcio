@@ -1,10 +1,10 @@
 <?php
+require_once './../../utils/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-require_once './../../utils/autoload.php';
 
 echo json_encode(liquidarMesPorConsorcio());
-
+         
 function liquidarMesPorConsorcio()
 {
 
@@ -13,15 +13,25 @@ function liquidarMesPorConsorcio()
         $gastoMensual = new GastoMensual($db);
         $consorcio = new Consorcio($db);
         $expensa = new Expensa($db);
-        $ctaCte = new
+        $ctaCte = new Cuentacorriente($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
     $data = $_POST;
-    $idConsorcio = $data['id_consorcio'];
-    $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
-    $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
-    $idCtaCte = $ctaCte->traerCtaCtePorUnidad($id_unidad);
-    $expensa->calcularExpensas($unidadesALiquidar,$totalDelMes);
-    
+    $arrConsorcios = $data['id_consorcio'];
+    $vencimiento = $data['vencimiento']; // yyyy-mm-dd
+   
+    foreach($arrConsorcios as $idConsorcio){
+        $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
+        $idGastoMensual = $gastoMensual->traerIdGastoMensual($idConsorcio);
+        $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
+        var_dump($unidadesALiquidar);die;
+        foreach($unidadesALiquidar as $id_unidad => $participacion){
+            $idCtaCte = $ctaCte->traerCtaCtePorUnidad($id_unidad);
+            $cuentasALiquidar[$idCtaCte]=$participacion;
+        }
+        $expensa->liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento);
+        $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
+    }
+    $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
 
 }
