@@ -62,10 +62,9 @@ class Unidad
             $arrUnidadesConSuperficie = $this->obtenerEspacioOcupadoPorUnidad();
             $totalSuperficie = $this->obtenerEspacioTotalPorConsorcio();
             foreach ($arrUnidadesConSuperficie as $id_unidad => $superficieUnidad) {
-                $prcParticipacion = $superficieUnidad/($totalSuperficie/100);
+                $prcParticipacion = round($superficieUnidad/($totalSuperficie/100),3);
                 $this->setIdUnidad($id_unidad);
                 $this->setPrcParticipacion($prcParticipacion);
-                // echo $this->prcParticipacion;die;
                 $this->actualizarPrcParticipacion();
             }
         }
