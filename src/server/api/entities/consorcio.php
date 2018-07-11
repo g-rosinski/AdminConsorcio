@@ -43,7 +43,6 @@ class Consorcio
         while ($reg = mysql_fetch_assoc($this->connection->ejecutar($query))) {
             $result[$reg['id_consorcio']] = $reg['nombre'];
         }
-        echo '<pre>' . print_r($query, true) . '</true>';die;
         return $result;
     }
     public function listarConsorciosCompleto()
@@ -84,13 +83,12 @@ class Consorcio
                        ." WHERE c.id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array ($consorcio);
-        $unidad = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
-        var_dump($unidad);die;
-        while ($unidad = $this->executeQuery($arrType,$arrParam)->fetch_assoc())
+        $arrUnidades = $this->executeQuery($arrType,$arrParam);
+        
+        while ($unidad = $arrUnidades->fetch_assoc())
         {
             $unidadesEncontradas[$unidad['idUnidad']] = $unidad['participacion'];
         }
-        ;
         return $unidadesEncontradas;
     }
     private function insertConsorcio()

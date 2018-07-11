@@ -24,14 +24,15 @@ function liquidarMesPorConsorcio()
         $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
         $idGastoMensual = $gastoMensual->traerIdGastoMensual($idConsorcio);
         $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
-        var_dump($unidadesALiquidar);die;
         foreach($unidadesALiquidar as $id_unidad => $participacion){
             $idCtaCte = $ctaCte->traerCtaCtePorUnidad($id_unidad);
             $cuentasALiquidar[$idCtaCte]=$participacion;
         }
+        
         $expensa->liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento);
         $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
     }
     $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
 
+    /* echo "<pre>".print_r($arrExpensasCalculadas,true)."</pre>";die; */
 }

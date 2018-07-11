@@ -1,6 +1,6 @@
 <?php
-
 require_once './../../utils/autoload.php';
+
 class Expensa
 {
     private $connection;
@@ -8,9 +8,9 @@ class Expensa
     private $query;
     private $tabla = "expensa";
     /* Campos de la tabla */
+    private $cuotaExtraordinaria; // $this->setCuotaExtraordinaria($cuotaExtraordinaria)
     private $idExpensa; // $this->setIdExpensa($idExpensa)
     private $cuotaExpensa; // $this->setCuotaExpensa($cuotaExpensa)
-    private $cuotaExtraordinaria; // $this->setCuotaExtraordinaria($cuotaExtraordinaria)
     private $cuotaMora; // $this->setCuotaMora($cuotaMora)
     private $cuotaMes; // $this->setCuotaMes($cuotaMes)
     private $cuotaVencimiento; // $this->setCuotaVencimiento($cuotaVencimiento)
@@ -30,18 +30,21 @@ class Expensa
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
     public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
-    {
-        $this->setCuotaExtraordinaria(0); // Sera expensa sin contar la mora
-        $this->setCuotaMora(0); // Aun falta hacer el calculo de la mora
+    {      
+        $this->prepareInsertExpensa();
         $this->setCuotaMes($this->obtenerNumeroDeCuotaAnual($idGastoMensual));
-        $this->setCuotaEstado(1); // Por ahora el 1 sera 'Sin imputar', 2 'Sin vencer', 3'Vencido, 4 'Pago'
-        $this->setCuotaVencimiento($cuotaVencimiento);
+        $this->setCuotaEstado('1'); // Por ahora el 1 sera 'Sin imputar', 2 'Sin vencer', 3'Vencido, 4 'Pago'
+        $this->setCuotaVencimiento($vencimiento);
         $this->setIdGastoMensual($idGastoMensual);
-        $arrExpensasCalculadas = $this->calcularExpensas($cuentasALiquidar,$totalDelMes);
+        $arrExpensasCalculadas = $this->calcularExpensas($cuentasALiquidar,$totalDelMes);        
         foreach($arrExpensasCalculadas as $idCtaCte => $importeExpensa){
-            $this->setIdCtaCte($id_ctacte);
-            $this->setCuotaExpensa($cuotaExpensa);
+            $this->setCuotaExtraordinaria($importeExpensa); // Sera expensa sin contar la mora
+            $this->setCuotaMora(1); // Aun falta hacer el calculo de la mora
+            $this->setIdCtaCte($idCtaCte);
+            $this->setCuotaExpensa($this->cuotaExtraordinaria + $this->cuotaMora);
+            $this->ingresarNuevasExpensas();
         }
+        /* var_dump($this->cuotaExtraordinaria); */die;
     }
 
     /**************************** */
@@ -49,16 +52,23 @@ class Expensa
     /**************************** */
     private function calcularExpensas($arrCtaCtes, $total){
         foreach($arrCtaCtes as $idCtaCte => $prcParticipacion){
-            $expPorUnidad[$idCtaCte] = ($total / 100)*$prcParticipacion;
+            $expPorUnidad[$idCtaCte] = round(($total / 100)*$prcParticipacion,2);
         }
         return $expPorUnidad;
     }
+    private function prepareInsertExpensa()
+    {
+        try{ $this->query = new Query($this->connection); }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        $query = "INSERT INTO ".$this->tabla." ( cuota_expensa, cuota_extraordinaria,"
+                                ." cuota_mora, cuota_mes, cuota_vencimiento, cuota_estado, id_ctacte,"
+                                ." id_gasto_mensual)"
+                                ." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->query->prepare($query);                     
+    }
     private function ingresarNuevasExpensas(){
-        $this->query = "INSERT INTO ".$this->tabla." ( cuota_expensa, cuota_extraordinaria,"
-                        ." cuota_mora, cuota_mes, cuota_vencimiento, cuota_estado, id_ctacte,"
-                        ." id_gasto_mensual)"
-                        ." VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $arrType = array("i","i","i","i","s","s","i","i");
+        
+        $arrType = array("d","d","d","i","s","s","i","i");
         $arrParam= array(
             $this->cuotaExpensa,
             $this->cuotaExtraordinaria,
@@ -69,15 +79,15 @@ class Expensa
             $this->id_ctacte,
             $this->id_gasto_mensual
         );
-        return $this->executeQuery($arrType,$arrParam);
+        return $this->query->sendData($arrType,$arrParam);
     }
     private function obtenerNumeroDeCuotaAnual($id_gasto_mensual){
-        $this->query = "SELECT periodo numero FROM ".$this->tabla
+        $this->query = "SELECT periodo numero FROM gastomensual"
                        ." WHERE id_gasto_mensual = ?";
-        $arrType = array ("i");
-        $arrParam = array ($id_gasto_mensual);
-        $periodo = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
-        $numeroPeriodo = explode("-",trim($periodo['numero'])); // '2018 - 06'
+        $arrType = array("i");
+        $arrParam = array($id_gasto_mensual);
+        $periodo = $this->executeQuery($arrType,$arrParam)->fetch_assoc();// '2018 - 06'
+        $numeroPeriodo = explode("-",trim($periodo['numero'])); // '06'
         return (int)$numeroPeriodo[1];
     }
 
@@ -97,13 +107,13 @@ class Expensa
         try { $this->cuotaMes = $this->validator->validarVariableNumerica($cuotaMes);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setCuotaVencimiento($cuotaVencimiento){
-        $this->cuotaVencimiento=$cuotaVencimiento;
+        try { $this->cuotaVencimiento = $this->validator->validarVariableString($cuotaVencimiento);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setCuotaEstado($cuotaEstado){
         try { $this->cuotaEstado = $this->validator->validarVariableString($cuotaEstado);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setIdCtaCte($id_ctacte){
-        try { $this->id_ctacte = $this->validator->validarVariableNumerica($total);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->id_ctacte = $this->validator->validarVariableNumerica($id_ctacte);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setIdGastoMensual($id_gasto_mensual){
         try { $this->id_gasto_mensual = $this->validator->validarVariableNumerica($id_gasto_mensual);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}

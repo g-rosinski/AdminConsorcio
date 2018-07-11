@@ -24,7 +24,7 @@ class Cuentacorriente
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
     public function traerCtaCtePorUnidad($unidad){
-        $this->setIdCtaCte($unidad);
+        $this->setIdUnidad($unidad);
         return $this->obtenerCtaCte();
     }
     public function actualizarSaldoCtacte($cuentas = array()){
@@ -35,15 +35,15 @@ class Cuentacorriente
             $this->insertSaldoCtaCte();
         }
     }
-
+    
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
     private function obtenerCtaCte(){
-        $this->query = "SELECT id_cta_cte id FROM ". $this->tabla
-                       ." WHERE id_unidad = ?";
-        $arrType = array ("i");
-        $arrParam = array ($this->id_unidad);
+        $this->query = "SELECT id_ctacte id FROM ". $this->tabla
+        ." WHERE id_unidad = ?";
+        $arrType = array("i");
+        $arrParam = array($this->id_unidad);
         $ctacte = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
         return $ctacte['id'];
     }
