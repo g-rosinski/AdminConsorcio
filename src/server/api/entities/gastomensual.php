@@ -61,7 +61,8 @@ class GastoMensual
     private function obtenerIdGastoMensualEnCurso()
     {
         $this->query = "SELECT MAX(id_gasto_mensual) id FROM ".$this->tabla
-                       ." WHERE id_consorcio = ?";
+                       ." WHERE id_consorcio = ?"
+                       ." AND fechaLiquidacion IS NULL";
         $arrType = array ("i");
         $arrParam = array ($this->id_consorcio);
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
@@ -70,7 +71,7 @@ class GastoMensual
     private function actualizarTotal()
     {
         $this->query = "UPDATE ".$this->tabla." SET total = ?  WHERE id_gasto_mensual = ?";
-        $arrType = array("i","i");
+        $arrType = array("d","i");
         $arrParam= array(
             $this->total,
             $this->idGastoMensual
@@ -86,19 +87,18 @@ class GastoMensual
         return $gastomensual['total'];
     }
     private function liquidarPeriodoPorConsorcio(){
-        $this->query = "UPDATE ".$this->tabla." SET fechaLiquidacion = ?  WHERE id_consorcio = ?"
-                        ." AND fechaLiquidacion IS NULL";
+        $this->query = "UPDATE ".$this->tabla." SET fechaLiquidacion = ?  WHERE id_gasto_mensual = ?";
         $arrType = array("s","i");
         $arrParam= array(
             $this->fechaLiquidacion,
-            $this->id_consorcio
+            $this->idGastoMensual
         );
         return $this->executeQuery($arrType,$arrParam);
     }
     private function nuevoPeriodoPorConsorcio(){
         $this->query = "INSERT INTO ".$this->tabla." (periodo,fechaInicio,total,id_consorcio)"
                         ." VALUES (?, ?, ?, ?)";
-        $arrType = array("s","s","i","i");
+        $arrType = array("s","s","d","i");
         $arrParam= array(
             $this->periodo,
             $this->fechaInicio,
@@ -137,7 +137,7 @@ class GastoMensual
     }
     private function setTotal($total)
     {
-        try { $this->total = $this->validator->validarVariableNumerica($total);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        $this->total = $total;
     }    
     private function setIdConsorcio($id_consorcio)
     {

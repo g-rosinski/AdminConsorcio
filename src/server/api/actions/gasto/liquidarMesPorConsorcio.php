@@ -17,7 +17,7 @@ function liquidarMesPorConsorcio()
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
     $data = $_POST;
-    $arrConsorcios = $data['id_consorcio'];
+    $arrConsorcios = $data['id_consorcio']; // Lista de consorcios a liquidar
     $vencimiento = $data['vencimiento']; // yyyy-mm-dd
    
     foreach($arrConsorcios as $idConsorcio){
@@ -31,7 +31,8 @@ function liquidarMesPorConsorcio()
         
         $expensa->liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento);
         $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
-    }
+        
+    } 
     $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
 
     /* echo "<pre>".print_r($arrExpensasCalculadas,true)."</pre>";die; */
