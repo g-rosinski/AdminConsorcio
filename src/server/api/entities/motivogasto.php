@@ -21,7 +21,7 @@ class MotivoGasto
 
     public function obtenerTodosLosMotivoGasto()
     {
-        $this->query = "SELECT * FROM $this->tabla";
+        $this->query = "SELECT id_motivo_gasto,descripcion FROM ". $this->tabla;
         return $this->executeQuery();
     }
 
