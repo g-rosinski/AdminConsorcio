@@ -19,4 +19,8 @@ export class ConsorcioService {
   obtenerConsorciosConReclamos(): Observable<any> {
     return this.http.get(ConsorcioService.BASE_URL + '/obtenerConsorciosConReclamo.php');
   }
+
+  obtenerConsorciosConGastos(): Observable<any> {
+    return this.http.get(ConsorcioService.BASE_URL + '/obtenerConsorciosConGastos.php');
+  }
 }

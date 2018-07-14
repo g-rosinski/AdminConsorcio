@@ -26,4 +26,10 @@ export class GastoService {
     return this.http.post(GastoService.BASE_URL + '/nuevoGasto.php', body.toString(), { headers: headers })
       .toPromise();
   }
+
+  obtenerGastoPorConsorcio(id: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().set('id_consorcio', id);
+    return this.http.get(GastoService.BASE_URL + '/listarGastosPorConsorcio.php', { headers, params });
+  }
 }
