@@ -121,11 +121,19 @@ constraint formaPago_fk_pe foreign key (id_forma_pago) references formaPago (id_
 create table gastoMensual
 (id_gasto_mensual int unsigned auto_increment not null,
 periodo varchar (50) not null,
-fecha date not null,
+fechaInicio date not null,
+fechaLiquidacion date,
 total double not null,
 id_consorcio int unsigned not null,
 primary key (id_gasto_mensual),
 constraint consorcio_fk_gm foreign key (id_consorcio) references consorcio(id_consorcio));
+
+create table expensaEstado
+( 
+id_expensaEstado int unsigned auto_increment not null,
+descripcion varchar(100) not null,
+primary key (id_expensaEstado)
+);
 
 create table expensa
 (id_expensa int unsigned auto_increment not null,
@@ -134,12 +142,13 @@ cuota_extraordinaria double,
 cuota_mora double,
 cuota_mes int not null,
 cuota_vencimiento date not null,
-cuota_estado varchar(1) not null,
+cuota_estado int unsigned not null,
 id_ctacte int unsigned not null,
 id_gasto_mensual int unsigned not null,
 primary key (id_expensa),
 constraint ctacte_fk_e foreign key (id_ctacte) references cuentaCorriente (id_ctacte),
-constraint gastoMensual_fk_e foreign key (id_gasto_mensual) references gastoMensual (id_gasto_mensual));
+constraint gastoMensual_fk_e foreign key (id_gasto_mensual) references gastoMensual (id_gasto_mensual),
+constraint estado_fk_e foreign key (cuota_estado) references expensaEstado (id_expensaEstado));
 
 create table rubroProveedor
 (id_rubro_proveedor int unsigned auto_increment not null,

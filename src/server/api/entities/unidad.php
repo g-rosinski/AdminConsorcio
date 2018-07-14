@@ -5,6 +5,8 @@ require_once './../../utils/autoload.php';
 class Unidad 
 {
     private $connection;
+    private $validator;
+    private $query;
     private $tabla = "unidad";
     /* Campos de la tabla */
     private $idUnidad;
@@ -14,9 +16,7 @@ class Unidad
     private $nro_unidad; //setNro_unidad
     private $superficie; //setSuperficie
     private $id_consorcio; //setIdConsorcio
-    private $validator;
     
-    private $query;
     
     
     public function __construct($connection)
@@ -25,22 +25,7 @@ class Unidad
         try{ $this->validator = new Validator; }
         catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
-
-    // executeQuery ejecuta la consulta, utiliza la query del atributo, recibe como parametro 2 arrays que se utilizarán para bindear a la query
-    // $arrType = array [ 0 => "<string>"] El string que debe ir es la letra del tipo de dato que se pasará por parametro
-    // Letras según tipo de dato i = int ; s = string ; d = double
-    // $arrParam = array [ 0 => "<string>", 1 => "<string>", n => "<string>"] El string será valor que bindeara a la query
-    // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
-    // $arrType = array("i","s","s") /* int string string */
-    // $arrParam = array(14,"Calle Falsa","432");
-    private function executeQuery($arrType = null, $arrParam = null)
-    {   
-        try{ $q = new Query($this->connection); }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
-        
-        return $q->execute(array($this->query),$arrType,$arrParam);
-    }
-    
+ 
     public function unidadesConPropietarioAsignado($consorcio){
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
@@ -69,7 +54,53 @@ class Unidad
             $unidad
         );
         return $this->executeQuery($arrType,$arrParam);  
-    }  
+    } 
+    public function calcularPrcParticipacionPorConsorcios($consorcios = array())
+    {   
+        foreach ($consorcios as $id_consorcio) {
+            $this->setIdConsorcio($id_consorcio);
+            $arrUnidadesConSuperficie = $this->obtenerEspacioOcupadoPorUnidad();
+            $totalSuperficie = $this->obtenerEspacioTotalPorConsorcio();
+            foreach ($arrUnidadesConSuperficie as $id_unidad => $superficieUnidad) {
+                $prcParticipacion = round($superficieUnidad/($totalSuperficie/100),3);
+                $this->setIdUnidad($id_unidad);
+                $this->setPrcParticipacion($prcParticipacion);
+                $this->actualizarPrcParticipacion();
+            }
+        }
+    }
+    private function obtenerEspacioOcupadoPorUnidad()
+    {
+        $this->query = "SELECT id_unidad as id, superficie FROM ".$this->tabla
+                        ." WHERE id_consorcio = ?";
+        $arrType = array("i");
+        $arrParam= array($this->id_consorcio);
+        $resultado = $this->executeQuery($arrType,$arrParam);
+        while ($reg = $resultado->fetch_assoc()) {
+            $arrUnidadConSuperficie[$reg['id']] = $reg['superficie'];
+        }
+        
+        return $arrUnidadConSuperficie;
+    } 
+    private function obtenerEspacioTotalPorConsorcio()
+    {
+        $this->query = "SELECT superficie FROM consorcio"
+                        ." WHERE id_consorcio = ?";
+        $arrType = array("i");
+        $arrParam= array($this->id_consorcio);
+        $consorcio = $this->executeQuery($arrType,$arrParam)->fetch_assoc();;
+        return $consorcio['superficie'];
+    } 
+    private function actualizarPrcParticipacion(){
+        $this->query = "UPDATE ".$this->tabla ." SET prc_participacion = ?"
+                       ." WHERE id_unidad = ?";
+        $arrType = array("d","i");
+        $arrParam = array(
+            $this->prcParticipacion,
+            $this->idUnidad
+        );
+        return $this->executeQuery($arrType,$arrParam); 
+    }
     private function vincularInquilinoAUnidad($user, $propietario, $unidad){
         $this->query = "INSERT INTO propietariounidad (user, inquilino_de,id_unidad)
                         VALUES (?,?,?)";
@@ -135,9 +166,9 @@ class Unidad
         return $this->executeQuery($arrType,$arrParam );
     }
 
-    private function setIdConsorcio($id_consorcio)
+    private function setIdUnidad($idUnidad)
     {
-        try { $this->id_consorcio = $this->validator->validarVariableNumerica($id_consorcio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->idUnidad = $this->validator->validarVariableNumerica($idUnidad);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setPrcParticipacion($prcParticipacion)
     {
@@ -159,5 +190,23 @@ class Unidad
     {
         try { $this->superficie = $this->validator->validarVariableNumerica($superficie);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
+    private function setIdConsorcio($id_consorcio)
+    {
+        try { $this->id_consorcio = $this->validator->validarVariableNumerica($id_consorcio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
 
+    // executeQuery ejecuta la consulta, utiliza la query del atributo, recibe como parametro 2 arrays que se utilizarán para bindear a la query
+    // $arrType = array [ 0 => "<string>"] El string que debe ir es la letra del tipo de dato que se pasará por parametro
+    // Letras según tipo de dato i = int ; s = string ; d = double
+    // $arrParam = array [ 0 => "<string>", 1 => "<string>", n => "<string>"] El string será valor que bindeara a la query
+    // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
+    // $arrType = array("i","s","s") /* int string string */
+    // $arrParam = array(14,"Calle Falsa","432");
+    private function executeQuery($arrType = null, $arrParam = null)
+    {   
+        try{ $q = new Query($this->connection); }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        
+        return $q->execute(array($this->query),$arrType,$arrParam);
+    }
 }

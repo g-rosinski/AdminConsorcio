@@ -14,7 +14,6 @@ class Query{
     public function prepare($query){
         try{$this->query = call_user_func_array(array($this->connection->getConnection(),'prepare'),$query);}
         catch(Exception $e){echo "Msj:" . $e->getMessage();}
-        
     } 
     public function sendData($type,$param){
         try{

@@ -92,7 +92,7 @@ class Gasto
     }
     private function insertGasto(){
         $this->query = "INSERT INTO ".$this->tabla." (nro_comprobante, fecha, descripcion, importe, id_motivo_gasto, id_proveedor, id_gasto_mensual, id_reclamo, id_operador) VALUES( ?,?,?,?,?,?,?,?,? )";
-        $arrType = array("i","s","s","i","i","i","i","i","s");
+        $arrType = array("i","s","s","d","i","i","i","i","s");
         $arrParam= array(
             $this->nro_comprobante,
             $this->fecha,
@@ -104,6 +104,7 @@ class Gasto
             $this->id_reclamo,
             $this->id_operador
         );
+
         return $this->executeQuery($arrType,$arrParam);
     }
     private function obtenerIdGastoMensual(){
@@ -117,6 +118,7 @@ class Gasto
     
     private function nuevoNumeroDeComprobante(){
         $this->query = "SELECT MAX(nro_comprobante) as nroComprobante FROM ".$this->tabla." LIMIT 1";
+        
         $ultGasto = $this->executeQuery()->fetch_assoc();
         ($ultGasto['nroComprobante']==null) ? $ultGasto['nroComprobante']=1 : $ultGasto['nroComprobante']++; 
         return $ultGasto['nroComprobante'];
@@ -144,7 +146,7 @@ class Gasto
     }
     private function setImporte($importe)
     {
-        try { $this->importe = $this->validator->validarVariableNumerica($importe);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->importe = round($this->validator->validarVariableNumerica($importe),3);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }    
     private function setIdMotivoGasto($id_motivo_gasto)
     {

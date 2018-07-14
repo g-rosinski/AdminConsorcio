@@ -1,9 +1,11 @@
 <?php
-
+require_once './../../utils/autoload.php';
 class Consorcio
 {
 
     private $connection;
+    private $validator;    
+    private $query;
     private $tabla = "consorcio";
     /* Campos de la tabla */
     private $idConsorcio;
@@ -18,6 +20,8 @@ class Consorcio
     public function __construct($connection)
     {
         $this->connection = $connection;
+        try{ $this->validator = new Validator; }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
     }
 
     public function crearConsorcio($nombre, $cuit, $calle, $altura, $superficie, $barrio, $telefono = null)
@@ -39,7 +43,6 @@ class Consorcio
         while ($reg = mysql_fetch_assoc($this->connection->ejecutar($query))) {
             $result[$reg['id_consorcio']] = $reg['nombre'];
         }
-        echo '<pre>' . print_r($query, true) . '</true>';die;
         return $result;
     }
     public function listarConsorciosCompleto()
@@ -92,7 +95,23 @@ class Consorcio
         $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
         return mysql_fetch_assoc($this->connection->ejecutar($query));
     }
-
+    public function traerParticipacionDelConsorcio($consorcio){
+        return $this->obtenerParticipacionDelConsorcio($consorcio);
+    }
+    private function obtenerParticipacionDelConsorcio($consorcio){
+        $this->query = "SELECT u.id_unidad idUnidad, u.prc_participacion participacion FROM ". $this->tabla ." c"
+                       ." INNER JOIN unidad u ON c.id_consorcio = u.id_consorcio"
+                       ." WHERE c.id_consorcio = ?";
+        $arrType = array ("i");
+        $arrParam = array ($consorcio);
+        $arrUnidades = $this->executeQuery($arrType,$arrParam);
+        
+        while ($unidad = $arrUnidades->fetch_assoc())
+        {
+            $unidadesEncontradas[$unidad['idUnidad']] = $unidad['participacion'];
+        }
+        return $unidadesEncontradas;
+    }
     private function insertConsorcio()
     {
         $query = "INSERT INTO "
@@ -148,5 +167,15 @@ class Consorcio
         } else {
             throw new Exception("El valor es null o no es de tipo Numerico");
         }
+    }
+    // Ejemplo: Si en mi query necesito pasarle el valor 14, "Calle Falsa", "432"
+    // $arrType = array("i","s","s") /* int string string */
+    // $arrParam = array(14,"Calle Falsa","432");
+    private function executeQuery($arrType = null, $arrParam = null)
+    {   
+        try{ $q = new Query($this->connection); }
+        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        
+        return $q->execute(array($this->query),$arrType,$arrParam);
     }
 }

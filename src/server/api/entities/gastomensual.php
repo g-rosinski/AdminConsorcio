@@ -10,7 +10,8 @@ class GastoMensual
     /* Campos de la tabla */
     private $idGastoMensual;
     private $periodo;
-    private $fecha;
+    private $fechaInicio;
+    private $fechaLiquidacion;
     private $total;
     private $id_consorcio;
 	
@@ -37,13 +38,76 @@ class GastoMensual
         $this->setTotal($total);
         return $this->actualizarTotal();
     }
+    public function liquidarGastoMensualPorConsorcio($consorcios = array())
+    {
+        $this->setFechaInicio($this->setDate());
+        $this->setFechaLiquidacion($this->setDate());
+        $this->setPeriodo($this->obtenerPeriodo());
+        $this->setTotal(0);
+        foreach($consorcios as $id_consorcio){
+            $this->setIdConsorcio($id_consorcio);
+            $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso());
+            $this->liquidarPeriodoPorConsorcio();
+            $this->nuevoPeriodoPorConsorcio();
+        }
+    }
+    public function obtenerTotalDelMes($id_consorcio)
+    {
+        $this->setIdConsorcio($id_consorcio);
+        $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso()); 
+        return $this->obtenerTotal($this->idGastoMensual);
+    }
+    public function traerGastosImpagos($idGastoMensualLiquidado){
+        return $this->listarGastosImpagosDelMesPorConsorcio($idGastoMensualLiquidado);
+    }
+    public function trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos)
+    {
+        $idGastoMensual = $this->traerIdGastoMensual($idConsorcio);
+        $this->setIdGastoMensual($idGastoMensual);
+        foreach ($gastosImpagos as $idGasto) {       
+            $this->actualizarIdGastoMensualPorGasto($idGasto);           
+        }
+    }
+
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function listarGastosImpagosDelMesPorConsorcio($idGastoMensualLiquidado)
+    {
+        $this->query =  "SELECT g.id_gasto id FROM gasto g"
+                        ." LEFT JOIN pagogasto pg on g.id_gasto = pg.id_gasto "
+                        ." WHERE g.id_gasto_mensual = ?"
+                        ." AND pg.nro_orden_pago is NULL";
+        $arrType = array ("i");
+        $arrParam = array ($idGastoMensualLiquidado);
+        $res=$this->executeQuery($arrType,$arrParam);
+        $gastoImpagos= array();
+        while ($idGastos = $res->fetch_assoc())
+        {
+            $gastoImpagos[] = $idGastos['id'];
+        }
+        if(!empty($gastoImpagos)){
+            return $gastoImpagos;
+        }
+        else{
+            return false;
+        }
+    }
+    private function actualizarIdGastoMensualPorGasto($idGasto)
+    {
+        $this->query = "UPDATE gasto SET id_gasto_mensual = ?  WHERE id_gasto = ?";
+        $arrType = array("i","i");
+        $arrParam= array(
+            $this->idGastoMensual,
+            $idGasto
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function obtenerIdGastoMensualEnCurso()
     {
         $this->query = "SELECT MAX(id_gasto_mensual) id FROM ".$this->tabla
-                       ." WHERE id_consorcio = ?";
+                       ." WHERE id_consorcio = ?"
+                       ." AND fechaLiquidacion IS NULL";
         $arrType = array ("i");
         $arrParam = array ($this->id_consorcio);
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
@@ -52,7 +116,7 @@ class GastoMensual
     private function actualizarTotal()
     {
         $this->query = "UPDATE ".$this->tabla." SET total = ?  WHERE id_gasto_mensual = ?";
-        $arrType = array("i","i");
+        $arrType = array("d","i");
         $arrParam= array(
             $this->total,
             $this->idGastoMensual
@@ -66,6 +130,32 @@ class GastoMensual
         $arrParam = array ($idGastoMensual);
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
         return $gastomensual['total'];
+    }
+    private function liquidarPeriodoPorConsorcio(){
+        $this->query = "UPDATE ".$this->tabla." SET fechaLiquidacion = ?  WHERE id_gasto_mensual = ?";
+        $arrType = array("s","i");
+        $arrParam= array(
+            $this->fechaLiquidacion,
+            $this->idGastoMensual
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
+    private function nuevoPeriodoPorConsorcio(){
+        $this->query = "INSERT INTO ".$this->tabla." (periodo,fechaInicio,total,id_consorcio)"
+                        ." VALUES (?, ?, ?, ?)";
+        $arrType = array("s","s","d","i");
+        $arrParam= array(
+            $this->periodo,
+            $this->fechaInicio,
+            $this->total,
+            $this->id_consorcio
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
+
+    private function obtenerPeriodo(){
+        date_default_timezone_get('America/Argentina/Buenos_Aires');
+        return date("Y - m");
     }
     private function setDate()
     {
@@ -82,13 +172,17 @@ class GastoMensual
     {
         try { $this->periodo = $this->validator->validarVariableString($periodo);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     } 
-    private function setFecha($fecha)
+    private function setFechaInicio($fechaInicio)
     {
-        $this->fecha=$fecha;
+        $this->fechaInicio=$fechaInicio;
+    }
+    private function setFechaLiquidacion($fechaLiquidacion)
+    {
+        $this->fechaLiquidacion=$fechaLiquidacion;
     }
     private function setTotal($total)
     {
-        try { $this->total = $this->validator->validarVariableNumerica($total);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        $this->total = $total;
     }    
     private function setIdConsorcio($id_consorcio)
     {

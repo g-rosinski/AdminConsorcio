@@ -16,7 +16,7 @@ function nuevoGasto()
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
     $data = $_POST;
-
+    
     $gasto->procesarGasto(
         $data['descripcion'],
         $data['importe'],
