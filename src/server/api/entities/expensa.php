@@ -32,7 +32,7 @@ class Expensa
     public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
     {      
         $this->setCuotaMes($this->obtenerNumeroDeCuotaAnual($idGastoMensual));
-        $this->setCuotaEstado('1'); // Por ahora el 1 sera 'Sin imputar', 2 'Sin vencer', 3'Vencido, 4 'Pago'
+        $this->setCuotaEstado(1); // Por ahora el 1 sera 'Sin imputar', 2 'Sin vencer', 3'Vencido, 4 'Pago'
         $this->setCuotaVencimiento($vencimiento);
         $this->setIdGastoMensual($idGastoMensual);
         $arrExpensasCalculadas = $this->calcularExpensas($cuentasALiquidar,$totalDelMes);
@@ -41,6 +41,7 @@ class Expensa
             $this->setCuotaMora(0); // Aun falta hacer el calculo de la mora
             $this->setIdCtaCte($idCtaCte);
             $this->setCuotaExpensa($this->cuotaExtraordinaria + $this->cuotaMora);
+            
             $this->ingresarExpensaDelMes();
         }
     }
@@ -103,7 +104,7 @@ class Expensa
         try { $this->cuotaVencimiento = $this->validator->validarVariableString($cuotaVencimiento);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setCuotaEstado($cuotaEstado){
-        try { $this->cuotaEstado = $this->validator->validarVariableString($cuotaEstado);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        try { $this->cuotaEstado = $this->validator->validarVariableNumerica($cuotaEstado);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setIdCtaCte($id_ctacte){
         try { $this->id_ctacte = $this->validator->validarVariableNumerica($id_ctacte);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}

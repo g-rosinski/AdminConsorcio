@@ -84,7 +84,7 @@ class Cuentacorriente
         $this->query = "SELECT e.id_expensa idExpensa, e.cuota_expensa importe FROM ". $this->tabla ." cc"
         ." INNER JOIN expensa e ON cc.id_ctacte = e.id_ctacte"
         ." WHERE e.id_ctacte = ?"
-        ." AND e.cuota_estado = '1'";
+        ." AND e.cuota_estado = 1";
         $arrType = array ("i");
         $arrParam = array ($this->id_ctacte);
         $saldoASumar=0;
@@ -92,13 +92,13 @@ class Cuentacorriente
         while ($expensasSinImputar = $res->fetch_assoc())
         {
             $saldoASumar += $expensasSinImputar['importe'];
-            $this->actualizarEstadoExpensa($expensasSinImputar['idExpensa'],'2');
+            $this->actualizarEstadoExpensa($expensasSinImputar['idExpensa'],2);
         }
         return $saldoASumar;
     }
     private function actualizarEstadoExpensa($idExpensa, $estado){
         $this->query = "UPDATE expensa SET cuota_estado = ?  WHERE id_expensa = ?";
-        $arrType = array("i","s");
+        $arrType = array("i","i");
         $arrParam= array(
             $estado,
             $idExpensa

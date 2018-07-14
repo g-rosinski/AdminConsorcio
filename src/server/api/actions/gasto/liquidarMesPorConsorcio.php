@@ -21,30 +21,28 @@ function liquidarMesPorConsorcio()
     $arrConsorcios = $data['id_consorcio']; 
     // yyyy-mm-dd
     $vencimiento = $data['vencimiento']; 
-   
+
+    // Liquida el mes 
     foreach($arrConsorcios as $idConsorcio){
         $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
         $idGastoMensual = $gastoMensual->traerIdGastoMensual($idConsorcio);
         $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
+        $cuentasALiquidar = array();
         foreach($unidadesALiquidar as $id_unidad => $participacion){
             $idCtaCte = $ctaCte->traerCtaCtePorUnidad($id_unidad);
             $cuentasALiquidar[$idCtaCte]=$participacion;
         }
-        
         $expensa->liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento);
         $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
         $arrIdGastoMensualLiquidado[$idConsorcio]=$idGastoMensual;
-        echo "<pre>".print_r($arrIdGastoMensualLiquidado,true)."</pre>";
     } 
     $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
-
-
-
+    
     foreach ($arrIdGastoMensualLiquidado as $idConsorcio => $idGastoMensualLiquidado) {
-        $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);  
+        $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);   
         if($gastosImpagos){
             $gastoMensual->trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos);
         }
     }
-
+    
 }

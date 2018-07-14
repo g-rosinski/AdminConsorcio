@@ -38,7 +38,8 @@ class GastoMensual
         $this->setTotal($total);
         return $this->actualizarTotal();
     }
-    public function liquidarGastoMensualPorConsorcio($consorcios = array()){
+    public function liquidarGastoMensualPorConsorcio($consorcios = array())
+    {
         $this->setFechaInicio($this->setDate());
         $this->setFechaLiquidacion($this->setDate());
         $this->setPeriodo($this->obtenerPeriodo());
@@ -50,14 +51,58 @@ class GastoMensual
             $this->nuevoPeriodoPorConsorcio();
         }
     }
-    public function obtenerTotalDelMes($id_consorcio){
+    public function obtenerTotalDelMes($id_consorcio)
+    {
         $this->setIdConsorcio($id_consorcio);
         $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso()); 
         return $this->obtenerTotal($this->idGastoMensual);
     }
+    public function traerGastosImpagos($idGastoMensualLiquidado){
+        return $this->listarGastosImpagosDelMesPorConsorcio($idGastoMensualLiquidado);
+    }
+    public function trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos)
+    {
+        $idGastoMensual = $this->traerIdGastoMensual($idConsorcio);
+        $this->setIdGastoMensual($idGastoMensual);
+        foreach ($gastosImpagos as $idGasto) {       
+            $this->actualizarIdGastoMensualPorGasto($idGasto);           
+        }
+    }
+
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function listarGastosImpagosDelMesPorConsorcio($idGastoMensualLiquidado)
+    {
+        $this->query =  "SELECT g.id_gasto id FROM gasto g"
+                        ." LEFT JOIN pagogasto pg on g.id_gasto = pg.id_gasto "
+                        ." WHERE g.id_gasto_mensual = ?"
+                        ." AND pg.nro_orden_pago is NULL";
+        $arrType = array ("i");
+        $arrParam = array ($idGastoMensualLiquidado);
+        $res=$this->executeQuery($arrType,$arrParam);
+        $gastoImpagos= array();
+        while ($idGastos = $res->fetch_assoc())
+        {
+            $gastoImpagos[] = $idGastos['id'];
+        }
+        if(!empty($gastoImpagos)){
+            return $gastoImpagos;
+        }
+        else{
+            return false;
+        }
+    }
+    private function actualizarIdGastoMensualPorGasto($idGasto)
+    {
+        $this->query = "UPDATE gasto SET id_gasto_mensual = ?  WHERE id_gasto = ?";
+        $arrType = array("i","i");
+        $arrParam= array(
+            $this->idGastoMensual,
+            $idGasto
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function obtenerIdGastoMensualEnCurso()
     {
         $this->query = "SELECT MAX(id_gasto_mensual) id FROM ".$this->tabla
