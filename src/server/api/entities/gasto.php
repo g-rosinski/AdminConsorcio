@@ -31,17 +31,21 @@ class Gasto
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
     public function procesarGasto($descripcion, $importe, $id_motivo_gasto, $id_proveedor, $id_gasto_mensual, $id_reclamo, $id_operador){
-        $this->setNroComprobante($this->nuevoNumeroDeComprobante());
-        $this->setFecha($this->setDate());
-        $this->setDescripcion($descripcion);
-        $this->setImporte($importe);
-        $this->setIdMotivoGasto($id_motivo_gasto);
-        $this->setIdProveedor($id_proveedor);
-        $this->setIdGastoMensual($id_gasto_mensual);
-        $this->setIdReclamo($id_reclamo);
-        $this->setIdOperador($id_operador);
-
-        return $this->insertGasto();
+        try{
+            $this->setNroComprobante($this->nuevoNumeroDeComprobante());
+            $this->setFecha($this->setDate());
+            $this->setDescripcion($descripcion);
+            $this->setImporte($importe);
+            $this->setIdMotivoGasto($id_motivo_gasto);
+            $this->setIdProveedor($id_proveedor);
+            $this->setIdGastoMensual($id_gasto_mensual);
+            $this->setIdReclamo($id_reclamo);
+            $this->setIdOperador($id_operador);
+            $this->insertGasto();
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+        return true;
     }
 
     public function traerGastosPorUnConsorcio($consorcio, $idGastoMensualActual){
@@ -104,7 +108,6 @@ class Gasto
             $this->id_reclamo,
             $this->id_operador
         );
-
         return $this->executeQuery($arrType,$arrParam);
     }
     private function obtenerIdGastoMensual(){
