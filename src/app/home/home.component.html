@@ -8,6 +8,8 @@
       <app-listar-gastos *ngIf="usuario.id_rol <= 2" [usuario]="usuario"></app-listar-gastos>
       <app-listar-consorcios *ngIf="usuario.id_rol === 1 || usuario.id_rol === 2"></app-listar-consorcios>
       <app-listar-expensas></app-listar-expensas>
+      <button mat-raised-button color="primary" (click)="redirect()">TEST MERCADO PAGO</button>
+
     </mat-accordion>
 
   </div>
