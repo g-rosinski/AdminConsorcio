@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from './../services/usuario.service';
 import { RegistroLoginService } from './../services/registro-login.service';
+import { GastoService } from '../services/gasto.service';
 
 @Component({
   selector: 'app-home',
@@ -9,10 +10,12 @@ import { RegistroLoginService } from './../services/registro-login.service';
 })
 export class HomeComponent implements OnInit {
   usuario;
+  URLMP = '';
 
   constructor(
     private usuarioService: UsuarioService,
     private session: RegistroLoginService,
+    private gs: GastoService,
   ) { }
 
   ngOnInit() {
@@ -21,5 +24,10 @@ export class HomeComponent implements OnInit {
         this.usuario = u
         this.usuario.id_rol = +this.usuario.id_rol;
       });
+    this.gs.generarMPBoton().then((data: any) => this.URLMP = data.url)
+  }
+
+  redirect(){
+    window.location.href = this.URLMP;
   }
 }

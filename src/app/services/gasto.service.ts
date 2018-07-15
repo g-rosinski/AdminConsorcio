@@ -55,4 +55,18 @@ export class GastoService {
     return this.http.post(GastoService.BASE_URL + '/realizarPago.php', body.toString(), { headers: headers })
       .toPromise();
   }
+
+  generarMPBoton() {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let params = new HttpParams()
+      .set('id', '0')
+      .set('titulo', 'Liquidacion del mes de enero')
+      .set('importe', '1000')
+      .set('success', 'localhost/home')
+      .set('fail', 'localhost/home')
+      .set('pend', 'localhost/home');      
+
+    return this.http.get('http://localhost/server/api/actions/testMP.php',{ headers, params })
+      .toPromise();
+  }
 }

@@ -49,6 +49,9 @@ export class LiquidarMesComponent implements OnInit {
         if (this.formModel.consorcios.length > 1)
             this.toast.warning('Este proceso puede durar varios segundos.');
         this.gastoService.liquidarMesPorConsorcio(this.formModel)
-            .then(() => this.toast.success('Consorcio liquidado correctamente.'));
+            .then(() => {
+                this.onNoClick();
+                this.toast.success('Consorcio liquidado correctamente.')
+            });
     }
 }
