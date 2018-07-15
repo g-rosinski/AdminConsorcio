@@ -44,5 +44,5 @@ function liquidarMesPorConsorcio()
             $gastoMensual->trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos);
         }
     }
-    
+    return true;
 }

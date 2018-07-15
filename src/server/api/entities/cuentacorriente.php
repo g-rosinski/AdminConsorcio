@@ -27,6 +27,10 @@ class Cuentacorriente
         $this->setIdUnidad($unidad);
         return $this->obtenerCtaCte();
     }
+    public function traerSaldoCtaCte($idCtacte){
+        $this->setIdCtaCte($idCtacte);
+        return $this->obtenerSaldo();
+    }
     public function actualizarSaldoCtacte($cuentas = array()){
         foreach($cuentas as $idCtaCte => $participacion){
             $this->setIdCtaCte($idCtaCte);
@@ -48,7 +52,7 @@ class Cuentacorriente
     /**************************** */
     private function obtenerCtaCte(){
         $this->query = "SELECT id_ctacte id FROM ". $this->tabla
-        ." WHERE id_unidad = ?";
+                        ." WHERE id_unidad = ?";
         $arrType = array("i");
         $arrParam = array($this->id_unidad);
         $ctacte = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
@@ -56,7 +60,7 @@ class Cuentacorriente
     }
     private function obtenerSaldo(){
         $this->query = "SELECT saldo FROM ". $this->tabla
-                       ." WHERE id_ctacte = ?";
+                        ." WHERE id_ctacte = ?";
         $arrType = array ("i");
         $arrParam = array ($this->id_ctacte);
         $saldo = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
@@ -64,7 +68,7 @@ class Cuentacorriente
     }
     private function consultarSaldoAFavorDisponible(){
         $this->query = "SELECT saldo_favor saldo FROM ". $this->tabla
-        ." WHERE id_ctacte = ?";
+                        ." WHERE id_ctacte = ?";
         $arrType = array ("i");
         $arrParam = array ($this->id_ctacte);
         $saldoAFavor = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
