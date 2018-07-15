@@ -23,4 +23,10 @@ export class UnidadService {
     const params = new HttpParams().set('id_consorcio', unidadId.toString());
     return this.http.get(UnidadService.BASE_URL + '/traerUnidadesParaInquilinos.php', { headers, params });
   }
+
+  traerUnidadesConDuenioPorConsorcio(id) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().set('id_consorcio', id);
+    return this.http.get(UnidadService.BASE_URL + '/traerUnidadesPorConsorcio.php', { headers, params }); 
+  }
 }

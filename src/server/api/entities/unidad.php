@@ -34,6 +34,10 @@ class Unidad
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesSinPropietario();
     }
+    public function unidadesConDuenioPorConsorcio($consorcio){
+        $this->setIdConsorcio($consorcio);
+        return $this->consultarUnidadesOcupadasPorConsorcio();
+    }
 
     public function agregarRelacionPersonaUnidad($user, $rol, $id_unidad)
     {
@@ -144,11 +148,17 @@ class Unidad
         return $this->executeQuery($arrType,$arrParam);
     }
     private function consultarUnidadesOcupadasPorConsorcio(){
-        $this->query =     "SELECT p.id_unidad 
-                            FROM propietariounidad p
-                            INNER JOIN unidad u on p.id_unidad = u.id_unidad 
-                            WHERE  p.inquilino_de IS NOT NULL
-                            AND u.id_consorcio = ?";
+        $this->query = 
+            "SELECT
+                p.id_unidad,
+                u.piso,
+                u.departamento
+            FROM
+                propietariounidad p
+            INNER JOIN unidad u ON
+                p.id_unidad = u.id_unidad
+            WHERE
+                u.id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array(
             $this->id_consorcio

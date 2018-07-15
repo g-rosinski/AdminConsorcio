@@ -34,7 +34,6 @@ import { AgregarGastoComponent } from '../../modals/agregar-gasto/agregar-gasto.
 export class ListarReclamosComponent implements OnInit {
   reclamos: Observable<any>;
   consorcios: Observable<any>;
-  isOpen = false;
   @Input() usuario;
 
   constructor(
@@ -56,10 +55,6 @@ export class ListarReclamosComponent implements OnInit {
       width: '500px',
       data: { usuario: this.usuario },
     });
-  }
-
-  onOpenClosePanel() {
-    this.isOpen = !this.isOpen;
   }
 
   onConsorcioChange(e: MatSelectChange) {

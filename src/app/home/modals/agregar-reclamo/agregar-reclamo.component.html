@@ -5,17 +5,34 @@
       <input [(ngModel)]="formModel.titulo" name="titulo" required matInput placeholder="Titulo">
     </mat-form-field>
 
+    <ng-container *ngIf="usuario.usuario.id_rol < 2">
+        <mat-form-field class="full-width">
+          <mat-select placeholder="Consorcio" required (selectionChange)="onConsorcioChange($event)">
+            <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-select [(ngModel)]="formModel.id_unidad" placeholder="Unidad" required [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let unidad of unidades |async" [value]="unidad.id_unidad">{{unidad.piso}}{{unidad.departamento}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
     <mat-form-field class="full-width">
       <textarea [(ngModel)]="formModel.mensaje" name="mensaje" required matInput placeholder="Mensaje" rows="5"></textarea>
     </mat-form-field>
+
   </mat-dialog-content>
   <mat-dialog-actions>
     <div style="width: 50%;">
-      <p>Unidad: <strong>{{usuario.usuario.unidad}}</strong></p>
+      <p *ngIf="usuario.usuario.id_rol > 2">Unidad:
+        <strong>{{usuario.usuario.unidad}}</strong>
+      </p>
     </div>
     <div style="text-align: right; width: 50%;">
-        <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
-        <button type="submit" [disabled]="!reclamoForm.form.valid" mat-raised-button color="primary">Enviar</button>
+      <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
+      <button type="submit" [disabled]="!reclamoForm.form.valid" mat-raised-button color="primary">Enviar</button>
     </div>
-    </mat-dialog-actions>
+  </mat-dialog-actions>
 </form>
