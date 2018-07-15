@@ -35,6 +35,7 @@ import { GastoService } from '../../../services/gasto.service';
 export class ListarGastosComponent implements OnInit {
   consorcios: Observable<any>;
   gastos: Observable<any>;
+  consorcioActual = 0;
   isOpen = false;
   @Input() usuario;
 
@@ -45,18 +46,17 @@ export class ListarGastosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if (this.usuario.id_rol <= 2) {
-      this.consorcios = this.consorcioService.obtenerConsorciosConGastos();
-    // } else {
-    //   this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario(this.usuario.user)
-    // }
+    this.consorcios = this.consorcioService.obtenerConsorciosConGastos();
   }
 
   openDialog(): void {
     this.dialog.open(AgregarReclamoComponent, {
       width: '500px',
       data: { usuario: this.usuario },
-    });
+    }).afterClosed()
+      .subscribe(() => {
+        this.gastos = this.gastoService.obtenerGastoPorConsorcio(this.consorcioActual);
+      });
   }
 
   onOpenClosePanel() {
@@ -64,15 +64,7 @@ export class ListarGastosComponent implements OnInit {
   }
 
   onConsorcioChange(e: MatSelectChange) {
-    // alert(e.value);
-    this.gastos = this.gastoService.obtenerGastoPorConsorcio(e.value);
+    this.consorcioActual = e.value;
+    this.gastos = this.gastoService.obtenerGastoPorConsorcio(this.consorcioActual);
   }
-
-//   generarGasto(reclamo): void {
-//     this.dialog.open(AgregarGastoComponent,
-//       {
-//         width: '500px',
-//         data: {usuario: this.usuario, reclamo},
-//       });
-//   }
 }

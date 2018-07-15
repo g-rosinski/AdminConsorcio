@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Liquidar Consorcio</h1>
+<form (ngSubmit)="onSubmit()" #liquidarForm="ngForm" autocomplete="off">
+
+    <mat-form-field style="width: 100%">
+        <input matInput disabled [matDatepicker]="picker" placeholder="Seleccione una fecha de vencimiento" (dateChange)="dateChange($event)"
+            [ngModelOptions]="{standalone: true}" [(ngModel)]="formModel.vencimiento">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker disabled="false"></mat-datepicker>
+    </mat-form-field>
+
+    <mat-card>
+        <mat-card-content>
+            <p>
+                <strong>Consorcios a liquidar: </strong>
+                <ng-container *ngFor="let consorcio of data.consorcios; let i = index">
+                    {{consorcio.nombre}}<span *ngIf="data.consorcios.length > 1 && !(i === data.consorcios.length -1)">,</span>
+                </ng-container>
+            </p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-dialog-actions>
+        <div style="text-align: right; width: 100%;">
+            <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
+            <button type="submit" [disabled]="!liquidarForm.form.valid" mat-raised-button color="primary">Enviar</button>
+        </div>
+    </mat-dialog-actions>
+</form>

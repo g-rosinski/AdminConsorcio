@@ -39,7 +39,7 @@ export class AgregarGastoComponent implements OnInit {
     this.formModel.operador = this.data.usuario.user;
     this.formModel.id_reclamo = this.data.reclamo.nroReclamo;
     this.formModel.mensaje = this.data.reclamo.mensaje;
-    this.formModel.id_consorcio= this.data.reclamo.consorcio;
+    this.formModel.id_consorcio = this.data.reclamo.consorcio;
     this.proveedores = this.proveedorService.obtenerTodosLosProveedores();
     this.motivos = this.motivoService.obtenerTodosLosMotivos();
   }
@@ -49,7 +49,10 @@ export class AgregarGastoComponent implements OnInit {
   }
 
   onSubmit() {
-    this.gastoService.agregarGasto(this.formModel).then(()=> this.onNoClick())
+    this.gastoService.agregarGasto(this.formModel).then(() => {
+      this.toast.info('Gasto generado correctamente')
+      this.onNoClick()
+    })
   }
 
 }

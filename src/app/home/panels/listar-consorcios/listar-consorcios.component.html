@@ -3,6 +3,9 @@
     <mat-panel-title>
       <a>Consorcios</a>
     </mat-panel-title>
+    <mat-panel-description>
+      <button mat-button color="accent" (click)="liquidarTodos()">LIQUIDAR TODOS</button>
+    </mat-panel-description>
   </mat-expansion-panel-header>
   <table class="table">
     <thead>
@@ -12,16 +15,20 @@
         <th>Telefono</th>
         <th>Superficie total</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let consorcio of consorcios |async">
+      <tr *ngFor="let consorcio of consorcios">
         <td>{{consorcio.nombre}}</td>
         <td>{{consorcio.cuit}}</td>
         <td>{{consorcio.telefono}}</td>
         <td>{{consorcio.superficie}}</td>
         <td>
-          <button mat-button color="accent" (click)="openDialog(consorcio)">VER MAS</button>
+          <button mat-button color="accent" (click)="openLiquidar([consorcio])">LIQUIDAR</button>
+        </td>
+        <td>
+          <button mat-button color="accent" (click)="openVerConsorcio(consorcio)">VER MAS</button>
         </td>
       </tr>
     </tbody>

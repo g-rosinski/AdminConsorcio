@@ -3,6 +3,7 @@ import { ConsorcioService } from '../../../services/consorcio.service';
 import { Observable } from 'rxjs';
 import { VerConsorcioComponent } from '../../modals/ver-consorcio/ver-consorcio.component';
 import { MatDialog } from '@angular/material';
+import { LiquidarMesComponent } from '../../modals/liquidar-mes/liquidar-mes.component';
 @Component({
   selector: 'app-listar-consorcios',
   templateUrl: './listar-consorcios.component.html',
@@ -26,10 +27,14 @@ import { MatDialog } from '@angular/material';
       text-align: center;
       text-transform: capitalize;
     }
+    
+    .mat-button {
+      line-height: 0;
+    }
 `]
 })
 export class ListarConsorciosComponent implements OnInit {
-  consorcios: Observable<any>;
+  consorcios = [];
 
   constructor(
     private dialog: MatDialog,
@@ -37,15 +42,28 @@ export class ListarConsorciosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.consorcios = this.consorcioService.obtenerTodosLosConsorcios();
+    this.consorcioService.obtenerTodosLosConsorcios()
+      .subscribe(consorcios => this.consorcios = consorcios);
   }
 
-  openDialog(consorcio): void {
+  openVerConsorcio(consorcio): void {
     this.dialog.open(VerConsorcioComponent,
       {
         width: '1000px',
         data: { consorcio },
       });
+  }
+
+  openLiquidar(consorcio): void {
+    this.dialog.open(LiquidarMesComponent,
+      {
+        width: '400px',
+        data: { consorcios: consorcio },
+      });
+  }
+
+  liquidarTodos() {
+    this.openLiquidar(this.consorcios);
   }
 
 }

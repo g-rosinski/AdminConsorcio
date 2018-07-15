@@ -32,6 +32,7 @@ import { ProveedorService } from './services/proveedores.service';
 import { MotivoGastoService } from './services/motivoGasto.service';
 import { GastoService } from './services/gasto.service';
 import { MyHttpInterceptor } from './services/http-interceptor.service';
+import { LiquidarMesComponent } from './home/modals/liquidar-mes/liquidar-mes.component';
 
 const httpInter = {
   provide: HTTP_INTERCEPTORS, 
@@ -56,6 +57,7 @@ const httpInter = {
     VerConsorcioComponent,
     AgregarGastoComponent,
     ListarGastosComponent,
+    LiquidarMesComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,7 @@ const httpInter = {
       apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
     }),
   ],
-  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent],
+  entryComponents: [AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent, LiquidarMesComponent],
   providers: [httpInter, UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService, MotivoGastoService, GastoService],
   bootstrap: [AppComponent]
 })

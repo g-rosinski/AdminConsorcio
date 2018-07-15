@@ -34,6 +34,7 @@ import { AgregarGastoComponent } from '../../modals/agregar-gasto/agregar-gasto.
 export class ListarReclamosComponent implements OnInit {
   reclamos: Observable<any>;
   consorcios: Observable<any>;
+  consorcioActual = 0;
   @Input() usuario;
 
   constructor(
@@ -54,19 +55,24 @@ export class ListarReclamosComponent implements OnInit {
     this.dialog.open(AgregarReclamoComponent, {
       width: '500px',
       data: { usuario: this.usuario },
-    });
+    }).afterClosed().subscribe(this.onPopupClosed);
   }
 
   onConsorcioChange(e: MatSelectChange) {
-    // alert(e.value);
+    this.consorcioActual = e.value;
     this.reclamos = this.reclamoService.traerTodosLosReclamosPorConsorcio(e.value);
+  }
+
+  onPopupClosed = () => {
+    this.ngOnInit();
+    this.reclamos = this.reclamoService.traerTodosLosReclamosPorConsorcio(this.consorcioActual.toString());
   }
 
   generarGasto(reclamo): void {
     this.dialog.open(AgregarGastoComponent,
       {
         width: '500px',
-        data: {usuario: this.usuario, reclamo},
-      });
+        data: { usuario: this.usuario, reclamo },
+      }).afterClosed().subscribe(this.onPopupClosed);
   }
 }
