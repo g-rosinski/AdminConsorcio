@@ -39,7 +39,7 @@
           </td>
           <td>{{reclamo.fecha}}</td>
           <td *ngIf="usuario.id_rol <= 2">
-            <button mat-button color="accent" (click)="generarGasto(reclamo)">GENERAR GASTO</button>
+            <button mat-button color="accent" [disabled]="reclamo.estado === 'FINALIZADO'" (click)="generarGasto(reclamo)">GENERAR GASTO</button>
           </td>
         </tr>
       </tbody>

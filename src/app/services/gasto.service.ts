@@ -36,7 +36,6 @@ export class GastoService {
   liquidarMesPorConsorcio(formModel) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let body = new HttpParams()
-      // .set('id_consorcio', formModel.id_consorcio)
       .set('vencimiento', formModel.vencimiento);
 
     formModel.consorcios.forEach((consorcio, index) => {
@@ -44,6 +43,16 @@ export class GastoService {
     });
 
     return this.http.post(GastoService.BASE_URL + '/liquidarMesPorConsorcio.php', body.toString(), { headers: headers })
+      .toPromise();
+  }
+
+  realizarPago(orderPago, idGasto) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('nro_orden_pago', orderPago)
+      .set('id_gasto', idGasto);
+
+    return this.http.post(GastoService.BASE_URL + '/realizarPago.php', body.toString(), { headers: headers })
       .toPromise();
   }
 }

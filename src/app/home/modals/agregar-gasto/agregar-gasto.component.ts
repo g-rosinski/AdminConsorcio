@@ -50,7 +50,7 @@ export class AgregarGastoComponent implements OnInit {
 
   onSubmit() {
     this.gastoService.agregarGasto(this.formModel).then(() => {
-      this.toast.info('Gasto generado correctamente')
+      this.toast.success('Gasto generado correctamente')
       this.onNoClick()
     })
   }

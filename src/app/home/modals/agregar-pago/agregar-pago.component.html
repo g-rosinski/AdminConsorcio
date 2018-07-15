@@ -1,0 +1,31 @@
+<form (ngSubmit)="onSubmit()" #pagoForm="ngForm" autocomplete="off">
+
+    <mat-card>
+        <h1 mat-card-title>Gasto N° {{data.idGasto}}</h1>
+        <mat-card-content>
+            <p>Descripcion:
+                <strong>{{data.descripcion}}</strong>
+            </p>
+            <p>Fecha:
+                <strong>{{data.fecha}}</strong>
+            </p>
+            <p>Importe:
+                <strong>${{data.importe}}</strong>
+            </p>
+            <p>N° Comprobante:
+                <strong>{{data.nroComprobante}}</strong>
+            </p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-form-field style="width: 100%;">
+        <input [(ngModel)]="ordenDePago" [ngModelOptions]="{standalone: true}" matInput placeholder="Orden de Pago">
+    </mat-form-field>
+
+    <mat-dialog-actions>
+        <div style="text-align: right; width: 100%;">
+            <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
+            <button type="submit" [disabled]="!pagoForm.form.valid" mat-raised-button color="primary">Realizar Pago</button>
+        </div>
+    </mat-dialog-actions>
+</form>

@@ -34,7 +34,7 @@
                     <td>${{gasto.importe}}</td>
                     <td>{{gasto.fecha}}</td>
                     <td>
-                        <button mat-button color="accent">PAGAR</button>
+                        <button mat-button color="accent" (click)="openAgregarPago(gasto)">PAGAR</button>
                     </td>
                 </tr>
             </tbody>

@@ -1,11 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReclamoService } from '../../../services/reclamo.service';
 import { MatDialog, MatSelectChange } from '@angular/material';
 import { Observable } from 'rxjs/internal/Observable';
-import { AgregarReclamoComponent } from '../../modals/agregar-reclamo/agregar-reclamo.component'
 import { ConsorcioService } from '../../../services/consorcio.service';
-import { AgregarGastoComponent } from '../../modals/agregar-gasto/agregar-gasto.component';
 import { GastoService } from '../../../services/gasto.service';
+import { AgregarPagoComponent } from '../../modals/agregar-pago/agregar-pago.component';
 
 @Component({
   selector: 'app-listar-gastos',
@@ -49,10 +47,10 @@ export class ListarGastosComponent implements OnInit {
     this.consorcios = this.consorcioService.obtenerConsorciosConGastos();
   }
 
-  openDialog(): void {
-    this.dialog.open(AgregarReclamoComponent, {
+  openAgregarPago(gasto): void {
+    this.dialog.open(AgregarPagoComponent, {
       width: '500px',
-      data: { usuario: this.usuario },
+      data: gasto,
     }).afterClosed()
       .subscribe(() => {
         this.gastos = this.gastoService.obtenerGastoPorConsorcio(this.consorcioActual);
