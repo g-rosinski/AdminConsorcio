@@ -32,4 +32,27 @@ export class GastoService {
     const params = new HttpParams().set('id_consorcio', id);
     return this.http.get(GastoService.BASE_URL + '/listarGastosPorConsorcio.php', { headers, params });
   }
+
+  liquidarMesPorConsorcio(formModel) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('vencimiento', formModel.vencimiento);
+
+    formModel.consorcios.forEach((consorcio, index) => {
+      body = body.append(`id_consorcio[${index}]`, consorcio.id_consorcio);
+    });
+
+    return this.http.post(GastoService.BASE_URL + '/liquidarMesPorConsorcio.php', body.toString(), { headers: headers })
+      .toPromise();
+  }
+
+  realizarPago(orderPago, idGasto) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('nro_orden_pago', orderPago)
+      .set('id_gasto', idGasto);
+
+    return this.http.post(GastoService.BASE_URL + '/realizarPago.php', body.toString(), { headers: headers })
+      .toPromise();
+  }
 }

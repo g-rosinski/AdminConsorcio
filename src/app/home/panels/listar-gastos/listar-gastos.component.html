@@ -3,10 +3,6 @@
         <mat-panel-title>
             <a>Gastos a pagar</a>
         </mat-panel-title>
-        <!-- <mat-panel-description>
-        <mat-icon *ngIf="!isOpen" [matBadge]="(reclamos | async)?.length" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
-        <mat-icon *ngIf="isOpen" (click)="openDialog()">add_circle_outline</mat-icon>
-      </mat-panel-description> -->
     </mat-expansion-panel-header>
     <ng-template matExpansionPanelContent>
         <div class="container-filtros" style="width: 100%; display: flex;" *ngIf="usuario.id_rol <= 2">
@@ -38,7 +34,7 @@
                     <td>${{gasto.importe}}</td>
                     <td>{{gasto.fecha}}</td>
                     <td>
-                        <button mat-button color="accent">PAGAR</button>
+                        <button mat-button color="accent" (click)="openAgregarPago(gasto)">PAGAR</button>
                     </td>
                 </tr>
             </tbody>

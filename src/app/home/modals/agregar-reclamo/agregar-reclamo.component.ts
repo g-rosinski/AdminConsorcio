@@ -48,7 +48,7 @@ export class AgregarReclamoComponent implements OnInit {
       this.formModel.id_unidad = this.usuario.usuario.id_unidad;
     this.reclamoService.agregarReclamo(this.formModel, this.formModel.id_unidad)
       .then(() => {
-        this.toast.info('Reclamo agregado correctamente.');
+        this.toast.success('Reclamo agregado correctamente.');
         this.dialogRef.close();
       });
   }
