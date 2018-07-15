@@ -18,6 +18,7 @@ import { UnidadService } from './services/unidad.service';
 import { MensajesComponent } from './home/panels/mensajes/mensajes.component';
 import { ListarReclamosComponent } from './home/panels/listar-reclamos/listar-reclamos.component';
 import { ListarExpensasComponent } from './home/panels/listar-expensas/listar-expensas.component';
+import { ListarGastosComponent } from './home/panels/listar-gastos/listar-gastos.component';
 import { FabButtonComponent } from './home/fab-button/fab-button.component';
 import { AgregarReclamoComponent } from './home/modals/agregar-reclamo/agregar-reclamo.component';
 import { VerConsorcioComponent } from './home/modals/ver-consorcio/ver-consorcio.component';
@@ -53,7 +54,8 @@ const httpInter = {
     FabButtonComponent,
     AgregarReclamoComponent,
     VerConsorcioComponent,
-    AgregarGastoComponent
+    AgregarGastoComponent,
+    ListarGastosComponent,
   ],
   imports: [
     BrowserModule,

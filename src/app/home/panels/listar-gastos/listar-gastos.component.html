@@ -1,0 +1,47 @@
+<mat-expansion-panel hideToggle="true" (opened)="onOpenClosePanel()" (closed)="onOpenClosePanel()">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <a>Gastos a pagar</a>
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+        <mat-icon *ngIf="!isOpen" [matBadge]="(reclamos | async)?.length" matBadgeColor="warn" matBadgeSize="small" matBadgePosition="below">warning</mat-icon>
+        <mat-icon *ngIf="isOpen" (click)="openDialog()">add_circle_outline</mat-icon>
+      </mat-panel-description> -->
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+        <div class="container-filtros" style="width: 100%; display: flex;" *ngIf="usuario.id_rol <= 2">
+            <div style="width: 50%;">
+                <mat-form-field style="width: 300px;">
+                    <mat-select placeholder="Consorcios" (selectionChange)="onConsorcioChange($event)">
+                        <mat-option *ngFor="let consorcio of consorcios |async" [value]="consorcio.id_consorcio">{{consorcio.nombre}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <table class="table" *ngIf="(gastos | async)?.length > 0">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>N° Comprobante</th>
+                    <th>Descripcion</th>
+                    <th>Importe</th>
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let gasto of gastos |async">
+                    <td>{{gasto.idGasto}}</td>
+                    <td>{{gasto.nroComprobante}}</td>
+                    <td style="max-width: 100px;">{{gasto.descripcion}}</td>
+                    <td>${{gasto.importe}}</td>
+                    <td>{{gasto.fecha}}</td>
+                    <td>
+                        <button mat-button color="accent">PAGAR</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-template>
+</mat-expansion-panel>
