@@ -29,6 +29,9 @@ class Expensa
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
+    public function traerDetalleDeExpensa($idExpensa){
+        return asdas;
+    }
     public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
     {      
         $this->setCuotaMes($this->obtenerNumeroDeCuotaAnual($idGastoMensual));
@@ -65,7 +68,17 @@ class Expensa
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
-    
+    private function consultarDetalleExpensa($idExpensa){
+        $this->setIdExpensa($idExpensa);
+         $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, r.mensaje mensaje, er.descripcion estado, r.fechaMovimiento fecha
+                        FROM propietariounidad pu
+                        INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
+                        INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
+                        WHERE pu.user LIKE ?";
+        $arrType = array ("s");
+        $arrParam = array( $user);
+        return $this->executeQuery($arrType,$arrParam);
+    }
     // $arrExpensas debe tener el formato = array('idExpensa' => idExpensa)
     private function pagarExpensasArray($arrExpensas = array())
     {
@@ -165,16 +178,12 @@ class Expensa
             return false;
         }
     }
-
-
-
     private function calcularExpensas($arrCtaCtes, $total){
         foreach($arrCtaCtes as $idCtaCte => $prcParticipacion){
             $expPorUnidad[$idCtaCte] = round(($total / 100)*$prcParticipacion,2);
         }
         return $expPorUnidad;
     }
-
     private function ingresarExpensaDelMes()
     {
         $this->query = "INSERT INTO ".$this->tabla." ( cuota_expensa, cuota_extraordinaria,"
