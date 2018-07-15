@@ -22,16 +22,16 @@ function liquidarMesPorConsorcio()
     // yyyy-mm-dd
     $vencimiento = $data['vencimiento']; 
 
-    $msj=true;
     // Liquida el mes 
     foreach($arrConsorcios as $idConsorcio){
         $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
         if($totalDelMes<=0){
-            return 'El consorcio '.$idConsorcio.' no posee movimientos a liquidar';
+            return 'Un consorcio no posee movimientos a liquidar';
         }
         if(!$gastoMensual->verificarPeriodoLiquidable($idConsorcio)){
-            return "El consorcio ".$id_consorcio." aun no se puede liquidar";
-        }
+            
+            return 'Un consorcio aun no se puede liquidar';
+        }        
         $idGastoMensual = $gastoMensual->traerIdGastoMensual($idConsorcio);
         $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
         $cuentasALiquidar = array();
@@ -51,5 +51,5 @@ function liquidarMesPorConsorcio()
             $gastoMensual->trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos);
         }
     }
-    return $msj;
+    return "Liquidacion realiza con exito";
 }

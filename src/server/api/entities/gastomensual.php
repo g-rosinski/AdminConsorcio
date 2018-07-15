@@ -190,6 +190,7 @@ class GastoMensual
     }
     private function validarTiempoPeriodoDeLiquidacion($fechaInicioPeriodoALiquidar,$fechaLiquidacion)
     {
+        
         $fechaInicioPeriodoALiquidar=strtotime($fechaInicioPeriodoALiquidar);
         $diasRequeridos = strtotime("+28 day",$fechaInicioPeriodoALiquidar);
         $fechaLiquidacion = strtotime($fechaLiquidacion);
