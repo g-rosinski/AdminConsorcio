@@ -1,6 +1,6 @@
 <?php
 
-require_once './../../utils/autoload.php';
+require_once str_replace("\\","/",__DIR__).'/../utils/autoload.php';
 
 class Unidad 
 {
