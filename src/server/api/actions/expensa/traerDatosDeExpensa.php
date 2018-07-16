@@ -3,9 +3,9 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 require_once './../../utils/autoload.php';
 
-echo verEstadoDeReclamosPorUsuario();
+echo traerDatosDeExpensa();
 
-function verEstadoDeReclamosPorUsuario()
+function traerDatosDeExpensa()
 {
 
     try {
@@ -13,10 +13,14 @@ function verEstadoDeReclamosPorUsuario()
         $expensa = new Expensa($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     $data = $_GET;
+    
     $detalleExpensa = $expensa->traerDetalleDeExpensa($data['idExpensa']);
-    $arrayExpensa = array();
-    while ($obj = $detalleExpensa->fetch_object()) {
-        $arrayExpensa[] = $obj;
+
+    $arrayDetalleExpensa = array();
+    while ($obj = $detalleExpensa->fetch_object()) {  
+        $arrayDetalleExpensa[] = $obj;
     }
-    return json_encode($arrayExpensa);
+
+
+    return json_encode($arrayDetalleExpensa);
 }
