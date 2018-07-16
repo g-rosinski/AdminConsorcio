@@ -1,0 +1,14 @@
+<ng-container [ngSwitch]="modo">
+    <p *ngSwitchCase="'approved'">
+        Su pago a sido procesado correctamente. Muchas gracias por utilizar nuestro sistema.
+    </p>
+    <p *ngSwitchCase="'pending'">
+        Su pago no se completo correctamente. Por favor intente nuevamente.
+    </p>
+    <p *ngSwitchCase="'in_process'">
+        Su pago esta siendo revisado.
+    </p>
+    <p *ngSwitchCase="'rejected'">
+        Su pago a sido rechazado. Por favor intente nuevamente.
+    </p>
+</ng-container>

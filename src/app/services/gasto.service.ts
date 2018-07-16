@@ -61,7 +61,7 @@ export class GastoService {
     let params = new HttpParams()
       .set('id', '0')
       .set('titulo', 'Liquidacion del mes de enero')
-      .set('importe', '1000')
+      .set('importe', '1000.77')
       .set('success', 'localhost/home')
       .set('fail', 'localhost/home')
       .set('pend', 'localhost/home');      
