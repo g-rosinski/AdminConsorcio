@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once './../../config/db.php';
 include_once './../../entities/consorcio.php';
 
-echo crearConsorcio();
+echo json_encode(crearConsorcio());
 
 function crearConsorcio()
 {
@@ -14,15 +14,16 @@ function crearConsorcio()
     $consorcio = new Consorcio($db);
     $data = $_POST;
 
-    $consorcio->crearConsorcio(
+    return $consorcio->crearConsorcio(
         $data['nombre'],
         $data['cuit'],
         $data['calle'],
         $data['altura'],
         $data['superficie'],
-        $data['barrio'],
-        $data['telefono']
+        $data['id_barrio'],
+        $data['telefono'],
+        $data['coordenadaLatitud'],
+        $data['coordenadaLongitud']
     );
-    
-   // return $consorcio->crearConsorcio();
+
 }

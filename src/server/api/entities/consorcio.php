@@ -4,7 +4,7 @@ class Consorcio
 {
 
     private $connection;
-    private $validator;    
+    private $validator;
     private $query;
     private $tabla = "consorcio";
     /* Campos de la tabla */
@@ -16,15 +16,16 @@ class Consorcio
     private $telefono;
     private $superficie;
     private $barrio;
+    private $coordenadaLatitud;
+    private $coordenadaLongitud;
 
     public function __construct($connection)
     {
         $this->connection = $connection;
-        try{ $this->validator = new Validator; }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        try { $this->validator = new Validator;} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
 
-    public function crearConsorcio($nombre, $cuit, $calle, $altura, $superficie, $barrio, $telefono = null)
+    public function crearConsorcio($nombre, $cuit, $calle, $altura, $superficie, $barrio, $telefono = null, $coordenadaLatitud = 0, $coordenadaLongitud = 0)
     {
         $this->setNombre($nombre);
         $this->setCuit($cuit);
@@ -33,8 +34,10 @@ class Consorcio
         $this->setTelefono($telefono);
         $this->setSuperficie($superficie);
         $this->setBarrio($barrio);
+        $this->setCoordenadaLatitud($coordenadaLatitud);
+        $this->setCoordenadaLongitud($coordenadaLongitud);
 
-        $this->insertConsorcio();
+        return $this->insertConsorcio();
     }
     public function listarConsorciosArrayFormateado()
     {
@@ -95,29 +98,38 @@ class Consorcio
         $query = "select * from " . $this->tabla . "WHERE id_consorcio = " . $id;
         return mysql_fetch_assoc($this->connection->ejecutar($query));
     }
-    public function traerParticipacionDelConsorcio($consorcio){
+    public function traerParticipacionDelConsorcio($consorcio)
+    {
         return $this->obtenerParticipacionDelConsorcio($consorcio);
     }
-    private function obtenerParticipacionDelConsorcio($consorcio){
-        $this->query = "SELECT u.id_unidad idUnidad, u.prc_participacion participacion FROM ". $this->tabla ." c"
-                       ." INNER JOIN unidad u ON c.id_consorcio = u.id_consorcio"
-                       ." WHERE c.id_consorcio = ?";
-        $arrType = array ("i");
-        $arrParam = array ($consorcio);
-        $arrUnidades = $this->executeQuery($arrType,$arrParam);
-        
-        while ($unidad = $arrUnidades->fetch_assoc())
-        {
+    private function obtenerParticipacionDelConsorcio($consorcio)
+    {
+        $this->query = "SELECT u.id_unidad idUnidad, u.prc_participacion participacion FROM " . $this->tabla . " c"
+            . " INNER JOIN unidad u ON c.id_consorcio = u.id_consorcio"
+            . " WHERE c.id_consorcio = ?";
+        $arrType = array("i");
+        $arrParam = array($consorcio);
+        $arrUnidades = $this->executeQuery($arrType, $arrParam);
+
+        while ($unidad = $arrUnidades->fetch_assoc()) {
             $unidadesEncontradas[$unidad['idUnidad']] = $unidad['participacion'];
         }
         return $unidadesEncontradas;
     }
     private function insertConsorcio()
     {
-        $query = "INSERT INTO "
-        . $this->tabla
-            . " (nombre, cuit, calle, altura, telefono, superficie, id_barrio)"
-            . " VALUES (('$this->nombre'),('$this->cuit'),('$this->calle'),($this->altura),('$this->telefono'),($this->superficie),($this->barrio))";
+        $query = "INSERT INTO $this->tabla
+        (nombre, cuit, calle, altura, telefono, superficie, id_barrio, coordenadaLatitud, coordenadaLongitud)
+        VALUES (('$this->nombre'),
+        ('$this->cuit'),
+        ('$this->calle'),
+        ($this->altura),
+        ('$this->telefono'),
+        ($this->superficie),
+        ($this->barrio),
+        ($this->coordenadaLatitud),
+        ($this->coordenadaLongitud))
+        ";
         return $this->connection->ejecutar($query);
     }
 
@@ -152,10 +164,24 @@ class Consorcio
         try { $this->barrio = $this->validarVariableNumerica($barrio);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
 
+    public function setCoordenadaLatitud($coordenadaLatitud)
+    {
+        try {
+            $this->coordenadaLatitud = $this->validarVariableNumerica($coordenadaLatitud);
+        } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
+
+    public function setCoordenadaLongitud($coordenadaLongitud)
+    {
+        try {
+            $this->coordenadaLongitud = $this->validarVariableNumerica($coordenadaLongitud);
+        } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    }
+
     private function validarVariableString($var)
     {
         if (!empty($var) && is_string($var)) {
-            return $var;
+            return $this->elimina_acentos($var);
         } else {
             throw new Exception("El valor es null o no es de tipo String");
         }
@@ -172,10 +198,59 @@ class Consorcio
     // $arrType = array("i","s","s") /* int string string */
     // $arrParam = array(14,"Calle Falsa","432");
     private function executeQuery($arrType = null, $arrParam = null)
-    {   
-        try{ $q = new Query($this->connection); }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
-        
-        return $q->execute(array($this->query),$arrType,$arrParam);
+    {
+        try { $q = new Query($this->connection);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+
+        return $q->execute(array($this->query), $arrType, $arrParam);
+    }
+
+    private function elimina_acentos($text)
+    {
+        $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
+        $text = strtolower($text);
+        $patron = array(
+            '/\+/' => '',
+            '/&agrave;/' => 'a',
+            '/&egrave;/' => 'e',
+            '/&igrave;/' => 'i',
+            '/&ograve;/' => 'o',
+            '/&ugrave;/' => 'u',
+
+            '/&aacute;/' => 'a',
+            '/&eacute;/' => 'e',
+            '/&iacute;/' => 'i',
+            '/&oacute;/' => 'o',
+            '/&uacute;/' => 'u',
+
+            '/&acirc;/' => 'a',
+            '/&ecirc;/' => 'e',
+            '/&icirc;/' => 'i',
+            '/&ocirc;/' => 'o',
+            '/&ucirc;/' => 'u',
+
+            '/&atilde;/' => 'a',
+            '/&etilde;/' => 'e',
+            '/&itilde;/' => 'i',
+            '/&otilde;/' => 'o',
+            '/&utilde;/' => 'u',
+
+            '/&auml;/' => 'a',
+            '/&euml;/' => 'e',
+            '/&iuml;/' => 'i',
+            '/&ouml;/' => 'o',
+            '/&uuml;/' => 'u',
+
+            '/&auml;/' => 'a',
+            '/&euml;/' => 'e',
+            '/&iuml;/' => 'i',
+            '/&ouml;/' => 'o',
+            '/&uuml;/' => 'u',
+
+            '/&aring;/' => 'a',
+            '/&ntilde;/' => 'n',
+        );
+
+        $text = preg_replace(array_keys($patron), array_values($patron), $text);
+        return $text;
     }
 }

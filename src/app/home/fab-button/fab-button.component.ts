@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { AgregarOperadorComponent } from '../modals/agregar-operador/agregar-operador.component';
 import { RegistroLoginService } from '../../services/registro-login.service';
+import { AgregarConsorcioComponent } from '../modals/agregar-consorcio/agregar-consorcio.component';
 
 @Component({
   selector: 'app-fab-button',
@@ -25,6 +26,12 @@ export class FabButtonComponent implements OnInit {
 
   openDialog(): void {
     let dialogRef = this.dialog.open(AgregarOperadorComponent, { width: '700px' });
+  }
+
+  openAgregarConsorcio() {
+    this.dialog.open(AgregarConsorcioComponent, {
+      width: '1000px',
+    });
   }
 
   logout() {
