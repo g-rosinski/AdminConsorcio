@@ -17,6 +17,12 @@
       </a>
       <a class="btn-floating mobile-fab-tip">Generar link para Operador</a>
     </li>
+    <li *ngIf="usuario.id_rol === 1">
+      <a class="btn-floating amber darken-1" (click)="openAgregarConsorcio()">
+        <i class="material-icons">location_city</i>
+      </a>
+      <a class="btn-floating mobile-fab-tip">Agregar nuevo consorcio</a>
+    </li>
 
   </ul>
 </div>

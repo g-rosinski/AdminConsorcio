@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { ToastrModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
@@ -35,6 +35,8 @@ import { MyHttpInterceptor } from './services/http-interceptor.service';
 import { LiquidarMesComponent } from './home/modals/liquidar-mes/liquidar-mes.component';
 import { AgregarPagoComponent } from './home/modals/agregar-pago/agregar-pago.component';
 import { PagoRealizadoComponent } from './home/modals/pago-realizado/pago-realizado.component';
+import { AgregarConsorcioComponent } from './home/modals/agregar-consorcio/agregar-consorcio.component';
+import { BarrioService } from './services/barrio.service';
 
 const httpInter = {
   provide: HTTP_INTERCEPTORS,
@@ -61,7 +63,8 @@ const httpInter = {
     ListarGastosComponent,
     LiquidarMesComponent,
     AgregarPagoComponent,
-    PagoRealizadoComponent
+    PagoRealizadoComponent,
+    AgregarConsorcioComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,13 +72,35 @@ const httpInter = {
     AppRoutingModule,
     HttpClientModule,
     MaterialModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc'
+      apiKey: 'AIzaSyCh_kOIVIZ_jDmX4MEgMCTiQRVdsbR-Wdc',
+      libraries: ['places']
     }),
   ],
-  entryComponents: [PagoRealizadoComponent, AgregarOperadorComponent, AgregarReclamoComponent, VerConsorcioComponent, AgregarGastoComponent, LiquidarMesComponent, AgregarPagoComponent],
-  providers: [httpInter, UsuarioService, ConsorcioService, RegistroLoginService, UnidadService, ReclamoService, ProveedorService, MotivoGastoService, GastoService],
+  entryComponents: [
+    PagoRealizadoComponent,
+    AgregarOperadorComponent,
+    AgregarReclamoComponent,
+    VerConsorcioComponent,
+    AgregarGastoComponent,
+    LiquidarMesComponent,
+    AgregarPagoComponent,
+    AgregarConsorcioComponent
+  ],
+  providers: [
+    httpInter,
+    UsuarioService,
+    ConsorcioService,
+    RegistroLoginService,
+    UnidadService,
+    ReclamoService,
+    ProveedorService,
+    MotivoGastoService,
+    GastoService,
+    BarrioService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

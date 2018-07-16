@@ -1,0 +1,46 @@
+<form (ngSubmit)="onSubmit()" #consorcioForm="ngForm" autocomplete="off">
+    <mat-dialog-content style="display: flex; justify-content: space-between;">
+
+        <div style="width: 40%; margin-right: 30px;">
+            <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+                <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+            </agm-map>
+        </div>
+
+        <div style="width: 60%">
+            <mat-form-field class="full-width">
+                <input [(ngModel)]="formModel.nombre" required matInput placeholder="Nombre" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <input [(ngModel)]="formModel.cuit" required matInput placeholder="CUIT" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <input [(ngModel)]="formModel.telefono" required matInput [type]="'number'" placeholder="Telefono" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <input [(ngModel)]="formModel.superficie" required matInput [type]="'number'" placeholder="Superficie" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <input matInput placeholder="Direccion (con altura incluida)" #search [formControl]="searchControl" required>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-select [(ngModel)]="formModel.id_barrio" placeholder="Barrio" required [ngModelOptions]="{standalone: true}">
+                    <mat-option *ngFor="let barrio of barrios |async" [value]="barrio.id_barrio">{{barrio.descripcion}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <div style="text-align: right; width: 100%;">
+            <button type="submit" [disabled]="!isValid" mat-raised-button color="primary">Enviar</button>
+            <button type="button" mat-button color="accent" (click)="dialogRef.close()">Cerrar</button>
+        </div>
+    </mat-dialog-actions>
+</form>
