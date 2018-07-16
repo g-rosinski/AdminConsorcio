@@ -38,17 +38,40 @@ class GastoMensual
         $this->setTotal($total);
         return $this->actualizarTotal();
     }
+    public function verificarPeriodoLiquidable($id_consorcio)
+    {
+        $this->setIdConsorcio($id_consorcio);
+        $idGastoMensual=$this->obtenerIdGastoMensualEnCurso();
+        $fechaLiquidacion=$this->setDate();
+        $fechaInicioPeriodoALiquidar = $this->obtenerFechaInicioDelPeriodo($idGastoMensual);
+        if($this->validarTiempoPeriodoDeLiquidacion($fechaInicioPeriodoALiquidar,$fechaLiquidacion))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public function liquidarGastoMensualPorConsorcio($consorcios = array())
     {
-        $this->setFechaInicio($this->setDate());
-        $this->setFechaLiquidacion($this->setDate());
-        $this->setPeriodo($this->obtenerPeriodo());
-        $this->setTotal(0);
+        $fechaLiquidacion=$this->setDate();
+        $periodoNuevo=$this->obtenerPeriodoNuevo();
+        $fechaInicioNuevoPeriodo=$this->setDate();
+        $totalNuevoPeriodo = 0;
         foreach($consorcios as $id_consorcio){
             $this->setIdConsorcio($id_consorcio);
-            $this->setIdGastoMensual($this->obtenerIdGastoMensualEnCurso());
-            $this->liquidarPeriodoPorConsorcio();
-            $this->nuevoPeriodoPorConsorcio();
+            $idGastoMensual=$this->obtenerIdGastoMensualEnCurso();
+            $fechaInicioPeriodoALiquidar = $this->obtenerFechaInicioDelPeriodo($idGastoMensual);
+            $this->setIdGastoMensual($idGastoMensual);
+            $this->liquidarPeriodoPorConsorcio($fechaLiquidacion);
+            $this->nuevoPeriodoPorConsorcio(
+                                                $periodoNuevo,
+                                                $fechaInicioNuevoPeriodo,
+                                                $totalNuevoPeriodo,
+                                                $id_consorcio
+                                            );
+        
         }
     }
     public function obtenerTotalDelMes($id_consorcio)
@@ -131,7 +154,8 @@ class GastoMensual
         $gastomensual = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
         return $gastomensual['total'];
     }
-    private function liquidarPeriodoPorConsorcio(){
+    private function liquidarPeriodoPorConsorcio($fechaLiquidacion){
+        $this->setFechaLiquidacion($fechaLiquidacion);
         $this->query = "UPDATE ".$this->tabla." SET fechaLiquidacion = ?  WHERE id_gasto_mensual = ?";
         $arrType = array("s","i");
         $arrParam= array(
@@ -140,7 +164,11 @@ class GastoMensual
         );
         return $this->executeQuery($arrType,$arrParam);
     }
-    private function nuevoPeriodoPorConsorcio(){
+    private function nuevoPeriodoPorConsorcio($periodoNuevo, $fechaInicio,$total,$id_consorcio){
+        $this->setPeriodo($periodoNuevo);
+        $this->setFechaInicio($fechaInicio);
+        $this->setTotal($total);
+        $this->setIdConsorcio($id_consorcio);
         $this->query = "INSERT INTO ".$this->tabla." (periodo,fechaInicio,total,id_consorcio)"
                         ." VALUES (?, ?, ?, ?)";
         $arrType = array("s","s","d","i");
@@ -152,10 +180,37 @@ class GastoMensual
         );
         return $this->executeQuery($arrType,$arrParam);
     }
-
-    private function obtenerPeriodo(){
+    private function obtenerFechaInicioDelPeriodo($idGastoMensual){
+        $this->query = "SELECT fechaInicio FROM ". $this->tabla
+                       ." WHERE id_gasto_mensual = ?";
+        $arrType = array ("i");
+        $arrParam = array ($idGastoMensual);
+        $fecha = $this->executeQuery($arrType,$arrParam)->fetch_assoc();
+        return $fecha['fechaInicio'];
+    }
+    private function validarTiempoPeriodoDeLiquidacion($fechaInicioPeriodoALiquidar,$fechaLiquidacion)
+    {
+        
+        $fechaInicioPeriodoALiquidar=strtotime($fechaInicioPeriodoALiquidar);
+        $diasRequeridos = strtotime("+28 day",$fechaInicioPeriodoALiquidar);
+        $fechaLiquidacion = strtotime($fechaLiquidacion);
+        if($fechaLiquidacion>=$diasRequeridos){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    /* private function obtenerPeriodo(){
         date_default_timezone_get('America/Argentina/Buenos_Aires');
         return date("Y - m");
+    } */
+    private function obtenerPeriodoNuevo()
+    {
+        $fechaActual = date("Y-m-d");
+        $fechaActual = strtotime($fechaActual);
+        $fechaExtendida = strtotime("+7 day",$fechaActual);
+        $periodoNuevo = date("Y - m",$fechaExtendida);
+        return $periodoNuevo;
     }
     private function setDate()
     {
