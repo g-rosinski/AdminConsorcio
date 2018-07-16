@@ -30,7 +30,7 @@ class Expensa
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
     public function traerDetalleDeExpensa($idExpensa){
-        return asdas;
+        return $this->consultarDetalleExpensaPorId($idExpensa);
     }
     public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
     {      
@@ -68,15 +68,14 @@ class Expensa
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
-    private function consultarDetalleExpensa($idExpensa){
+    private function consultarDetalleExpensaPorId($idExpensa){
         $this->setIdExpensa($idExpensa);
-         $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, r.mensaje mensaje, er.descripcion estado, r.fechaMovimiento fecha
-                        FROM propietariounidad pu
-                        INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
-                        INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
-                        WHERE pu.user LIKE ?";
-        $arrType = array ("s");
-        $arrParam = array( $user);
+        $this->query = "SELECT cuota_expensa total, cuota_extraordinaria impteExtraordinaria, cuota_mora mora,"
+                        ." cuota_mes cuotaAnual, cuota_vencimiento vencimiento, id_gasto_mensual idGastoMensual"
+                        ." FROM ". $this->tabla
+                        ." WHERE id_expensa = ?";
+        $arrType = array ("i");
+        $arrParam = array($this->idExpensa);
         return $this->executeQuery($arrType,$arrParam);
     }
     // $arrExpensas debe tener el formato = array('idExpensa' => idExpensa)
