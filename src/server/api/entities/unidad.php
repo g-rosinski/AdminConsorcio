@@ -1,8 +1,8 @@
 <?php
 
-require_once str_replace("\\","/",__DIR__).'/../utils/autoload.php';
+require_once str_replace("\\", "/", __DIR__) . '/../utils/autoload.php';
 
-class Unidad 
+class Unidad
 {
     private $connection;
     private $validator;
@@ -16,58 +16,69 @@ class Unidad
     private $nro_unidad; // $this->setNro_unidad
     private $superficie; // $this->setSuperficie
     private $id_consorcio; // $this->setIdConsorcio
-    
-    
-    
+
     public function __construct($connection)
     {
         $this->connection = $connection;
-        try{ $this->validator = new Validator; }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
+        try { $this->validator = new Validator;} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
-    public function unidadesConPropietarioAsignado($consorcio){
+    public function unidadesConPropietarioAsignado($consorcio)
+    {
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesConPropietario();
     }
-    public function unidadesSinPropietarioAsignado($consorcio){
+    public function unidadesSinPropietarioAsignado($consorcio)
+    {
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesSinPropietario();
     }
-    public function unidadesConDuenioPorConsorcio($consorcio){
+    public function unidadesConDuenioPorConsorcio($consorcio)
+    {
         $this->setIdConsorcio($consorcio);
         return $this->consultarUnidadesOcupadasPorConsorcio();
+    }
+    public function agregarUnidad($piso, $depto, $nroUnidad, $superficie, $consorcio)
+    {
+        $this->setPiso($piso);
+        $this->setDepartamento($depto);
+        $this->setNro_unidad($nroUnidad);
+        $this->setSuperficie($superficie);
+        $this->setIdConsorcio($consorcio);
+
+        return $this->insertUnidad();
     }
 
     public function agregarRelacionPersonaUnidad($user, $rol, $id_unidad)
     {
         if ($rol == 'PROPIETARIO') {
-            return $this->vincularPropietarioAUnidad($user,$id_unidad);
+            return $this->vincularPropietarioAUnidad($user, $id_unidad);
         } else {
             $propietario = $this->obtenerPropietarioUnidad($id_unidad)->fetch_assoc();
             return $this->vincularInquilinoAUnidad($user, $propietario['user'], $id_unidad);
         }
     }
-    public function vincularPropietarioAUnidad($user, $unidad){
+    public function vincularPropietarioAUnidad($user, $unidad)
+    {
         $this->query = "INSERT INTO propietariounidad (user,id_unidad)
                         VALUES (?,?)";
-        $arrType = array("s","i");
+        $arrType = array("s", "i");
         $arrParam = array(
             $user,
-            $unidad
+            $unidad,
         );
-        return $this->executeQuery($arrType,$arrParam);  
-    } 
+        return $this->executeQuery($arrType, $arrParam);
+    }
     public function calcularPrcParticipacionPorConsorcios($consorcios = array())
-    {   
+    {
         foreach ($consorcios as $id_consorcio) {
             $this->setIdConsorcio($id_consorcio);
             $arrUnidadesConSuperficie = $this->obtenerEspacioOcupadoPorUnidad();
             $totalSuperficie = $this->obtenerEspacioTotalPorConsorcio();
             foreach ($arrUnidadesConSuperficie as $id_unidad => $superficieUnidad) {
-                $prcParticipacion = round($superficieUnidad/($totalSuperficie/100),3);
+                $prcParticipacion = round($superficieUnidad / ($totalSuperficie / 100), 3);
                 $this->setIdUnidad($id_unidad);
                 $this->setPrcParticipacion($prcParticipacion);
                 $this->actualizarPrcParticipacion();
@@ -84,79 +95,81 @@ class Unidad
     /**************************** */
     private function consultarUnidadesPorConsorcio()
     {
-        $this->query = "SELECT id_unidad as id FROM ".$this->tabla
-                        ." WHERE id_consorcio = ?";
+        $this->query = "SELECT id_unidad as id FROM " . $this->tabla
+            . " WHERE id_consorcio = ?";
         $arrType = array("i");
-        $arrParam= array($this->id_consorcio);
-        $resultado = $this->executeQuery($arrType,$arrParam);
-        $arrUnidadConSuperficie=array();
+        $arrParam = array($this->id_consorcio);
+        $resultado = $this->executeQuery($arrType, $arrParam);
+        $arrUnidadConSuperficie = array();
         while ($reg = $resultado->fetch_assoc()) {
             $arrUnidadConSuperficie[] = $reg['id'];
         }
-        if(!empty($arrUnidadConSuperficie)){
-            return $arrUnidadConSuperficie;         
-        }else{
+        if (!empty($arrUnidadConSuperficie)) {
+            return $arrUnidadConSuperficie;
+        } else {
             return false;
         }
     }
     private function obtenerEspacioOcupadoPorUnidad()
     {
-        $this->query = "SELECT id_unidad as id, superficie FROM ".$this->tabla
-                        ." WHERE id_consorcio = ?";
+        $this->query = "SELECT id_unidad as id, superficie FROM " . $this->tabla
+            . " WHERE id_consorcio = ?";
         $arrType = array("i");
-        $arrParam= array($this->id_consorcio);
-        $resultado = $this->executeQuery($arrType,$arrParam);
+        $arrParam = array($this->id_consorcio);
+        $resultado = $this->executeQuery($arrType, $arrParam);
         while ($reg = $resultado->fetch_assoc()) {
             $arrUnidadConSuperficie[$reg['id']] = $reg['superficie'];
-        }        
+        }
         return $arrUnidadConSuperficie;
-    } 
+    }
     private function obtenerEspacioTotalPorConsorcio()
     {
         $this->query = "SELECT superficie FROM consorcio"
-                        ." WHERE id_consorcio = ?";
+            . " WHERE id_consorcio = ?";
         $arrType = array("i");
-        $arrParam= array($this->id_consorcio);
-        $consorcio = $this->executeQuery($arrType,$arrParam)->fetch_assoc();;
+        $arrParam = array($this->id_consorcio);
+        $consorcio = $this->executeQuery($arrType, $arrParam)->fetch_assoc();
         return $consorcio['superficie'];
-    } 
-    private function actualizarPrcParticipacion(){
-        $this->query = "UPDATE ".$this->tabla ." SET prc_participacion = ?"
-                       ." WHERE id_unidad = ?";
-        $arrType = array("d","i");
+    }
+    private function actualizarPrcParticipacion()
+    {
+        $this->query = "UPDATE " . $this->tabla . " SET prc_participacion = ?"
+            . " WHERE id_unidad = ?";
+        $arrType = array("d", "i");
         $arrParam = array(
             $this->prcParticipacion,
-            $this->idUnidad
+            $this->idUnidad,
         );
-        return $this->executeQuery($arrType,$arrParam); 
+        return $this->executeQuery($arrType, $arrParam);
     }
-    private function vincularInquilinoAUnidad($user, $propietario, $unidad){
+    private function vincularInquilinoAUnidad($user, $propietario, $unidad)
+    {
         $this->query = "INSERT INTO propietariounidad (user, inquilino_de,id_unidad)
                         VALUES (?,?,?)";
-        $arrType = array("s","s","i");
+        $arrType = array("s", "s", "i");
         $arrParam = array(
             $user,
             $propietario,
-            $unidad
+            $unidad,
         );
-        return $this->executeQuery($arrType,$arrParam); 
+        return $this->executeQuery($arrType, $arrParam);
     }
-    
+
     private function consultarUnidadesSinPropietario()
     {
-        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
+        $this->query = "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
                             FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
                             AND p.user is null";
-        $arrType = array ("i");
+        $arrType = array("i");
         $arrParam = array(
-            $this->id_consorcio
+            $this->id_consorcio,
         );
-        return $this->executeQuery($arrType,$arrParam);
+        return $this->executeQuery($arrType, $arrParam);
     }
     private function consultarUnidadesConPropietario()
-    {    
-        $this->query =    "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
+    {
+        $this->query = "SELECT u.id_unidad, u.piso AS piso , u.departamento AS deptoUnidad
                             FROM unidad u left join propietariounidad p on p.id_unidad = u.id_unidad
                             WHERE u.id_consorcio = ?
                             AND p.user IS NOT NULL
@@ -166,14 +179,15 @@ class Unidad
                                                     WHERE p2.id_unidad = p.id_unidad
                                                     AND p2.inquilino_de IS NOT NULL)
                             ";
-        $arrType = array ("i");
+        $arrType = array("i");
         $arrParam = array(
-            $this->id_consorcio
+            $this->id_consorcio,
         );
-        return $this->executeQuery($arrType,$arrParam);
+        return $this->executeQuery($arrType, $arrParam);
     }
-    private function consultarUnidadesOcupadasPorConsorcio(){
-        $this->query = 
+    private function consultarUnidadesOcupadasPorConsorcio()
+    {
+        $this->query =
             "SELECT
                 p.id_unidad,
                 u.piso,
@@ -184,21 +198,45 @@ class Unidad
                 p.id_unidad = u.id_unidad
             WHERE
                 u.id_consorcio = ?";
-        $arrType = array ("i");
+        $arrType = array("i");
         $arrParam = array(
-            $this->id_consorcio
+            $this->id_consorcio,
         );
-        return $this->executeQuery($arrType,$arrParam);
+        return $this->executeQuery($arrType, $arrParam);
     }
 
     private function obtenerPropietarioUnidad($unidad)
     {
         $this->query = "SELECT user FROM propietariounidad WHERE id_unidad = ?";
-        $arrType = array ("i");
+        $arrType = array("i");
         $arrParam = array(
-            $unidad
+            $unidad,
         );
-        return $this->executeQuery($arrType,$arrParam );
+        return $this->executeQuery($arrType, $arrParam);
+    }
+
+    private function insertUnidad()
+    {
+        $this->query =
+            "INSERT INTO $this->tabla (
+                `prc_participacion`,
+                `piso`,
+                `departamento`,
+                `nro_unidad`,
+                `superficie`,
+                `id_consorcio`
+            ) VALUES(?, ?, ?, ?, ?, ?)";
+
+        $arrType = array("d", "s", "s", "i", "d", "i");
+        $arrParam = array(
+            0.00,
+            $this->piso,
+            $this->departamento,
+            $this->nro_unidad,
+            $this->superficie,
+            $this->id_consorcio,
+        );
+        return $this->executeQuery($arrType, $arrParam);
     }
 
     private function setIdUnidad($idUnidad)
@@ -238,10 +276,9 @@ class Unidad
     // $arrType = array("i","s","s") /* int string string */
     // $arrParam = array(14,"Calle Falsa","432");
     private function executeQuery($arrType = null, $arrParam = null)
-    {   
-        try{ $q = new Query($this->connection); }
-        catch(Exception $e){echo "Msj:".$e->getMessage();}
-        
-        return $q->execute(array($this->query),$arrType,$arrParam);
+    {
+        try { $q = new Query($this->connection);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+
+        return $q->execute(array($this->query), $arrType, $arrParam);
     }
 }

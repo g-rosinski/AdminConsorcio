@@ -27,6 +27,19 @@ export class UnidadService {
   traerUnidadesConDuenioPorConsorcio(id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams().set('id_consorcio', id);
-    return this.http.get(UnidadService.BASE_URL + '/traerUnidadesPorConsorcio.php', { headers, params }); 
+    return this.http.get(UnidadService.BASE_URL + '/traerUnidadesPorConsorcio.php', { headers, params });
+  }
+
+  agregarUnidad(formModel): Promise<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('piso', formModel.piso)
+      .set('depto', formModel.departamento)
+      .set('superficie', formModel.superficie)
+      .set('nroUnidad', formModel.nroUnidad)
+      .set('id_consorcio', formModel.consorcio);
+
+    return this.http.post(UnidadService.BASE_URL + '/agregarUnidad.php', body.toString(), { headers: headers })
+      .toPromise();
   }
 }

@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { AgregarOperadorComponent } from '../modals/agregar-operador/agregar-operador.component';
 import { RegistroLoginService } from '../../services/registro-login.service';
 import { AgregarConsorcioComponent } from '../modals/agregar-consorcio/agregar-consorcio.component';
+import { AgregarUnidadComponent } from '../modals/agregar-unidad/agregar-unidad.component';
 
 @Component({
   selector: 'app-fab-button',
@@ -31,6 +32,12 @@ export class FabButtonComponent implements OnInit {
   openAgregarConsorcio() {
     this.dialog.open(AgregarConsorcioComponent, {
       width: '1000px',
+    });
+  }
+
+  openAgregarUnidad() {
+    this.dialog.open(AgregarUnidadComponent, {
+      width: '500px',
     });
   }
 

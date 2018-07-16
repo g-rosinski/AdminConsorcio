@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Agregar Unidad</h1>
+<form (ngSubmit)="onSubmit()" #unidadForm="ngForm" autocomplete="off">
+    <mat-dialog-content>
+
+        <mat-form-field class="full-width">
+            <input type="number" [(ngModel)]="formModel.piso" matInput placeholder="Piso" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input [(ngModel)]="formModel.departamento" matInput placeholder="Departamento" [ngModelOptions]="{standalone: true}" maxlength="1">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input type="number" [(ngModel)]="formModel.superficie" matInput placeholder="Superficie" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input type="number" [(ngModel)]="formModel.nroUnidad" matInput placeholder="N° Unidad" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <mat-select [ngModelOptions]="{standalone: true}" placeholder="Consorcio" required [(ngModel)]="formModel.consorcio">
+                <mat-option *ngFor="let c of consorcios |async" [value]="c.id_consorcio">{{c.nombre}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <div style="text-align: right; width: 100%;">
+            <button type="button" mat-button color="accent" style="margin-right: 5px;" (click)="onNoClick()">Cancelar</button>
+            <button type="submit" [disabled]="!unidadForm.form.valid" mat-raised-button color="primary">Enviar</button>
+        </div>
+    </mat-dialog-actions>
+</form>
