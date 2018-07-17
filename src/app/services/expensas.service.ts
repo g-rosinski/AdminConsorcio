@@ -17,4 +17,10 @@ export class ExpensaService {
         const params = new HttpParams().set('idUnidad', idUnidad);
         return this.http.get(ExpensaService.BASE_URL + '/listarExpensasPorUnidad.php', { headers, params });
     }
+
+    traerDetalleDeUnaExpensa(id) {
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        const params = new HttpParams().set('idExpensa', id);
+        return this.http.get(ExpensaService.BASE_URL + '/traerDatosDeExpensa.php', { headers, params });
+    }
 }
