@@ -13,6 +13,7 @@ function traerDatosDeExpensa()
         $expensa = new Expensa($db);
         $gastos = new Gasto($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+    // Solo necesita el Id de la expensa
     $data = $_GET;          
     
     $expensaEncontrada = $expensa->traerDetalleDeExpensa($data['idExpensa']);
@@ -26,7 +27,6 @@ function traerDatosDeExpensa()
 
     return json_encode($arrayDetalleCompleto);
 }
-
 
 // Detalle que devuelve:
 //
