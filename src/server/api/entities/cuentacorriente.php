@@ -23,6 +23,16 @@ class Cuentacorriente
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
+    public function realizarPago($user,$idCtaCte,$importe=null){
+        if($importe==null){
+            $importe = $this->traerSaldoCtaCte($idCtaCte);
+        }
+        $this->insertPago($user,$idCtaCte,$importe);
+        $saldoActualizado = $this->traerSaldoCtaCte($idCtaCte) - $importe;
+        $this->setIdCtaCte($idCtaCte);
+        $this->setSaldo($saldoActualizado);
+        return $this->cargarSaldoActualizadoCtaCte();
+    }
     public function traerArrayCtaCteConSaldo($arrUnidades){
         foreach ($arrUnidades as $unidad) {
             $ctacte = $this->traerCtaCtePorUnidad($unidad);
@@ -126,14 +136,32 @@ class Cuentacorriente
         );
         return $this->executeQuery($arrType,$arrParam);
     }
+    private function insertPago($user,$idCtaCte,$importe){
+        $this->setSaldo($importe);
+        $this->setIdCtaCte($idCtaCte);
+        $fecha = date("Y-m-d");
+        $hora = date("G:i:s");        
+        $this->query = "INSERT INTO pagoexpensa (importe,fecha,hora,id_ctacte,user, id_forma_pago)"
+                        ." VALUES (?,?,?,?,?,?)";
+        $arrType = array("d","s","s","i","s","i");
+        $arrParam= array(
+            $this->saldo,
+            $fecha,
+            $hora,
+            $this->id_ctacte,
+            $user,
+            1 // Efectivo
+        );
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function setIdCtaCte($id_ctacte){
         try { $this->id_ctacte = $this->validator->validarVariableNumerica($id_ctacte);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     }
     private function setSaldo($saldo){
-        try { $this->saldo = round($this->validator->validarVariableNumerica($saldo),3);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        $this->saldo = round($saldo,3);
     }
     private function setSaldoAFavor($saldo_favor){
-        try { $this->saldo_favor = round($this->validator->validarVariableNumerica($saldo_favor),3);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
+        $this->saldo_favor = round($saldo_favor,3);
     }
     private function setIdUnidad($id_unidad){
         try { $this->id_unidad = $this->validator->validarVariableNumerica($id_unidad);} catch (Exception $e) {echo "Msj:" . $e->getMessage();}
