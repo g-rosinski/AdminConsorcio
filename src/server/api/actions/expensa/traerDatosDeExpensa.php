@@ -18,6 +18,8 @@ function traerDatosDeExpensa()
     
     $expensaEncontrada = $expensa->traerDetalleDeExpensa($data['idExpensa']);
     $detalleExpensa = $expensaEncontrada->fetch_assoc();
+    $detalleExpensa['total'] = round($detalleExpensa['total'],2);
+    $detalleExpensa['impteExtraordinaria'] = round($detalleExpensa['impteExtraordinaria'],2);
     $detalleGastos = $gastos->listarGastosPorIdGastoMensual($detalleExpensa['idGastoMensual']);
 
     $arrayDetalleCompleto = Array(

@@ -78,24 +78,40 @@ class Gasto
             $listaDeRubros = $this->armarListadoDeRubros($listaDeRubros,$registro);
             $listaDeMotivos = $this->armarListaDeMotivosConTotales($listaDeMotivos,$registro);
             $listaDeGastos = $this->armarListaDeGastosAgrupadoPorMotivo($listaDeGastos,$registro);
+            
         }       
-          
-        $listasDeGastosPorMotivo = $this->asignarAlMotivoDeGastoCorrespondiente($listaDeMotivos,$listaDeGastos);
+        
+        $listasDeGastosPorMotivo = $this->asignarAlMotivoDeGastoCorrespondiente($listaDeMotivos,$listaDeGastos);        
         $listadoFormateadoPorRubro = $this->asignarAlRubroCorrespondiente($listaDeRubros, $listasDeGastosPorMotivo);            
         return $gastosFormateados['rubros'] = $listadoFormateadoPorRubro ;
     }
     private function armarListadoDeRubros($listaExistente = array(),$gastoConRubroAsignado)
-    {
-        $listaExistente[$gastoConRubroAsignado['rubro']][]=$gastoConRubroAsignado['motivo'];
+    {   
+        $motivoExistente=false;
+        if(!empty($listaExistente))
+        {
+            foreach ($listaExistente as $rubro => $listaDeMotivos) {
+                if($rubro == $gastoConRubroAsignado['rubro']){
+                    foreach ($listaDeMotivos as $motivo) {
+                        if($motivo==$gastoConRubroAsignado['motivo']){
+                            $motivoExistente=true;
+                        }
+                    } 
+                }
+            }
+        }        
+        if(!$motivoExistente){
+            $listaExistente[$gastoConRubroAsignado['rubro']][]=$gastoConRubroAsignado['motivo'];
+        }
         return $listaExistente;
     }
     private function armarListaDeMotivosConTotales($listaDeMotivos=array(), $registro)
     {
-        if(empty($listaDeMotivos[$registro['motivo']])){
-                $listaDeMotivos[$registro['motivo']] = $registro['importe'];
-            }else{
-                $listaDeMotivos[$registro['motivo']] = $listaDeMotivos[$registro['motivo']] + $registro['importe'];
-            }
+        if(empty($listaDeMotivos)){
+            $listaDeMotivos[$registro['motivo']] = $registro['importe'];
+        }else{
+            $listaDeMotivos[$registro['motivo']] = $listaDeMotivos[$registro['motivo']] + $registro['importe'];
+        }
         return $listaDeMotivos;
     }
     private function armarListaDeGastosAgrupadoPorMotivo($listaDeGastos,$registro)
