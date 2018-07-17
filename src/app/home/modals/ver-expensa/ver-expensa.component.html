@@ -1,0 +1,76 @@
+<div *ngIf="loaded" id="pdfContent">
+    <h6>Detalle de la expensa: </h6>
+    <mat-card style="width: 100%">
+        <mat-card-content>
+            <p>Cuota Anual:
+                <strong>{{e.expensa.cuotaAnual}}</strong>
+            </p>
+            <p>Mora:
+                <strong>{{e.expensa.mora}}</strong>
+            </p>
+            <p>Importe Extraordinario:
+                <strong>{{e.expensa.impteExtraordinaria}}</strong>
+            </p>
+            <p>Vencimiento:
+                <strong>{{e.expensa.vencimiento}}</strong>
+            </p>
+            <p>TOTAL:
+                <strong>{{e.expensa.total}}</strong>
+            </p>
+        </mat-card-content>
+    </mat-card>
+    <h6>Detalle de los gasto del consorcio: </h6>
+    <table>
+        <ng-container *ngFor="let key of objectKeys(e.gastos); let i = index;">
+            <tr>
+                <td style="width: 5%;" class="center">{{i + 1}}</td>
+                <td style="width: 80%; padding-left: 10px;">{{key}}</td>
+                <td style="width: 15%;" class="center">
+                    <span *ngIf="i == 0">Importe</span>
+                </td>
+            </tr>
+            <ng-container *ngFor="let gasto of e.gastos[key]; let i = index;">
+                <tr>
+                    <td></td>
+                    <td style="padding-left: 10px;">{{i + 1}}. {{gasto.motivo}}</td>
+                    <td class="center">${{gasto.totalGasto}}</td>
+                </tr>
+                <tr *ngFor="let subitem of gasto.detalle;">
+                    <td></td>
+                    <td class="subitem">
+                        <div style="width: 30%; float: left;">
+                            <p>Proveedor:
+                                <strong>{{subitem.proveedor}}</strong>
+                            </p>
+                        </div>
+                        <div>
+                            <p>Descripcion:
+                                <strong>{{subitem.descripcion}}</strong>
+                            </p>
+                        </div>
+                        <p>
+                            Importe:
+                            <strong>${{subitem.importe}}</strong>
+                        </p>
+                    </td>
+                    <td></td>
+                </tr>
+            </ng-container>
+            <tr>
+                <td></td>
+                <td class="right">
+                    <strong>Total para {{key}}:</strong>
+                </td>
+                <td class="center">{{sumar(e.gastos[key])}}</td>
+            </tr>
+        </ng-container>
+        <tr>
+            <td></td>
+            <td class="right">
+                <strong>Gran total para de los gastos:</strong>
+            </td>
+            <td class="center">{{sumargrantotal(e.gastos)}}</td>
+        </tr>
+    </table>
+</div>
+<a  *ngIf="loaded" style="width: 100%" (click)="export()" mat-stroked-button color="primary">Exportar a PDF</a>

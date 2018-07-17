@@ -38,6 +38,9 @@ import { PagoRealizadoComponent } from './home/modals/pago-realizado/pago-realiz
 import { AgregarConsorcioComponent } from './home/modals/agregar-consorcio/agregar-consorcio.component';
 import { BarrioService } from './services/barrio.service';
 import { AgregarUnidadComponent } from './home/modals/agregar-unidad/agregar-unidad.component';
+import { ExpensaService } from './services/expensas.service';
+import { ListarGastosHistoricosComponent } from './home/panels/listar-gastos-historicos/listar-gastos-historico.component';
+import { VerExpensaComponent } from './home/modals/ver-expensa/ver-expensa.component';
 
 const httpInter = {
   provide: HTTP_INTERCEPTORS,
@@ -66,7 +69,9 @@ const httpInter = {
     AgregarPagoComponent,
     PagoRealizadoComponent,
     AgregarConsorcioComponent,
-    AgregarUnidadComponent
+    AgregarUnidadComponent,
+    ListarGastosHistoricosComponent,
+    VerExpensaComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +95,8 @@ const httpInter = {
     LiquidarMesComponent,
     AgregarPagoComponent,
     AgregarConsorcioComponent,
-    AgregarUnidadComponent
+    AgregarUnidadComponent,
+    VerExpensaComponent
   ],
   providers: [
     httpInter,
@@ -102,7 +108,8 @@ const httpInter = {
     ProveedorService,
     MotivoGastoService,
     GastoService,
-    BarrioService
+    BarrioService,
+    ExpensaService
   ],
   bootstrap: [AppComponent]
 })

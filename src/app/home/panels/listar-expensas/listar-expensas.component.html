@@ -7,5 +7,32 @@
 
     </mat-panel-description>
   </mat-expansion-panel-header>
-  <p>Componente que muestre los reclamos</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>N° ID</th>
+        <th>Cuota Anual</th>
+        <th>Estado</th>
+        <th>Total</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let expensa of expensas |async">
+        <td>{{expensa.idExpensa}}</td>
+        <td>{{expensa.cuotaAnual}}</td>
+        <td>
+          <strong>{{expensa.estado}}</strong>
+        </td>
+        <td>${{expensa.total}}</td>
+        <td>
+          <button mat-button color="accent" (click)="pagarConMercadoPago(expensa)">PAGAR EN MERCADO PAGO</button>
+        </td>
+        <td>
+          <button mat-button color="accent" (click)="openVerExpensa(expensa)">VER DETALLE</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </mat-expansion-panel>

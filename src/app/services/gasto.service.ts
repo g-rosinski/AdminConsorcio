@@ -56,17 +56,29 @@ export class GastoService {
       .toPromise();
   }
 
-  generarMPBoton() {
+  generarMPBoton(data) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let params = new HttpParams()
-      .set('id', '0')
-      .set('titulo', 'Liquidacion del mes de enero')
-      .set('importe', '1000.77')
+      .set('id', data.idExpensa)
+      .set('titulo', 'Pago de la cuota anual: ' + data.cuotaAnual.toString())
+      .set('importe', data.total.toString())
       .set('success', 'localhost/home')
       .set('fail', 'localhost/home')
-      .set('pend', 'localhost/home');      
+      .set('pend', 'localhost/home');
 
-    return this.http.get('http://localhost/server/api/actions/testMP.php',{ headers, params })
+    return this.http.get('http://localhost/server/api/actions/testMP.php', { headers, params })
       .toPromise();
+  }
+
+  listarPeriodosLiquidados(id) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().set('idConsorcio', id);
+    return this.http.get(GastoService.BASE_URL + '/listarPeriodosLiquidadosPorConsorcios.php', { headers, params });
+  }
+
+  listarGastosHistoricosPorMes(id){
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().set('idGastoMensual', id);
+    return this.http.get(GastoService.BASE_URL + '/listarGastosHistoricosPorMes.php', { headers, params });
   }
 }
