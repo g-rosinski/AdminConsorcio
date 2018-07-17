@@ -46,6 +46,8 @@ export class ListarReclamosComponent implements OnInit {
   ngOnInit() {
     if (this.usuario.id_rol <= 2) {
       this.consorcios = this.consorcioService.obtenerConsorciosConReclamos();
+      if (this.consorcioActual)
+        this.reclamos = this.reclamoService.traerTodosLosReclamosPorConsorcio(this.consorcioActual.toString());
     } else {
       this.reclamos = this.reclamoService.traerTodosLosReclamosPorUsuario(this.usuario.user)
     }
@@ -65,7 +67,6 @@ export class ListarReclamosComponent implements OnInit {
 
   onPopupClosed = () => {
     this.ngOnInit();
-    this.reclamos = this.reclamoService.traerTodosLosReclamosPorConsorcio(this.consorcioActual.toString());
   }
 
   generarGasto(reclamo): void {

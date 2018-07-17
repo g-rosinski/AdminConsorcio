@@ -51,12 +51,16 @@ function liquidarMesPorConsorcio()
         $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
         $arrIdGastoMensualLiquidado[$idConsorcio] = $idGastoMensual;
     }
-    $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
 
-    foreach ($arrIdGastoMensualLiquidado as $idConsorcio => $idGastoMensualLiquidado) {
-        $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);
-        if ($gastosImpagos) {
-            $gastoMensual->trasladarGastosAMesCorriente($idConsorcio, $gastosImpagos);
+    // SI TENGO ERROR. NO DEBO LIQUIDAR GASTOS
+    if (count($mensajes) === 0) {
+        $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
+
+        foreach ($arrIdGastoMensualLiquidado as $idConsorcio => $idGastoMensualLiquidado) {
+            $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);
+            if ($gastosImpagos) {
+                $gastoMensual->trasladarGastosAMesCorriente($idConsorcio, $gastosImpagos);
+            }
         }
     }
 
