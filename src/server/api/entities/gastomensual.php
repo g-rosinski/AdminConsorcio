@@ -26,6 +26,9 @@ class GastoMensual
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
+    public function traerPeriodosLiquidadosPorConsorcio($id_consorcio){
+        return $this->consultarPeriodosLiquidadosPorConsorcios($id_consorcio);
+    }
     public function traerIdGastoMensual($consorcio)
     {
     	$this->setIdConsorcio($consorcio);
@@ -95,6 +98,17 @@ class GastoMensual
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function consultarPeriodosLiquidadosPorConsorcios($idConsorcio)
+    {
+        $this->setIdConsorcio($idConsorcio);
+        $this->query = "SELECT gm.id_gasto_mensual idGastoMensual, periodo, fechaLiquidacion"
+                        ." FROM ".$this->tabla." as gm"
+                        ." WHERE gm.fechaLiquidacion IS NOT NULL"
+                        ." AND gm.id_consorcio = ?";
+        $arrType = array ("i");
+        $arrParam = array($this->id_consorcio);
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function listarGastosImpagosDelMesPorConsorcio($idGastoMensualLiquidado)
     {
         $this->query =  "SELECT g.id_gasto id FROM gasto g"

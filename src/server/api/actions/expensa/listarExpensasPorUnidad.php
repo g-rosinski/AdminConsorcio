@@ -22,7 +22,12 @@ function listarExpensasPorUnidad()
     while ($obj = $expensasEncontradas->fetch_object()) {
         $arrayExpensas[] = $obj;
     }
-    return json_encode($arrayExpensas);
+    if(empty($arrayExpensas)){
+        $response = "La unidad no cuenta con expensas aún";
+    }else{
+        $response = $arrayExpensas;
+    }
+    return json_encode($response);
 }
 // Devuelve un json con el siguiente formato
 /* 

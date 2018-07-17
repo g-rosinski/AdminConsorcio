@@ -24,3 +24,24 @@ function listarGastosHistoricosPorConsorcio()
 
      return json_encode($arrayGastos);
 }
+// Devuelve un json con el siguiente formato
+/* 
+ * [
+ *     {
+ *         "nroGasto": 1,
+ *         "motivo": "Tuberias",
+ *         "proveedor": "Brainverse",
+ *         "importe": 4650,
+ *         "titulo": "En mi departamento se esta inunando por tuberias pinchadas",
+ *         "nroPago": 6548362
+ *     },
+ *     {
+ *         "nroGasto": 2,
+ *         "motivo": "Portero",
+ *         "proveedor": "Zoomdog",
+ *         "importe": 658,
+ *         "titulo": "El portero no suena cuando apretas el timbre de cualquier departamento",
+ *         "nroPago": 684926
+ *     }
+ * ]
+ */
