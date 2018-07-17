@@ -47,7 +47,11 @@ class Gasto
         }
         return true;
     }
-
+    public function listarGastosPorIdGastoMensual($idGastoMensual){        
+        $gastosEncontrados = $this->traerReporteDeGastosPorMes($idGastoMensual);
+        $listadoDeGatosFormateados = $this->formatearGastosPorMesParaPDF($gastosEncontrados);
+        return $listadoDeGatosFormateados;
+    }
     public function traerGastosPorUnConsorcio($consorcio, $idGastoMensualActual){
         $this->setIdGastoMensual($idGastoMensualActual);
         return $this->consultarGastosPorConsorcio($consorcio);
@@ -66,6 +70,75 @@ class Gasto
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function formatearGastosPorMesParaPDF($detalleGastos){
+        $listaDeRubros  = array();  
+        $listaDeMotivos = array();  
+        $listaDeGastos = array(); 
+        while ($registro = $detalleGastos->fetch_assoc()) { 
+            $listaDeRubros = $this->armarListadoDeRubros($listaDeRubros,$registro);
+            $listaDeMotivos = $this->armarListaDeMotivosConTotales($listaDeMotivos,$registro);
+            $listaDeGastos = $this->armarListaDeGastosAgrupadoPorMotivo($listaDeGastos,$registro);
+        }        
+        $listasDeGastosPorMotivo = $this->asignarAlMotivoDeGastoCorrespondiente($listaDeMotivos,$listaDeGastos);
+        $listadoFormateadoPorRubro = $this->asignarAlRubroCorrespondiente($listaDeRubros, $listasDeGastosPorMotivo);            
+        return $gastosFormateados['rubros'] = $listadoFormateadoPorRubro ;
+    }
+    private function armarListadoDeRubros($listaExistente = array(),$gastoConRubroAsignado){
+        $listaExistente[$gastoConRubroAsignado['rubro']]=Array();
+        $listaExistente[$gastoConRubroAsignado['rubro']][]=$gastoConRubroAsignado['motivo'];
+        return $listaExistente;
+    }
+    private function armarListaDeMotivosConTotales($listaDeMotivos=array(), $registro){
+        if(empty($listaDeMotivos[$registro['motivo']])){
+                $listaDeMotivos[$registro['motivo']] = $registro['importe'];
+            }else{
+                $listaDeMotivos[$registro['motivo']] = $listaDeMotivos[$registro['motivo']] + $registro['importe'];
+            }
+        return $listaDeMotivos;
+    }
+    private function armarListaDeGastosAgrupadoPorMotivo($listaDeGastos,$registro){
+        $listaDeGastos[$registro['motivo']][] = Array(
+                                                    'proveedor'=> $registro['razon_social'],
+                                                    'importe' => $registro['importe'],
+                                                    'descripcion' => $registro['detalle']
+            );
+        return $listaDeGastos;
+    }
+    private function asignarAlMotivoDeGastoCorrespondiente($listaDeMotivos,$listaDeGastos){
+      foreach ($listaDeGastos as $motivo => $arrayGastos) {
+            $listasDeGastosPorMotivo[] = Array(
+                'motivo' => $motivo,
+                'totalGasto' => $listaDeMotivos[$motivo],
+                'detalle' => $arrayGastos
+            );
+        }
+        return $listasDeGastosPorMotivo;  
+    }
+    private function asignarAlRubroCorrespondiente($listaDeRubros, $arrGastosPorMotivo){
+        foreach ($arrGastosPorMotivo as $datosMotivo) {
+            foreach ($listaDeRubros as $rubro => $listaMotivos) {
+                foreach($listaMotivos as $motivo){
+                    if($motivo==$datosMotivo['motivo']){
+                        $listaDeRubrosCompletos[$rubro][]=$datosMotivo;
+                    }
+                }
+                
+            }            
+        }
+        return $listaDeRubrosCompletos;
+    }
+    private function traerReporteDeGastosPorMes($idGastoMensual){
+        $this->setIdGastoMensual($idGastoMensual);
+        $this->query = "SELECT rg.descripcion rubro, mg.descripcion motivo, p.razon_social, g.importe, g.descripcion detalle"
+                        ." FROM ".$this->tabla. " g "
+                        ." INNER JOIN motivogasto mg on g.id_motivo_gasto = mg.id_motivo_gasto"
+                        ." INNER JOIN rubrogasto rg on mg.id_rubro_gasto = rg.id_rubro_gasto"
+                        ." INNER JOIN proveedor p on g.id_proveedor = p.id_proveedor"
+                        ." WHERE g.id_gasto_mensual = ?";
+        $arrType = array ("i");
+        $arrParam = array($this->id_gasto_mensual);
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function consultarGasto(){
         $this->query = "SELECT id_gasto idGasto, nro_comprobante nroComprobante, fecha, descripcion, importe,"
                         ."  id_motivo_gasto idMotivoGasto, id_proveedor idProveedor, id_gasto_mensual idGastoMensual,"

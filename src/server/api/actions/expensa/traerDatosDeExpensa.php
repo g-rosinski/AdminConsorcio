@@ -11,19 +11,23 @@ function traerDatosDeExpensa()
     try {
         $db = new DB();
         $expensa = new Expensa($db);
+        $gastos = new Gasto($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
-    $data = $_GET;
+    $data = $_GET;          
     
-    $detalleExpensa = $expensa->traerDetalleDeExpensa($data['idExpensa']);
+    $expensaEncontrada = $expensa->traerDetalleDeExpensa($data['idExpensa']);
+    $detalleExpensa = $expensaEncontrada->fetch_assoc();
+    $detalleGastos = $gastos->listarGastosPorIdGastoMensual($detalleExpensa['idGastoMensual']);
 
-    $arrayDetalleExpensa = array();
-    while ($obj = $detalleExpensa->fetch_object()) {  
-        $arrayDetalleExpensa[] = $obj;
-    }
+    $arrayDetalleCompleto = Array(
+        "expensa" => $detalleExpensa,
+        "gastos" => $detalleGastos
+    );
 
-
-    return json_encode($arrayDetalleExpensa);
+    return json_encode($arrayDetalleCompleto);
 }
+
+
 // Detalle que devuelve:
 //
 /* Array(
@@ -37,14 +41,16 @@ function traerDatosDeExpensa()
 	)
 	'gastos' => Array(
         'rubros'=> Array(
-            0 => Array(
-                '<nombreRubro>' => Array(
-                    '<motivoDelGasto>'=>nombre
+            '<nombreRubro>' => Array(
+                0 => Array(
+                    '<motivo>'=>nombre
                     'totalGasto'=> total gastado en esto
                     'detalle'=> Array(
-                        'proveedor' => nombre de proveedor
-                        'importe' => importe del gasto
-                        'descripcion' => mensaje del gasto
+                        0 => Array(
+                            'proveedor' => nombre de proveedor
+                            'importe' => importe del gasto
+                            'descripcion' => mensaje del gasto
+                        )
                     )
                 )
             )
