@@ -15,7 +15,6 @@
         <th>Telefono</th>
         <th>Superficie total</th>
         <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -25,10 +24,23 @@
         <td>{{consorcio.telefono}}</td>
         <td>{{consorcio.superficie}}</td>
         <td>
-          <button mat-button color="accent" (click)="openLiquidar([consorcio])">LIQUIDAR</button>
-        </td>
-        <td>
-          <button mat-button color="accent" (click)="openVerConsorcio(consorcio)">VER MAS</button>
+          <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openLiquidar([consorcio])">
+              <mat-icon>attach_money</mat-icon>
+              <span>Liquidar</span>
+            </button>
+            <button mat-menu-item (click)="controlarConsorcio(consorcio)">
+              <mat-icon>warning</mat-icon>
+              <span>Controlar Consorcio</span>
+            </button>
+            <button mat-menu-item (click)="openVerConsorcio(consorcio)">
+              <mat-icon>info</mat-icon>
+              <span>Ver informacio completa</span>
+            </button>
+          </mat-menu>
         </td>
       </tr>
     </tbody>
