@@ -13,9 +13,9 @@ function listarGastosHistoricosPorConsorcio()
         $gasto = new Gasto($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
-    // Solo requiere el Id de Consorcio, traera todos los gastos de un consorcio
+    // Solo requiere el Id del mes, traera todos los gastos de un consorcio
     $data = $_GET;
-    $gastosEncontrados = $gasto->traerGastosHistoricosPorUnConsorcio($data['id_consorcio']);
+    $gastosEncontrados = $gasto->traerGastosHistoricosPorUnConsorcio($data['idGastoMensual']);
 
     $arrayGastos = array();
     while ($obj = $gastosEncontrados->fetch_object()) {
