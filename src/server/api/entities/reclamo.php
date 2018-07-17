@@ -96,15 +96,15 @@ class Reclamo
     }
     public function consultarEstadoDeReclamoPorConsorcio($consorcio){
         $this->query = "SELECT r.id_reclamo id, r.nro_reclamo nroReclamo, r.titulo titulo, r.mensaje mensaje, er.descripcion estado, r.fechaMovimiento fecha, u.piso piso, u.departamento, u.id_consorcio consorcio
-                        FROM propietariounidad pu
-                        INNER JOIN reclamo r ON r.id_unidad = pu.id_unidad
+                        FROM unidad u
+                        INNER JOIN reclamo r ON r.id_unidad = u.id_unidad
                         INNER JOIN estadoreclamo er ON r.id_estado_reclamo = er.id_estado_reclamo
-                        INNER JOIN  unidad u ON u.id_unidad = pu.id_unidad
                         WHERE u.id_consorcio = ?";
         $arrType = array ("i");
         $arrParam = array(
             $consorcio            
         );
+        
         return $this->executeQuery($arrType,$arrParam);
     }
     

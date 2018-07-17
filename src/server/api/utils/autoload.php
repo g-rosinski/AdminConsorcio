@@ -7,9 +7,15 @@ if (isset($_SESSION['user']) && ($_SESSION['expire'] > time())) {
     session_destroy();
 }
 
-set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+// set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+//     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+//     echo json_encode(var_dump($errno, $errstr, $errfile, $errline));
+// });
+
+
+set_error_handler(function ($errno) {
     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-    echo json_encode(var_dump($errno, $errstr, $errfile, $errline));
+    echo json_encode($errno);
 });
 
 spl_autoload_register(function ($class) {

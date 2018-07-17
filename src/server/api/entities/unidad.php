@@ -189,15 +189,11 @@ class Unidad
     {
         $this->query =
             "SELECT
-                p.id_unidad,
+                u.id_unidad,
                 u.piso,
                 u.departamento
-            FROM
-                propietariounidad p
-            INNER JOIN unidad u ON
-                p.id_unidad = u.id_unidad
-            WHERE
-                u.id_consorcio = ?";
+            FROM unidad u
+            WHERE u.id_consorcio = ?";
         $arrType = array("i");
         $arrParam = array(
             $this->id_consorcio,
