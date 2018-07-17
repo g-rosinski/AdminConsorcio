@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { VerConsorcioComponent } from '../../modals/ver-consorcio/ver-consorcio.component';
 import { MatDialog } from '@angular/material';
 import { LiquidarMesComponent } from '../../modals/liquidar-mes/liquidar-mes.component';
+import { ExpensaService } from '../../../services/expensas.service';
+import { ToastrService } from '../../../../../node_modules/ngx-toastr';
 @Component({
   selector: 'app-listar-consorcios',
   templateUrl: './listar-consorcios.component.html',
@@ -39,6 +41,8 @@ export class ListarConsorciosComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private consorcioService: ConsorcioService,
+    private expensaService: ExpensaService,
+    private toast: ToastrService
   ) { }
 
   ngOnInit() {
@@ -64,6 +68,11 @@ export class ListarConsorciosComponent implements OnInit {
 
   liquidarTodos() {
     this.openLiquidar(this.consorcios);
+  }
+
+  controlarConsorcio(consorcio) {
+    this.expensaService.controlarExpensasPorConsorcio([consorcio.id_consorcio])
+      .then(() => this.toast.success('Consorcio actualizado correctamente'))
   }
 
 }

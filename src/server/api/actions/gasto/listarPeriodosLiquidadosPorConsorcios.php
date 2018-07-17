@@ -21,12 +21,8 @@ function listarPeriodosLiquidadosPorConsorcios()
     while ($obj = $periodosEncontrados->fetch_object()) {
         $arrayPeriodos[] = $obj;
     }
-    if(empty($arrayPeriodos)){
-        $response = "No hay periodos liquidados aún";
-    }else{
-        $response = $arrayPeriodos;
-    }
-     return json_encode($response);
+    
+     return json_encode($arrayPeriodos);
 }
 // Devuelve un json con el siguiente formato
 /* 

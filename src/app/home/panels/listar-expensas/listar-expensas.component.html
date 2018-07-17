@@ -15,7 +15,6 @@
         <th>Estado</th>
         <th>Total</th>
         <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -27,10 +26,19 @@
         </td>
         <td>${{expensa.total}}</td>
         <td>
-          <button mat-button color="accent" (click)="pagarConMercadoPago(expensa)">PAGAR EN MERCADO PAGO</button>
-        </td>
-        <td>
-          <button mat-button color="accent" (click)="openVerExpensa(expensa)">VER DETALLE</button>
+          <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="pagarConMercadoPago(expensa)">
+              <mat-icon>credit_card</mat-icon>
+              <span>Pagar con Mercado Pago</span>
+            </button>
+            <button mat-menu-item (click)="openVerExpensa(expensa)">
+              <mat-icon>details</mat-icon>
+              <span>Ver Detalle Expensa</span>
+            </button>
+          </mat-menu>
         </td>
       </tr>
     </tbody>
