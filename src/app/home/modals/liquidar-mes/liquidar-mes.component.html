@@ -13,9 +13,17 @@
             <p>
                 <strong>Consorcios a liquidar: </strong>
                 <ng-container *ngFor="let consorcio of data.consorcios; let i = index">
-                    {{consorcio.nombre}}<span *ngIf="data.consorcios.length > 1 && !(i === data.consorcios.length -1)">,</span>
+                    {{consorcio.nombre}}
+                    <span *ngIf="data.consorcios.length > 1 && !(i === data.consorcios.length -1)">,</span>
                 </ng-container>
             </p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card id="errores" *ngIf="errores.length" style="background-color: #f44336; color: white; margin-top: 10px">
+        <mat-card-content>
+            <h6><strong>ATENCION</strong></h6>
+            <p *ngFor="let error of errores">{{error.mensaje}}</p>
         </mat-card-content>
     </mat-card>
 

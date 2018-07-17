@@ -3,8 +3,8 @@ require_once './../../utils/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-echo json_encode(liquidarMesPorConsorcio());
-         
+echo liquidarMesPorConsorcio();
+
 function liquidarMesPorConsorcio()
 {
 
@@ -18,38 +18,51 @@ function liquidarMesPorConsorcio()
 
     $data = $_POST;
     // Lista de consorcios a liquidar
-    $arrConsorcios = $data['id_consorcio']; 
+    $arrConsorcios = $data['id_consorcio'];
     // yyyy-mm-dd
-    $vencimiento = $data['vencimiento']; 
+    $vencimiento = $data['vencimiento'];
+    // Liquida el mes
+    $mensajes = array();
+    $arrIdGastoMensualLiquidado = array();
+    foreach ($arrConsorcios as $idConsorcio) {
+        $error = new stdClass();
 
-    // Liquida el mes 
-    foreach($arrConsorcios as $idConsorcio){
         $totalDelMes = $gastoMensual->obtenerTotalDelMes($idConsorcio);
-        if($totalDelMes<=0){
-            return 'Un consorcio no posee movimientos a liquidar';
+        if ($totalDelMes <= 0) {
+            $error->id_consorcio = $idConsorcio;
+            $error->mensaje = 'El consorcio ' . $idConsorcio . ' no posee movimientos a liquidar';
+            $mensajes[] = $error;
+            continue;
         }
-        if(!$gastoMensual->verificarPeriodoLiquidable($idConsorcio)){
-            
-            return 'Un consorcio aun no se puede liquidar';
-        }        
+        if (!$gastoMensual->verificarPeriodoLiquidable($idConsorcio)) {
+            $error->id_consorcio = $idConsorcio;
+            $error->mensaje = 'El consorcio ' . $idConsorcio . ' aun no se puede liquidar';
+            $mensajes[] = $error;
+            continue;
+        }
         $idGastoMensual = $gastoMensual->traerIdGastoMensual($idConsorcio);
         $unidadesALiquidar = $consorcio->traerParticipacionDelConsorcio($idConsorcio);
         $cuentasALiquidar = array();
-        foreach($unidadesALiquidar as $id_unidad => $participacion){
+        foreach ($unidadesALiquidar as $id_unidad => $participacion) {
             $idCtaCte = $ctaCte->traerCtaCtePorUnidad($id_unidad);
-            $cuentasALiquidar[$idCtaCte]=$participacion;
+            $cuentasALiquidar[$idCtaCte] = $participacion;
         }
-        $expensa->liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento);
+        $expensa->liquidarExpensas($idGastoMensual, $cuentasALiquidar, $totalDelMes, $vencimiento);
         $ctaCte->actualizarSaldoCtacte($cuentasALiquidar);
-        $arrIdGastoMensualLiquidado[$idConsorcio]=$idGastoMensual;
-    } 
-    $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
-    
-    foreach ($arrIdGastoMensualLiquidado as $idConsorcio => $idGastoMensualLiquidado) {
-        $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);   
-        if($gastosImpagos){
-            $gastoMensual->trasladarGastosAMesCorriente($idConsorcio,$gastosImpagos);
+        $arrIdGastoMensualLiquidado[$idConsorcio] = $idGastoMensual;
+    }
+
+    // SI TENGO ERROR. NO DEBO LIQUIDAR GASTOS
+    if (count($mensajes) === 0) {
+        $gastoMensual->liquidarGastoMensualPorConsorcio($arrConsorcios);
+
+        foreach ($arrIdGastoMensualLiquidado as $idConsorcio => $idGastoMensualLiquidado) {
+            $gastosImpagos = $gastoMensual->traerGastosImpagos($idGastoMensualLiquidado);
+            if ($gastosImpagos) {
+                $gastoMensual->trasladarGastosAMesCorriente($idConsorcio, $gastosImpagos);
+            }
         }
     }
-    return "Liquidacion realiza con exito";
+
+    return json_encode($mensajes);
 }

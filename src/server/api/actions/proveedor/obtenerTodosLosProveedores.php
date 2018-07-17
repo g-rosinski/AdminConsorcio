@@ -10,10 +10,10 @@ function obtenerTodosLosProveedores()
 
     try {
         $db = new DB();
-        $reclamo = new Proveedor($db);
+        $proveedor = new Proveedor($db);
     } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
     $data = $_GET;
-    $respuesta = $reclamo->obtenerTodosLosProveedores();
+    $respuesta = $proveedor->obtenerTodosLosProveedores();
     $proveedores = array();
 
     while ($obj = $respuesta->fetch_object()) {

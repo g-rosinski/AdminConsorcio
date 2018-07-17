@@ -12,7 +12,11 @@ import { ToastrService } from 'ngx-toastr';
         width: 100%;
     }
 
-    .mat-card {
+    ul {
+        list-style-type: none;
+    }
+
+    .mat-card:not(#errores) {
         background: #0D47A1 !important;
         color: white;
         width: 100%;
@@ -25,6 +29,8 @@ export class LiquidarMesComponent implements OnInit {
         vencimiento: '',
         consorcios: [],
     };
+
+    errores = [];
 
     constructor(
         private gastoService: GastoService,
@@ -49,9 +55,14 @@ export class LiquidarMesComponent implements OnInit {
         if (this.formModel.consorcios.length > 1)
             this.toast.warning('Este proceso puede durar varios segundos.');
         this.gastoService.liquidarMesPorConsorcio(this.formModel)
-            .then(() => {
-                this.onNoClick();
-                this.toast.success('Consorcio liquidado correctamente.')
+            .then((e: any[]) => {
+                if (e.length) {
+                    this.errores = e;
+                }
+                else {
+                    this.onNoClick();
+                    this.toast.success('Consorcio liquidado correctamente.')
+                }
             });
     }
 }

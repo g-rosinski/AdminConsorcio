@@ -37,6 +37,7 @@ import { AgregarPagoComponent } from './home/modals/agregar-pago/agregar-pago.co
 import { PagoRealizadoComponent } from './home/modals/pago-realizado/pago-realizado.component';
 import { AgregarConsorcioComponent } from './home/modals/agregar-consorcio/agregar-consorcio.component';
 import { BarrioService } from './services/barrio.service';
+import { AgregarUnidadComponent } from './home/modals/agregar-unidad/agregar-unidad.component';
 
 const httpInter = {
   provide: HTTP_INTERCEPTORS,
@@ -65,6 +66,7 @@ const httpInter = {
     AgregarPagoComponent,
     PagoRealizadoComponent,
     AgregarConsorcioComponent,
+    AgregarUnidadComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +89,8 @@ const httpInter = {
     AgregarGastoComponent,
     LiquidarMesComponent,
     AgregarPagoComponent,
-    AgregarConsorcioComponent
+    AgregarConsorcioComponent,
+    AgregarUnidadComponent
   ],
   providers: [
     httpInter,
