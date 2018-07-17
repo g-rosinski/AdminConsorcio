@@ -6,8 +6,9 @@
       <app-review-users *ngIf="usuario.id_rol === 1"></app-review-users>
       <app-listar-reclamos [usuario]="usuario"></app-listar-reclamos>
       <app-listar-gastos *ngIf="usuario.id_rol <= 2" [usuario]="usuario"></app-listar-gastos>
+      <app-listar-gastos-historico *ngIf="usuario.id_rol <= 2" [usuario]="usuario"></app-listar-gastos-historico>
       <app-listar-consorcios *ngIf="usuario.id_rol === 1 || usuario.id_rol === 2"></app-listar-consorcios>
-      <app-listar-expensas [usuario]="usuario"></app-listar-expensas>
+      <app-listar-expensas *ngIf="usuario.id_rol > 2" [usuario]="usuario"></app-listar-expensas>
     </mat-accordion>
 
   </div>
