@@ -32,6 +32,9 @@ class Expensa
     public function traerDetalleDeExpensa($idExpensa){
         return $this->consultarDetalleExpensaPorId($idExpensa);
     }
+    public function listarExpensasPorCtaCte($idCtaCte){
+        return $this->consultarExpensasPorIDCtaCte($idCtaCte);
+    }
     public function liquidarExpensas($idGastoMensual,$cuentasALiquidar,$totalDelMes,$vencimiento)
     {      
         $this->setCuotaMes($this->obtenerNumeroDeCuotaAnual($idGastoMensual));
@@ -68,12 +71,22 @@ class Expensa
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
+    private function consultarExpensasPorIDCtaCte($id_ctacte){
+        $this->setIdCtaCte($id_ctacte);
+        $this->query = "SELECT e.id_expensa idExpensa, e.cuota_expensa total, e.cuota_mes cuotaAnual, est.descripcion estado"
+                        ." FROM ". $this->tabla . " e "
+                        ." INNER JOIN expensaestado est on e.cuota_estado = est.id_expensaEstado"
+                        ." WHERE e.id_ctacte = ?";
+        $arrType = array ("i");
+        $arrParam = array($this->id_ctacte);
+        return $this->executeQuery($arrType,$arrParam);
+    }
     private function consultarDetalleExpensaPorId($idExpensa){
         $this->setIdExpensa($idExpensa);
         $this->query = "SELECT cuota_expensa total, cuota_extraordinaria impteExtraordinaria, cuota_mora mora,"
-                        ." cuota_mes cuotaAnual, cuota_vencimiento vencimiento, id_gasto_mensual idGastoMensual"
-                        ." FROM ". $this->tabla
-                        ." WHERE id_expensa = ?";
+        ." cuota_mes cuotaAnual, cuota_vencimiento vencimiento, id_gasto_mensual idGastoMensual"
+        ." FROM ". $this->tabla
+        ." WHERE id_expensa = ?";
         $arrType = array ("i");
         $arrParam = array($this->idExpensa);
         return $this->executeQuery($arrType,$arrParam);
