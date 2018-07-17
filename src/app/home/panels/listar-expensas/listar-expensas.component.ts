@@ -4,6 +4,7 @@ import { Observable } from '../../../../../node_modules/rxjs';
 import { GastoService } from '../../../services/gasto.service';
 import { VerExpensaComponent } from '../../modals/ver-expensa/ver-expensa.component';
 import { MatDialog } from '../../../../../node_modules/@angular/material';
+import { ToastrService } from '../../../../../node_modules/ngx-toastr';
 
 @Component({
   selector: 'app-listar-expensas',
@@ -38,7 +39,8 @@ export class ListarExpensasComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private expensaService: ExpensaService,
-    private gastoService: GastoService
+    private gastoService: GastoService,
+    private toast: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class ListarExpensasComponent implements OnInit {
   }
 
   pagarConMercadoPago(expensa) {
+    this.toast.info('Lo estamos redireccionado a Mercado Pago');
     this.gastoService.generarMPBoton(expensa)
       .then((data: any) => window.location.href = data.url);
   }

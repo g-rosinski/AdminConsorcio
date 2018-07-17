@@ -75,4 +75,8 @@ export class ListarConsorciosComponent implements OnInit {
       .then(() => this.toast.success('Consorcio actualizado correctamente'))
   }
 
+  controlarVencimientoConsorcio(consorcio) {
+    this.expensaService.controlarExpensasVencidas([consorcio.id_consorcio])
+      .then(()=> this.toast.success('Los vencimientos se han actualizado correctamente'));
+  }
 }

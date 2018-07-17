@@ -70,13 +70,23 @@ export class GastoService {
       .toPromise();
   }
 
+  pagarCuentaCorriente(user, idunidad) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let body = new HttpParams()
+      .set('idUnidad', idunidad)
+      .set('user', user);
+
+    return this.http.post('http://localhost/server/api/actions/ctacte/pagar.php', body.toString(), { headers: headers })
+      .toPromise();
+  }
+
   listarPeriodosLiquidados(id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams().set('idConsorcio', id);
     return this.http.get(GastoService.BASE_URL + '/listarPeriodosLiquidadosPorConsorcios.php', { headers, params });
   }
 
-  listarGastosHistoricosPorMes(id){
+  listarGastosHistoricosPorMes(id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams().set('idGastoMensual', id);
     return this.http.get(GastoService.BASE_URL + '/listarGastosHistoricosPorMes.php', { headers, params });

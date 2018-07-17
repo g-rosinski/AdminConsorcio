@@ -8,17 +8,15 @@ echo pagar();
 function pagar()
 {
 
+    try {
+        $db = new DB();
+        $cc = new Cuentacorriente($db);
+    } catch (Exception $e) {echo "Msj:" . $e->getMessage();}
 
-try{
-    $db = new DB();
-    $cc = new Cuentacorriente($db);
-}catch(Exception $e) {echo "Msj:" . $e->getMessage();}
+    $response = true;
+    $data = $_POST;
+    $idCtaCte = $cc->traerCtaCtePorUnidad($data['idUnidad']);
+    $cc->realizarPago($data['user'], $idCtaCte);
 
-$response = true;
-$data = $_POST;
-$idCtaCte = $cc->traerCtaCtePorUnidad($data['idUnidad']);
-$cc->realizarPago($data['user'],$idCtaCte);
-    
-return json_encode($response);
+    return json_encode($response);
 }
- 

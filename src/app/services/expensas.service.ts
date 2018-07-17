@@ -35,4 +35,17 @@ export class ExpensaService {
         return this.http.post(ExpensaService.BASE_URL + '/controlarExpensasPorConsorcio.php', body.toString(), { headers: headers })
             .toPromise();
     }
+
+    
+    controlarExpensasVencidas(ids: any[]) {
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let body = new HttpParams()
+
+        ids.forEach((id, index) => {
+            body = body.append(`consorcio[${index}]`, id);
+        });
+
+        return this.http.post(ExpensaService.BASE_URL + '/controlarExpensasVencidas.php', body.toString(), { headers: headers })
+            .toPromise();
+    }
 }
