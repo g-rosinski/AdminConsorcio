@@ -55,7 +55,7 @@ class Gasto
         $this->setIdGastoMensual($idGastoMensualActual);
         return $this->consultarGastosPorConsorcio($consorcio);
     }
-    public function traerGastosHistoricosPorUnConsorcio($idGastoMensual){
+    public function traerGastosHistoricosPorUnMes($idGastoMensual){
         return $this->consultarGastosHistoricosPorMes($idGastoMensual);  
     }
     public function traerDetalleGasto($idGasto){

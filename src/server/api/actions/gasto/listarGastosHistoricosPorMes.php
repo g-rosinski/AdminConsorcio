@@ -3,9 +3,9 @@ require_once './../../utils/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-echo listarGastosHistoricosPorConsorcio();
+echo listarGastosHistoricosPorMes();
 
-function listarGastosHistoricosPorConsorcio()
+function listarGastosHistoricosPorMes()
 {
 
     try {
@@ -15,7 +15,7 @@ function listarGastosHistoricosPorConsorcio()
 
     // Solo requiere el Id del mes, traera todos los gastos de un consorcio
     $data = $_GET;
-    $gastosEncontrados = $gasto->traerGastosHistoricosPorUnConsorcio($data['idGastoMensual']);
+    $gastosEncontrados = $gasto->traerGastosHistoricosPorUnMes($data['idGastoMensual']);
 
     $arrayGastos = array();
     while ($obj = $gastosEncontrados->fetch_object()) {
