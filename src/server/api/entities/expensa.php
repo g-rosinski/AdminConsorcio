@@ -43,31 +43,40 @@ class Expensa
         $this->setIdGastoMensual($idGastoMensual);
         $arrExpensasCalculadas = $this->calcularExpensas($cuentasALiquidar,$totalDelMes);
         foreach($arrExpensasCalculadas as $idCtaCte => $importeExpensa){
+            $mora = 0;
             $this->setCuotaExtraordinaria($importeExpensa); // Sera expensa sin contar la mora
-            $this->setCuotaMora(0); // Aun falta hacer el calculo de la mora
+            ($this->controlarExpensasVencidas($idCtaCte)) ? $mora = 50 : $mora;
+            $this->setCuotaMora($mora); // Aun falta hacer el calculo de la mora
             $this->setIdCtaCte($idCtaCte);
             $this->setCuotaExpensa($this->cuotaExtraordinaria + $this->cuotaMora);
             
             $this->ingresarExpensaDelMes();
         }
     }
-    public function controlarExpensasImpagas($arrCuentasConSaldo)// $arrCuentasConSaldo = array( id => saldo);
+    public function controlarExpensasImpagas($arrCuentasConSaldo)// $arrCuentasConSaldo = array( idCtaCte => saldoCtaCte);
     {
+        $msj='';
+        $arrExpensasImpagas = Array();
         foreach ($arrCuentasConSaldo as $idCtaCte => $saldoCtaCte) {
-            $arrExpensasImpagas = $this->consultarExpensasImpagas($idCtaCte);
-            $arrExpensasVencidas= array();
-            if($saldoCtaCte==0){
-                $this->pagarExpensasArray($arrExpensasImpagas);
-            }elseif($saldoCtaCte>0){
-                $arrExpensasVencidas = $this->filtrarArrayExpensasVencidas($arrExpensasImpagas);
-                if(!empty($arrExpensasVencidas)){
-                    $this->actualizarEstadoDeExpensas($arrExpensasVencidas,$saldoCtaCte);
+            $arrExpensasImpagas = $this->consultarExpensasImpagas($idCtaCte);            
+            if(!empty($arrExpensasImpagas))
+            {
+                $arrExpensasVencidas= array();
+                if($saldoCtaCte==0){
+                    $this->pagarExpensasArray($arrExpensasImpagas);
+                }elseif($saldoCtaCte>0){
+                    $arrExpensasVencidas = $this->filtrarArrayExpensasVencidas($arrExpensasImpagas);
+                    if(!empty($arrExpensasVencidas)){
+                        $this->actualizarEstadoDeExpensas($arrExpensasVencidas,$saldoCtaCte);
+                    }
                 }
-            }            
-        }
-        return true;
-    }
-    
+            }else{
+                $msj .= $idCtaCte ." - ";
+            }
+        }        
+        ($msj=='') ? $msj = true : $msj;
+        return $msj;
+    }    
     /**************************** */
     /*     FUNCIONES PRIVADAS     */
     /**************************** */
@@ -124,6 +133,15 @@ class Expensa
             }
         }
     }
+    private function controlarExpensasVencidas($idCtaCte)
+    {
+        // false: No existen expensas vencidas || true: existen expensas vencidas
+        $expVencidasEncontradas = Array();
+        $expVencidasEncontradas = $this->consultarExpensasVencidas($idCtaCte);
+        $existenVencidas = false;
+        (empty($expVencidasEncontradas )) ? $existenVencidas = true : $existenVencidas;
+        return $existenVencidas;
+    }
     private function filtrarArrayExpensasVencidas($arrExpensas = array())
     {
         $arrExpensasVencidas=array();
@@ -166,6 +184,23 @@ class Expensa
         );
         return $this->executeQuery($arrType,$arrParam);
     }
+    private function consultarExpensasVencidas($id_ctacte)
+    {
+        $this->setIdCtaCte($id_ctacte);
+        $this->query = "SELECT e.id_expensa idExpensa, e.cuota_estado estado"
+        ." FROM ". $this->tabla ." e"
+        ." WHERE e.id_ctacte = ?"
+        ." AND e.cuota_estado = 3";
+        $arrType = array ("i");
+        $arrParam = array ($this->id_ctacte);
+        $expVencidas=array();
+        $resultado=$this->executeQuery($arrType,$arrParam);
+        while ($reg = $resultado->fetch_assoc())
+        {
+            $expVencidas[] = $reg;
+        }
+        return $expVencidas;
+    }
     private function consultarExpensasImpagas($id_ctacte)
     {
         $this->setIdCtaCte($id_ctacte);
@@ -184,11 +219,7 @@ class Expensa
                                         'importe' => $reg['importe'],
                                         'fechaVencimiento' => $reg['fechaVencimiento']);
         }
-        if(!empty($expensasImpagas)){
-            return $expensasImpagas;
-        }else {
-            return false;
-        }
+        return $expensasImpagas;
     }
     private function calcularExpensas($arrCtaCtes, $total){
         foreach($arrCtaCtes as $idCtaCte => $prcParticipacion){

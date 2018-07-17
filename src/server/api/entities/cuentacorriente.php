@@ -23,6 +23,14 @@ class Cuentacorriente
     /**************************** */
     /*     FUNCIONES PUBLICAS     */
     /**************************** */
+    public function traerArrayCtaCteConSaldo($arrUnidades){
+        foreach ($arrUnidades as $unidad) {
+            $ctacte = $this->traerCtaCtePorUnidad($unidad);
+            $saldo = $this->traerSaldoCtaCte($ctacte);
+            $arrCteCteConSaldo[$ctacte]=$saldo;
+        }
+        return $arrCteCteConSaldo;
+    }
     public function traerCtaCtePorUnidad($unidad){
         $this->setIdUnidad($unidad);
         return $this->obtenerCtaCte();
