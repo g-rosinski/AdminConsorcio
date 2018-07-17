@@ -38,6 +38,7 @@ import { PagoRealizadoComponent } from './home/modals/pago-realizado/pago-realiz
 import { AgregarConsorcioComponent } from './home/modals/agregar-consorcio/agregar-consorcio.component';
 import { BarrioService } from './services/barrio.service';
 import { AgregarUnidadComponent } from './home/modals/agregar-unidad/agregar-unidad.component';
+import { ExpensaService } from './services/expensas.service';
 
 const httpInter = {
   provide: HTTP_INTERCEPTORS,
@@ -102,7 +103,8 @@ const httpInter = {
     ProveedorService,
     MotivoGastoService,
     GastoService,
-    BarrioService
+    BarrioService,
+    ExpensaService
   ],
   bootstrap: [AppComponent]
 })

@@ -56,12 +56,12 @@ export class GastoService {
       .toPromise();
   }
 
-  generarMPBoton() {
+  generarMPBoton(data) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let params = new HttpParams()
-      .set('id', '0')
-      .set('titulo', 'Liquidacion del mes de enero')
-      .set('importe', '1000.77')
+      .set('id', data.idExpensa)
+      .set('titulo', 'Pago de la cuota anual: ' + data.cuotaAnual.toString())
+      .set('importe', data.total.toString())
       .set('success', 'localhost/home')
       .set('fail', 'localhost/home')
       .set('pend', 'localhost/home');      
