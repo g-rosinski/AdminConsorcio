@@ -78,14 +78,14 @@ class Gasto
             $listaDeRubros = $this->armarListadoDeRubros($listaDeRubros,$registro);
             $listaDeMotivos = $this->armarListaDeMotivosConTotales($listaDeMotivos,$registro);
             $listaDeGastos = $this->armarListaDeGastosAgrupadoPorMotivo($listaDeGastos,$registro);
-        }        
+        }       
+          
         $listasDeGastosPorMotivo = $this->asignarAlMotivoDeGastoCorrespondiente($listaDeMotivos,$listaDeGastos);
         $listadoFormateadoPorRubro = $this->asignarAlRubroCorrespondiente($listaDeRubros, $listasDeGastosPorMotivo);            
         return $gastosFormateados['rubros'] = $listadoFormateadoPorRubro ;
     }
     private function armarListadoDeRubros($listaExistente = array(),$gastoConRubroAsignado)
     {
-        $listaExistente[$gastoConRubroAsignado['rubro']]=Array();
         $listaExistente[$gastoConRubroAsignado['rubro']][]=$gastoConRubroAsignado['motivo'];
         return $listaExistente;
     }
